@@ -37,4 +37,13 @@ class ContainerTypesTest extends Specification {
 		"be serialized"		in { serialize(nativ)	mustEqual json 	}
 		"as deserialized"	in { deserialize(json)	mustEqual nativ	}
 	}
+	
+	"Pair" should {
+		"roundtrip" in {
+			val a	= Pair(1,1)
+			val b	= JSSerialization serialize		a
+			val c	= JSSerialization deserialize	b
+			a mustEqual c
+		}
+	}
 }

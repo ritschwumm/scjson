@@ -264,7 +264,7 @@ object Decoder {
 		val flags			= readFlags(pb)
 		// TODO optional value.
 		// read it, find out if it's referencing a Symbol, if not it's left out
-		// this is what the pickeer does: 
+		// this is what the pickler does: 
 		// if (sym.hasAccessBoundary) writeRef(sym.privateWithin)
 		val privateWithin	= None	// readRef(pb)
 		val info			= readRef(pb)

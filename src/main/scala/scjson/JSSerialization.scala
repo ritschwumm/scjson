@@ -4,6 +4,7 @@ import java.lang.reflect.{ Modifier, Field, Constructor }
 
 import scala.collection.mutable
 
+import scutil.Functions._
 import scutil.ext.OptionImplicits._
 import scutil.ext.BooleanImplicits._
 
@@ -90,11 +91,9 @@ object JSSerialization /*extends Logging*/ {
 							.flatMap { ctor:Constructor[_] =>
 								val	boxedTypes	= ctor.getParameterTypes map boxType
 								val	coercedArgs	= boxedArgs zip boxedTypes map coerceValue
-								coercedArgs forall { _.isDefined } guard {
-									() => {
-										val ctorArgs:Array[AnyRef]	= coercedArgs map { _.get } toArray;
-										ctor newInstance (ctorArgs:_*) 
-									}	
+								coercedArgs forall { _.isDefined } guard thunk {
+									val ctorArgs:Array[AnyRef]	= coercedArgs map { _.get } toArray;
+									ctor newInstance (ctorArgs:_*) 
 								}
 							}
 					
@@ -136,8 +135,9 @@ object JSSerialization /*extends Logging*/ {
 	
 	private def coerceValue(trans:Pair[AnyRef,Class[_]]):Option[AnyRef] = trans match {
 		// TODO hack for Option
-		case (null,to)				if to isAssignableFrom classOf[Option[_]]	=> Some(None)
-		case (value,to)				if to isAssignableFrom classOf[Option[_]]	=> Some(Some(value))	// NOTE: fails for Option[T] if T is not a case class
+		case (null,to)				if classOf[Option[_]] isAssignableFrom to	=> Some(None)
+		// NOTE: fails for Option[T] if T is not a case class
+		case (value,to)				if classOf[Option[_]] isAssignableFrom to	=> Some(Some(value))	
 		case (null,_)															=> None
 		case (value,to)				if to isAssignableFrom value.getClass		=> Some(value)
 		case (value:BigDecimal, to)	if to == classOf[java.lang.Byte]			=> Some(value.byteValue.asInstanceOf[AnyRef])
