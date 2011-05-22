@@ -48,8 +48,8 @@ object Flag {
 		maybe(Flags.SUPERACCESSOR,	SUPERACCESSOR)	++
 		maybe(Flags.PARAMACCESSOR,	PARAMACCESSOR)	++
 		maybe(Flags.MODULEVAR,		MODULEVAR)		++
-		maybe(Flags.SYNTHETICMETH,	SYNTHETICMETH)	++
-		maybe(Flags.MONOMORPHIC,	MONOMORPHIC)	++
+		// maybe(Flags.SYNTHETICMETH,	SYNTHETICMETH)	++
+		// maybe(Flags.MONOMORPHIC,	MONOMORPHIC)	++
 		maybe(Flags.LAZY,			LAZY)			++
 		maybe(Flags.IS_ERROR,		IS_ERROR)		++
 		maybe(Flags.OVERLOADED,		OVERLOADED)		++

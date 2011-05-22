@@ -2,8 +2,8 @@ import sbt._
 
 final class ScJsonProject(info:ProjectInfo) extends DefaultProject(info) {
 	// dependencies
-	val scutil 	= "de.djini"				%% "scutil"	% "0.0.2"	% "compile"
-	val specs	= "org.scala-tools.testing"	%% "specs"	% "1.6.7.1"	% "test"
+	val scutil 	= "de.djini"				%% "scutil"	% "0.0.3"	% "compile"
+	val specs	= "org.scala-tools.testing"	%% "specs"	% "1.6.8"	% "test"
 
 	// issue compiler warnings
 	override def compileOptions	= super.compileOptions ++ Seq(Unchecked)
