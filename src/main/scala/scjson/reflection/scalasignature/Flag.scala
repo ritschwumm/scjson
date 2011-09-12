@@ -1,4 +1,4 @@
-package scjson.reflect.scalasignature
+package scjson.reflection.scalasignature
 
 import scutil.ext.BooleanImplicits._
 

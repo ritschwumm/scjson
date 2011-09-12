@@ -1,4 +1,4 @@
-package scjson.reflect.scalasignature
+package scjson.reflection.scalasignature
 
 // @see scala.tools.nsc.symtab.classfile.Pickler
 

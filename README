@@ -1,7 +1,7 @@
 JSON utilities for conversion between Strings, JSON-ASTs and scala objects.
 
 To build this code, get and install SBT from 
-	http://code.google.com/p/simple-build-tool/ .
+	https://github.com/harrah/xsbt
 
 Get and install these library/libraries before building:
 	https://github.com/ritschwumm/scutil
@@ -9,4 +9,4 @@ Get and install these library/libraries before building:
 Use these commands to build:
 	git clone git@github.com:ritschwumm/scjson.git
 	cd scjson
-	sbt update publish-local
+	sbt publish-local

@@ -1,4 +1,4 @@
-package scjson.reflect.scalasignature
+package scjson.reflection.scalasignature
 
 import java.util.Arrays
 
@@ -9,6 +9,7 @@ import scala.reflect.generic.ByteCodecs
 import scala.reflect.generic.PickleFormat
 import scala.reflect.generic.PickleBuffer
 
+import scutil.Tuples
 import scutil.ext.BooleanImplicits._
 
 object Decoder {
@@ -17,6 +18,8 @@ object Decoder {
 			decodeAnnotation		map 
 			parseSignature			map 
 			{ it => new Signature(it) }
+
+	// TODO what is ScalaLongSignature?
 
 	def getAnnotation(clazz:Class[_]):Option[ScalaSignature]	= 
 			Option(clazz getAnnotation classOf[ScalaSignature])
@@ -47,10 +50,6 @@ object Decoder {
 		out
 	}
 	
-	// TODO generalize
-	def uncurry[A,B,C](in:Pair[Pair[A,B],C]):Triple[A,B,C]	= 
-			Triple(in._1._1, in._1._2, in._2)
-	
 	def parseSignature(bytes:Array[Byte]):Seq[Entry] = {
 		val pb		= pickleBuffer(bytes)
 		val major	= pb.readNat
@@ -58,7 +57,7 @@ object Decoder {
 		// println("version=" + major + "." + minor)
 		require(major == PickleFormat.MajorVersion && minor <= PickleFormat.MinorVersion,	"wrong version")
 		
-		pb.toIndexedSeq.zipWithIndex map uncurry collect {
+		pb.toIndexedSeq.zipWithIndex map Tuples.runcurry3 collect {
 			case (PickleFormat.TERMname,			body, index)	=> readTERMname(			Ref(index), pickleBuffer(body))
 			case (PickleFormat.TYPEname,			body, index)	=> readTYPEname(			Ref(index), pickleBuffer(body))
 			

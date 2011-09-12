@@ -1,4 +1,4 @@
-package scjson.reflect
+package scjson.reflection
 
 object Mangling {
 	def mangle(s:String):String		= operators.foldLeft(s) { (n, o) => n.replace (o._1, o._2) }
