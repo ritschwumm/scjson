@@ -2,22 +2,22 @@ package scjson.codec
 
 import scjson._
 
-object JSEncoderNice {
-	/** unparse a JSValue into a String */ 
-	def write(v:JSValue):String	= v match {
-		case JSNull			=> "null"
-		case JSTrue			=> "true"
-		case JSFalse		=> "false"
-		case JSNumber(data)	=> data.toString
-		case JSString(data)	=> data map writeChar mkString("\"","","\"")
-		// case JSArray(data)	=> data map write mkString("[", ",", "]")
-		// case JSObject(data)	=> data.iterator map { case (key,value)	=> write(key) + ":" + write(value) } mkString("{", ",", "}")
-		case JSArray(data)	=> {
+object JSONEncoderNice {
+	/** unparse a JSONValue into a String */ 
+	def write(v:JSONValue):String	= v match {
+		case JSONNull			=> "null"
+		case JSONTrue			=> "true"
+		case JSONFalse			=> "false"
+		case JSONNumber(data)	=> data.toString
+		case JSONString(data)	=> data map writeChar mkString("\"","","\"")
+		// case JSONArray(data)	=> data map write mkString("[", ",", "]")
+		// case JSONObject(data)	=> data.iterator map { case (key,value)	=> write(key) + ":" + write(value) } mkString("{", ",", "}")
+		case JSONArray(data)	=> {
 			val inner	= data map write mkString ",\n"
 			if (inner.nonEmpty)	"[\n" + inner.replaceAll("(?m)^", "\t") + "\n]"
 			else				"[]"
 		}
-		case JSObject(data)	=> {
+		case JSONObject(data)	=> {
 			val inner	= data.iterator map { case (key,value)	=> write(key) + ":\t" + write(value) } mkString ",\n"
 			if (inner.nonEmpty)	"{\n" + inner.replaceAll("(?m)^", "\t") + "\n}"
 			else				"{}"

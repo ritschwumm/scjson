@@ -4,49 +4,49 @@ import scala.collection.mutable
 
 import scjson._
 
-object JSDecoderFast {
-	/** parse a JSON formatted String into a JSValue */
-	def read(s:String):Option[JSValue]	= 
-			try { Some(new JSDecoderFast(s).decode()) }
+object JSONDecoderFast {
+	/** parse a JSON formatted String into a JSONValue */
+	def read(s:String):Option[JSONValue]	= 
+			try { Some(new JSONDecoderFast(s).decode()) }
 			catch { case e:Exception => None }
 }
 
-private final class JSDecoderFast(text:String) {
+private final class JSONDecoderFast(text:String) {
 	val NO_CHAR	= -1
 	var	offset	= 0
 
-	private def decode():JSValue	= {
+	private def decode():JSONValue	= {
 		val value	= decodeNext()
 		ws()
 		if (!finished)	throw expected("end of input")
 		value
 	}
 
-	private def decodeNext():JSValue = {
+	private def decodeNext():JSONValue = {
 		ws()
 		if (finished)		throw expected("any char")
-		if (is("null"))		return JSNull
-		if (is("true"))		return JSTrue
-		if (is("false"))	return JSFalse
+		if (is("null"))		return JSONNull
+		if (is("true"))		return JSONTrue
+		if (is("false"))	return JSONFalse
 		if (is('[')) {
-			val	out	= mutable.ArrayBuilder.make[JSValue] 
+			val	out	= mutable.ArrayBuilder.make[JSONValue] 
 			ws()
-			if (is(']'))	return JSArray(out.result)
+			if (is(']'))	return JSONArray(out.result)
 			while (true) {
 				val value	= decodeNext()
 				out	+= value
 				ws()
-				if (is(']'))	return JSArray(out.result)
+				if (is(']'))	return JSONArray(out.result)
 				if (!is(','))	throw expectedClass(",]")
 			}
 		}
 		if (is('{')) {
-			val out	= new mutable.MapBuilder[JSString,JSValue,Map[JSString,JSValue]](Map.empty)
+			val out	= new mutable.MapBuilder[JSONString,JSONValue,Map[JSONString,JSONValue]](Map.empty)
 			ws()
-			if (is('}'))	return JSObject(out.result)
+			if (is('}'))	return JSONObject(out.result)
 			while (true) {
 				val key	= decodeNext() match {
-					case s:JSString	=> s
+					case s:JSONString	=> s
 					case _			=> throw expected("string key")
 				}
 				ws();
@@ -54,7 +54,7 @@ private final class JSDecoderFast(text:String) {
 				val value	= decodeNext()
 				out	+= (key -> value)
 				ws()
-				if (is('}'))	return JSObject(out.result)
+				if (is('}'))	return JSONObject(out.result)
 				if (!is(','))	throw expectedClass(",}");
 			}
 		}
@@ -96,7 +96,7 @@ private final class JSDecoderFast(text:String) {
 					else throw expectedClass("\"\\/trnfbu")
 				}
 				else if (is('"')) {
-					return JSString(out.result)
+					return JSONString(out.result)
 				}
 				else if (rng('\u0000', '\u001f')) {
 					offset	-= 1
@@ -109,9 +109,12 @@ private final class JSDecoderFast(text:String) {
 				}
 			}
 		}
-		// TODO json: leading zeroes are not allowed!
 		val before	= offset
 		is('-')
+		if (next == '0') {
+			consume()
+			if (next >= '0' && next <= '9')	throw expected("number without leading zero")
+		}
 		digits()
 		is('.')
 		digits()
@@ -119,7 +122,7 @@ private final class JSDecoderFast(text:String) {
 		is('+') || is('-')
 		digits()
 		try {
-			JSNumber(BigDecimal(from(before)))
+			JSONNumber(BigDecimal(from(before)))
 		}
 		catch {
 			case e:NumberFormatException	=>
@@ -129,11 +132,11 @@ private final class JSDecoderFast(text:String) {
 	}
 	
 	private def expected(what:String)	=
-			JSDecodeException(text, offset, what)
+			new JSONDecodeException(text, offset, what)
 	
 	private def expectedClass(charClass:String)	=
 			// TODO JSON-encode charClass characters
-			JSDecodeException(text, offset, "one of " + charClass)
+			new JSONDecodeException(text, offset, "one of " + charClass)
 
 	//------------------------------------------------------------------------------
 	//## hex
@@ -234,17 +237,5 @@ private final class JSDecoderFast(text:String) {
 	private def consume() {
 		if (finished)	sys error "already finished"
 		offset	+= 1
-	}
-}
-
-/** the input is invalid */
-case class JSDecodeException(input:String, offset:Int, expectation:String) extends Exception {
-	override def getMessage:String	= 
-			"at offset: " + offset + " expected: " + expectation
-
-	def lookingAt:String	= {
-		val width	= 80
-		val end		= (offset+width) min input.length
-		input substring (offset, end) replaceAll ("[\r\n]", "§")
 	}
 }

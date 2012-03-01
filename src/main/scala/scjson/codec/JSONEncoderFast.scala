@@ -2,9 +2,9 @@ package scjson.codec
 
 import scjson._
 
-object JSEncoderFast {
-	/** unparse a JSValue into a String */ 
-	def write(v:JSValue):String	= {
+object JSONEncoderFast {
+	/** unparse a JSONValue into a String */ 
+	def write(v:JSONValue):String	= {
 		val	b	= new StringBuilder
 		write1(v, b)
 		b.toString
@@ -12,13 +12,13 @@ object JSEncoderFast {
 	
 	private val hexTable	= "0123456789abcdef".toCharArray
 	
-	/** unparse a JSValue into a String */ 
-	private def write1(v:JSValue, b:StringBuilder):Unit	= v match {
-		case JSNull			=> b append "null"
-		case JSTrue			=> b append "true"
-		case JSFalse		=> b append "false"
-		case JSNumber(data)	=> b append  data.toString
-		case JSString(data)	=> {
+	/** unparse a JSONValue into a String */ 
+	private def write1(v:JSONValue, b:StringBuilder):Unit	= v match {
+		case JSONNull			=> b append "null"
+		case JSONTrue			=> b append "true"
+		case JSONFalse			=> b append "false"
+		case JSONNumber(data)	=> b append  data.toString
+		case JSONString(data)	=> {
 			b += '"'
 			var i	= 0
 			while (i < data.length) {
@@ -42,7 +42,7 @@ object JSEncoderFast {
 			}
 			b += '"'
 		}
-		case JSArray(data)	=> 
+		case JSONArray(data)	=> 
 			b	+= '['
 			var sep	= false
 			data foreach { it =>
@@ -51,7 +51,7 @@ object JSEncoderFast {
 				write1(it, b) 
 			}
 			b	+= ']'
-		case JSObject(data)	=> 
+		case JSONObject(data)	=> 
 			b	+= '{'
 			var sep	= false
 			data foreach { case (key,value) =>
