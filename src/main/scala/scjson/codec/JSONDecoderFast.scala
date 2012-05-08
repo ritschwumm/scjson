@@ -1,14 +1,19 @@
 package scjson.codec
 
+import scala.util.control.Exception._
 import scala.collection.mutable
 
 import scjson._
 
 object JSONDecoderFast {
 	/** parse a JSON formatted String into a JSONValue */
-	def read(s:String):Option[JSONValue]	= 
-			try { Some(new JSONDecoderFast(s).decode()) }
-			catch { case e:Exception => None }
+	def read(s:String):Either[JSONDecodeException,JSONValue]	=
+			try { Right(readOrThrow(s)) }
+			catch { case e:JSONDecodeException => Left(e) }
+			
+	/** parse a JSON formatted String into a JSONValue */
+	def readOrThrow(s:String):JSONValue	= 
+			new JSONDecoderFast(s).decode()
 }
 
 private final class JSONDecoderFast(text:String) {

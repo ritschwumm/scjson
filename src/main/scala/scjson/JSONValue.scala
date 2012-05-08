@@ -1,6 +1,10 @@
 package scjson
 
-sealed abstract class JSONValue
+sealed abstract class JSONValue {
+	def downcast[T<:JSONValue]:Option[T]	=
+			try { Some(asInstanceOf[T]) }
+			catch { case e:ClassCastException => None }
+}
 
 case object JSONNull extends JSONValue
 
