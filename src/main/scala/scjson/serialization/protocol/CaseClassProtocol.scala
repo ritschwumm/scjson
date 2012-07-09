@@ -14,7 +14,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	def caseObjectJSONFormat[T:Manifest](singleton:T):JSONFormat[T]	= {
 		new JSONFormat[T] {
 			def write(out:T):JSONValue	= {
-				JSONObject(Map.empty)
+				JSONObject.empty
 			}
 			def read(in:JSONValue):T	= {
 				singleton
@@ -27,14 +27,14 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 		new JSONFormat[T] {
 			def write(out:T):JSONValue	= {
 				val fields	= unapply(out).get
-				JSONObject(Map(
-					JSONString(k1)	-> doWrite[S1](fields)
+				JSONObject(Seq(
+					k1	-> doWrite[S1](fields)
 				))
 			}
 			def read(in:JSONValue):T	= {
-				val map	= objectValue(in)
+				val map	= objectMap(in)
 				apply(
-					doRead[S1](map(JSONString(k1)))
+					doRead[S1](map(k1))
 				)
 			}
 		}
@@ -47,15 +47,15 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 			def write(out:T):JSONValue	= {
 				val fields	= unapply(out).get
 				JSONObject(Map(
-					JSONString(k1)	-> doWrite[S1](fields._1),
-					JSONString(k2)	-> doWrite[S2](fields._2)
+					k1	-> doWrite[S1](fields._1),
+					k2	-> doWrite[S2](fields._2)
 				))
 			}
 			def read(in:JSONValue):T	= {
 				val map	= objectValue(in)
 				apply(
-					doRead[S1](map(JSONString(k1))),
-					doRead[S2](map(JSONString(k2)))
+					doRead[S1](map(k1)),
+					doRead[S2](map(k2))
 				)
 			}
 		}
@@ -74,11 +74,14 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 		JSONFormat[T](
 			out => {
 				val (identifier,formatted)	= helper write out
-				JSONObject(objectValue(formatted) + (Summand.typeTag -> identifier))
+				JSONObject(
+					(Summand.typeTag -> identifier)	+:
+					downcast[JSONObject](formatted).value
+				)
 			},
 			in => {
 				val formatted	= downcast[JSONObject](in)
-				val identifier	= downcast[JSONString](formatted value Summand.typeTag)
+				val identifier	= downcast[JSONString](formatted valueMap Summand.typeTag)
 				helper read (identifier, formatted)
 			}
 		)

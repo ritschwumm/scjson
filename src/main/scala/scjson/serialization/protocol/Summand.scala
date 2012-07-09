@@ -3,7 +3,7 @@ package scjson.serialization
 import scjson._
 
 private object Summand {
-	val typeTag	= JSONString("")
+	val typeTag	= ""
 	
 	implicit def fromClass[T:JSONFormat](clazz:Class[T]):Summand[T]	= 
 			Summand(clazz.getName, clazz, jsonFormat[T])

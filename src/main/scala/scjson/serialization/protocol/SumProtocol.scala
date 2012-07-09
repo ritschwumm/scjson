@@ -1,7 +1,7 @@
 package scjson.serialization
 
 import scutil.Implicits._
-import scutil.Bijection
+import scutil.data.Bijection
 
 import scjson._
 
@@ -15,11 +15,11 @@ trait SumProtocol {
 		JSONFormat[T](
 			out	=> {
 				val (identifier,formatted)	= helper write out
-				JSONObject(Map(identifier	-> formatted))
+				JSONObject(Seq(identifier.value	-> formatted))
 			},
 			in	=> {
 				val (identifier,formatted)	= downcast[JSONObject](in).value.head
-				helper read (identifier, formatted)
+				helper read (JSONString(identifier), formatted)
 			}
 		)
 	}

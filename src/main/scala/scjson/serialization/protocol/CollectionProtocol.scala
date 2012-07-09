@@ -1,6 +1,6 @@
 package scjson.serialization
 
-import scutil.Bijection
+import scutil.data._
 
 import scjson._
 
@@ -20,7 +20,7 @@ trait CollectionProtocol {
 	
 	//------------------------------------------------------------------------------
 		
-	/** map format with arbitrary keys */
+	/*
 	def mapJSONFormat[S,T:JSONFormat](conv:Bijection[S,String]):JSONFormat[Map[S,T]]	=
 			StringMapJSONFormat[T] compose Bijection[Map[S,T],Map[String,T]](
 				_ map { case (k,v) => (conv write k, v) },
@@ -30,13 +30,14 @@ trait CollectionProtocol {
 	implicit def StringMapJSONFormat[T:JSONFormat]:JSONFormat[Map[String,T]]	= new JSONFormat[Map[String,T]] {
 		def write(out:Map[String,T]):JSONValue	=
 				JSONObject(out map { 
-					case (k,v) => (JSONString(k), doWrite[T](v)) 
+					case (k,v) => (k, doWrite[T](v)) 
 				})
 		def read(in:JSONValue):Map[String,T]	= 
 				objectValue(in) map { 
-					case (k,v) => (k.value, doRead[T](v)) 
+					case (k,v) => (k, doRead[T](v)) 
 				}
 	}
+	*/
 	
 	implicit def ViaSetMapJSONFormat[K:JSONFormat,V:JSONFormat]:JSONFormat[Map[K,V]]	= new JSONFormat[Map[K,V]] {
 		// TODO dubious
@@ -61,15 +62,15 @@ trait CollectionProtocol {
 	
 	// alternative {some} or {none}
 	implicit def OptionJSONFormat[T:JSONFormat]:JSONFormat[Option[T]]	= new JSONFormat[Option[T]] {
-		private val someTag	= JSONString("some")
-		private val noneTag	= JSONString("none")
+		private val someTag	= "some"
+		private val noneTag	= "none"
 		
 		def write(out:Option[T]):JSONValue	= out match {
-			case Some(value)	=> JSONObject(Map(someTag -> doWrite(value)))
-			case None			=> JSONObject(Map(noneTag -> JSONTrue))
+			case Some(value)	=> JSONObject(Seq(someTag -> doWrite(value)))
+			case None			=> JSONObject(Seq(noneTag -> JSONTrue))
 		}
 		def read(in:JSONValue):Option[T]	= {
-			val map	= objectValue(in)
+			val map	= objectMap(in)
 			(map get someTag, map get noneTag) match {
 				case (Some(js), None)	=> Some(doRead[T](js))
 				case (None, Some(js))	=> None
@@ -80,23 +81,45 @@ trait CollectionProtocol {
 	
 	// alternative {left} or {right}
 	implicit def EitherJSONFormat[L:JSONFormat,R:JSONFormat]:JSONFormat[Either[L,R]]	= new JSONFormat[Either[L,R]] {
-		private val rightTag	= JSONString(">")
-		private val leftTag		= JSONString("<")
+		private val rightTag	= "right"
+		private val leftTag		= "left"
 		
 		def write(out:Either[L,R]):JSONValue	= out match {
-			case Right(value)	=> JSONObject(Map(
+			case Right(value)	=> JSONObject(Seq(
 				rightTag	-> doWrite[R](value)
 			))
-			case Left(value)	=> JSONObject(Map(
+			case Left(value)	=> JSONObject(Seq(
 				leftTag		-> doWrite[L](value)
 			))
 		}
 		def read(in:JSONValue):Either[L,R]	= { 
-			val	map	= objectValue(in)
+			val	map	= objectMap(in)
 			(map get leftTag, map get rightTag) match {
 				case (None, Some(js))	=> Right(doRead[R](js))
 				case (Some(js), None)	=> Left(doRead[L](js))
 				case _					=> fail("unexpected either")
+			}
+		}
+	}
+	
+	implicit def TriedJSONFormat[F:JSONFormat,W:JSONFormat]:JSONFormat[Tried[F,W]]	= new JSONFormat[Tried[F,W]] {
+		private val winTag	= "win"
+		private val failTag	= "fail"
+		
+		def write(out:Tried[F,W]):JSONValue	= out match {
+			case Fail(value)	=> JSONObject(Seq(
+				failTag	-> doWrite[F](value)
+			))
+			case Win(value)	=> JSONObject(Seq(
+				winTag	-> doWrite[W](value)
+			))
+		}
+		def read(in:JSONValue):Tried[F,W]	= { 
+			val	map	= objectMap(in)
+			(map get failTag, map get winTag) match {
+				case (Some(bs), None)	=> Fail(doRead[F](bs))
+				case (None, Some(bs))	=> Win(doRead[W](bs))
+				case _					=> fail("unexpected trial")
 			}
 		}
 	}

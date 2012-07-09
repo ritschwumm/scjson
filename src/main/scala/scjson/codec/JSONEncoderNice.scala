@@ -9,7 +9,7 @@ object JSONEncoderNice {
 		case JSONTrue			=> "true"
 		case JSONFalse			=> "false"
 		case JSONNumber(data)	=> data.toString
-		case JSONString(data)	=> data map writeChar mkString("\"","","\"")
+		case JSONString(data)	=> writeString(data)
 		// case JSONArray(data)	=> data map write mkString("[", ",", "]")
 		// case JSONObject(data)	=> data.iterator map { case (key,value)	=> write(key) + ":" + write(value) } mkString("{", ",", "}")
 		case JSONArray(data)	=> {
@@ -18,11 +18,14 @@ object JSONEncoderNice {
 			else				"[]"
 		}
 		case JSONObject(data)	=> {
-			val inner	= data.iterator map { case (key,value)	=> write(key) + ":\t" + write(value) } mkString ",\n"
+			val inner	= data map { case (key,value)	=> writeString(key) + ":\t" + write(value) } mkString ",\n"
 			if (inner.nonEmpty)	"{\n" + inner.replaceAll("(?m)^", "\t") + "\n}"
 			else				"{}"
 		}
 	}
+	
+	private def writeString(data:String):String	= 
+			data map writeChar mkString("\"","","\"")
 	
 	private def writeChar(char:Char):String	= char match {
 		case '"' 	=> "\\\""

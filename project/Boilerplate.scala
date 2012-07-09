@@ -11,6 +11,7 @@ object Boilerplate {
 	}	
 	
 	//------------------------------------------------------------------------------
+	//## tuples
 	
 	def genTupleFile(outDir:File):File	= {
 		val outFile		= outDir / "TupleProtocolGenerated.scala"
@@ -36,23 +37,24 @@ object Boilerplate {
 	}
 			
 	def genTupleMethod(arity:Int):String	= {
-		def aritywise(item:Int=>String):String	= 1 to arity map item mkString ","
-		val typeParams	= aritywise("T"+_+":JSONFormat") 
-		val typeNames	= aritywise("T"+_)
+		val awc	= aritywise(arity)(",") _
+		val typeParams	= awc("T$:JSONFormat") 
+		val typeNames	= awc("T$")
 		("""
 		|	implicit def Tuple"""+arity+"""JSONFormat["""+typeParams+"""]:JSONFormat[("""+typeNames+""")]	= new JSONFormat[("""+typeNames+""")] {
 		|		def write(out:("""+typeNames+""")):JSONValue	= {
-		|			JSONArray(Seq("""+ aritywise(i => "doWrite[T"+i+"](out._"+i+")")	+"""))
+		|			JSONArray(Seq("""+ awc("doWrite[T$](out._$)")	+"""))
 		|		}
 		|		def read(in:JSONValue):("""+typeNames+""")	= {
 		|			val	arr	= arrayValue(in)
-		|			("""+ aritywise(i => "doRead[T"+i+"](arr("+(i-1)+"))") +""")
+		|			("""+ awc("doRead[T$](arr($-1))") +	""")
 		|		}
 		|	}
 		""").stripMargin
 	}
 	
 	//------------------------------------------------------------------------------
+	//## case classes
 	
 	def genCaseClassFile(outDir:File):File	= {
 		val outFile		= outDir / "CaseClassProtocolGenerated.scala"
@@ -79,24 +81,30 @@ object Boilerplate {
 	}
 	
 	def genCaseClassMethod(arity:Int):String	= {
-		def aritywise(item:Int=>String):String	= 1 to arity map item mkString ","
-		val typeParams	= aritywise("S"+_+":JSONFormat") 
-		val typeNames	= aritywise("S"+_)
-		val fieldNames	= aritywise("k"+_)
+		val awc	= aritywise(arity)(",") _
+		val typeParams	= awc("S$:JSONFormat") 
+		val typeNames	= awc("S$")
+		val fieldNames	= awc("k$")
 		("""
 		|	def caseClassJSONFormat"""+arity+"""["""+typeParams+""",T:Manifest](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):JSONFormat[T]	= {
 		|		val Seq("""+fieldNames+""")	= fieldNamesFor[T]
 		|		new JSONFormat[T] {
 		|			def write(out:T):JSONValue	= {
 		|				val fields	= unapply(out).get
-		|				JSONObject(Map(""" + aritywise(i => "JSONString(k"+i+") -> doWrite[S"+i+"](fields._"+i+")") + """))
+		|				JSONObject(Seq(""" + awc("k$ -> doWrite[S$](fields._$)") + """))
 		|			}
 		|			def read(in:JSONValue):T	= {
-		|				val map	= objectValue(in)
-		|				apply(""" + aritywise(i => "doRead[S"+i+"](map(JSONString(k"+i+")))") + """)
+		|				val map	= objectMap(in)
+		|				apply(""" + awc("doRead[S$](map(k$))") + """)
 		|			}
 		|		}
 		|	}
 		""").stripMargin
 	}
+	
+	//------------------------------------------------------------------------------
+	//## helper
+	
+	private def aritywise(arity:Int)(separator:String)(format:String):String	= 
+			1 to arity map { i => format replace ("$", i.toString) } mkString separator
 }

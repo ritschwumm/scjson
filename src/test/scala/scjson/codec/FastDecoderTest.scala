@@ -3,6 +3,7 @@ package scjson.codec
 import org.specs2.mutable._
 
 import scutil.Implicits._
+import scutil.data._
 
 import scjson._
 import scjson.codec._
@@ -10,80 +11,80 @@ import scjson.codec._
 class FastDecoderTest extends Specification {
 	"FastDecoder" should {
 		"decode null" in {
-			(JSONDecoderFast read "null") mustEqual Right(JSONNull)
+			(JSONDecoderFast read "null") mustEqual Win(JSONNull)
 		}
 		"decode true" in {
-			(JSONDecoderFast read "true") mustEqual Right(JSONTrue)
+			(JSONDecoderFast read "true") mustEqual Win(JSONTrue)
 		}
 		"decode false" in {
-			(JSONDecoderFast read "false") mustEqual Right(JSONFalse)
+			(JSONDecoderFast read "false") mustEqual Win(JSONFalse)
 		}
 		
 		"decode int 0" in {
-			(JSONDecoderFast read "0") mustEqual Right(JSONNumber(0))
+			(JSONDecoderFast read "0") mustEqual Win(JSONNumber(0))
 		}
 		"decode int -1" in {
-			(JSONDecoderFast read "-1") mustEqual Right(JSONNumber(-1))
+			(JSONDecoderFast read "-1") mustEqual Win(JSONNumber(-1))
 		}
 		"decode int 1" in {
-			(JSONDecoderFast read "1") mustEqual Right(JSONNumber(1))
+			(JSONDecoderFast read "1") mustEqual Win(JSONNumber(1))
 		}
 		"decode int 0." in {
-			(JSONDecoderFast read "0.") mustEqual Right(JSONNumber(0))
+			(JSONDecoderFast read "0.") mustEqual Win(JSONNumber(0))
 		}
 		"decode int .0" in {
-			(JSONDecoderFast read ".0") mustEqual Right(JSONNumber(0))
+			(JSONDecoderFast read ".0") mustEqual Win(JSONNumber(0))
 		}
 		"decode int 0.0" in {
-			(JSONDecoderFast read "0.0") mustEqual Right(JSONNumber(0))
+			(JSONDecoderFast read "0.0") mustEqual Win(JSONNumber(0))
 		}
 		"not decode 1e" in {
-			(JSONDecoderFast read "1e") must beLeft
+			(JSONDecoderFast read "1e").toEither must beLeft
 		}
 		"decode 1e1" in {
-			(JSONDecoderFast read "1e1") mustEqual Right(JSONNumber(10))
+			(JSONDecoderFast read "1e1") mustEqual Win(JSONNumber(10))
 		}
 		"decode 2e+3" in {
-			(JSONDecoderFast read "2e+3") mustEqual Right(JSONNumber(2000))
+			(JSONDecoderFast read "2e+3") mustEqual Win(JSONNumber(2000))
 		}
 		"decode 10e-1" in {
-			(JSONDecoderFast read "10e-1") mustEqual Right(JSONNumber(1))
+			(JSONDecoderFast read "10e-1") mustEqual Win(JSONNumber(1))
 		}
 		"decode 47.11" in {
-			(JSONDecoderFast read "47.11") mustEqual Right(JSONNumber(47.11))
+			(JSONDecoderFast read "47.11") mustEqual Win(JSONNumber(47.11))
 		}
 	
 		"decode simple strings" in {
-			(JSONDecoderFast read "\"hallo, welt!\"") mustEqual Right(JSONString("hallo, welt!"))
+			(JSONDecoderFast read "\"hallo, welt!\"") mustEqual Win(JSONString("hallo, welt!"))
 		}
 		"decode string escapes" in {
-			(JSONDecoderFast read "\" \\\\ \\/ \\t \\r \\n \\f \\b \"") mustEqual Right(JSONString(" \\ / \t \r \n \f \b "))
+			(JSONDecoderFast read "\" \\\\ \\/ \\t \\r \\n \\f \\b \"") mustEqual Win(JSONString(" \\ / \t \r \n \f \b "))
 		}
 		"decode small hex escapes" in {
-			(JSONDecoderFast read "\" \\u0123 \"") mustEqual Right(JSONString(" \u0123 "))
+			(JSONDecoderFast read "\" \\u0123 \"") mustEqual Win(JSONString(" \u0123 "))
 		}
 		"decode big hex escapes" in {
-			(JSONDecoderFast read "\" \\uf3e2 \"") mustEqual Right(JSONString(" \uf3e2 "))
+			(JSONDecoderFast read "\" \\uf3e2 \"") mustEqual Win(JSONString(" \uf3e2 "))
 		}
 		
 		"decode arrays with 0 elements" in {
-			(JSONDecoderFast read "[]") mustEqual Right(JSONArray(Seq()))
+			(JSONDecoderFast read "[]") mustEqual Win(JSONArray(Seq()))
 		}
 		"decode arrays with 1 elements" in {
-			(JSONDecoderFast read "[1]") mustEqual Right(JSONArray(Seq(JSONNumber(1))))
+			(JSONDecoderFast read "[1]") mustEqual Win(JSONArray(Seq(JSONNumber(1))))
 		}
 		"decode arrays with 2 elements" in {
-			(JSONDecoderFast read "[1,2]") mustEqual Right(JSONArray(Seq(JSONNumber(1),JSONNumber(2))))
+			(JSONDecoderFast read "[1,2]") mustEqual Win(JSONArray(Seq(JSONNumber(1),JSONNumber(2))))
 		}
 		
 		"decode objects with 0 elements" in {
-			(JSONDecoderFast read "{}") mustEqual Right(JSONObject(Map()))
+			(JSONDecoderFast read "{}") mustEqual Win(JSONObject.empty)
 		}
 		"decode objects with 1 elements" in {
-			(JSONDecoderFast read "{\"a\":1}") mustEqual Right(JSONObject(Map(JSONString("a")->JSONNumber(1))))
+			(JSONDecoderFast read "{\"a\":1}") mustEqual Win(JSONObject(Seq("a"->JSONNumber(1))))
 		}
 		"decode objects with 2 elements" in {
-			(JSONDecoderFast read "{\"a\":1,\"b\":2}") mustEqual Right(JSONObject(Map(JSONString("a")->JSONNumber(1),JSONString("b")->JSONNumber(2))))
+			(JSONDecoderFast read "{\"a\":1,\"b\":2}") mustEqual Win(JSONObject(Seq("a"->JSONNumber(1),"b"->JSONNumber(2))))
 		}
 	}
 }

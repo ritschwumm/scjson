@@ -6,15 +6,9 @@ object JSONNavigation {
 }
 
 final class JSONNavigation(value:Option[JSONValue]) {
-	def /(name:String):Option[JSONValue]	= objectMap flatMap { _ get JSONString(name) }
-	def /(index:Int):Option[JSONValue]		= arraySeq  flatMap { _.lift apply index }
+	def /(name:String):Option[JSONValue]	= objectMap flatMap { _ get name }
+	def /(index:Int):Option[JSONValue]		= arraySeq  flatMap { _ lift index }
 	
-	def first:Option[JSONValue] = 
-			value collect {
-				case JSONObject(data)	=> data.values.headOption
-				case JSONArray(data)	=> data.headOption
-			} flatMap identity
-		
 	//------------------------------------------------------------------------------
 			
 	def jsonNull:Option[JSONNull.type]	= value collect { case JSONNull			=> JSONNull	}
@@ -35,5 +29,7 @@ final class JSONNavigation(value:Option[JSONValue]) {
 	def float:Option[Float]							= value collect { case JSONNumber(data)		=> data.floatValue	}
 	def boolean:Option[Boolean]						= value collect { case JSONBoolean(data)	=> data				}
 	def arraySeq:Option[Seq[JSONValue]]				= value collect { case JSONArray(data)		=> data }
-	def objectMap:Option[Map[JSONString,JSONValue]]	= value collect { case JSONObject(data)		=> data }
+	def objectSeq:Option[Seq[(String,JSONValue)]]	= value collect { case JSONObject(data)		=> data }
+	def objectMap:Option[Map[String,JSONValue]]		= objectSeq map { _.toMap }
+	
 }

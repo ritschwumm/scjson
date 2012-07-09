@@ -2,14 +2,17 @@ package scjson.codec
 
 import scala.util.control.Exception._
 import scala.collection.mutable
+import scala.collection.immutable
+
+import scutil.data._
 
 import scjson._
 
 object JSONDecoderFast {
 	/** parse a JSON formatted String into a JSONValue */
-	def read(s:String):Either[JSONDecodeException,JSONValue]	=
-			try { Right(readOrThrow(s)) }
-			catch { case e:JSONDecodeException => Left(e) }
+	def read(s:String):Tried[JSONDecodeException,JSONValue]	=
+			try { Win(readOrThrow(s)) }
+			catch { case e:JSONDecodeException => Fail(e) }
 			
 	/** parse a JSON formatted String into a JSONValue */
 	def readOrThrow(s:String):JSONValue	= 
@@ -34,7 +37,7 @@ private final class JSONDecoderFast(text:String) {
 		if (is("true"))		return JSONTrue
 		if (is("false"))	return JSONFalse
 		if (is('[')) {
-			val	out	= mutable.ArrayBuilder.make[JSONValue] 
+			val	out	= new immutable.VectorBuilder[JSONValue] 
 			ws()
 			if (is(']'))	return JSONArray(out.result)
 			while (true) {
@@ -46,13 +49,13 @@ private final class JSONDecoderFast(text:String) {
 			}
 		}
 		if (is('{')) {
-			val out	= new mutable.MapBuilder[JSONString,JSONValue,Map[JSONString,JSONValue]](Map.empty)
+			val out	= new immutable.VectorBuilder[(String,JSONValue)] 
 			ws()
 			if (is('}'))	return JSONObject(out.result)
 			while (true) {
 				val key	= decodeNext() match {
-					case s:JSONString	=> s
-					case _			=> throw expected("string key")
+					case JSONString(s)	=> s
+					case _				=> throw expected("string key")
 				}
 				ws();
 				if (!is(':'))	throw expectedClass(":")

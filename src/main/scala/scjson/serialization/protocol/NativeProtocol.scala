@@ -8,7 +8,7 @@ object NativeProtocol extends NativeProtocol
 
 trait NativeProtocol {
 	implicit object UnitJSONFormat extends JSONFormat[Unit] {
-		def write(out:Unit):JSONValue	= JSONObject(Map.empty)
+		def write(out:Unit):JSONValue	= JSONObject.empty
 		def read(in:JSONValue):Unit		= ()
 	}
 	

@@ -2,7 +2,7 @@ package scjson
 
 import scala.util.control.Exception._
 
-import scutil.Marshaller
+import scutil.data.Marshaller
 
 import scjson.codec._
 	
@@ -13,5 +13,5 @@ object JSONMarshaller extends Marshaller[JSONValue,String] {
 	
 	/** parse a JSON formatted String into a JSONValue */
 	def read(it:String):Option[JSONValue]	=
-			(JSONDecoderFast read it).right.toOption
+			(JSONDecoderFast read it).toOption
 }

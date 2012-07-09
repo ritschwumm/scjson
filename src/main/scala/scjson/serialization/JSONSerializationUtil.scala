@@ -13,7 +13,14 @@ private object JSONSerializationUtil {
 			try { it.asInstanceOf[T] }
 			catch { case e:ClassCastException => fail("unexpected json value type", e) }
 	
-	def objectValue(v:JSONValue):Map[JSONString,JSONValue]	= v match {
+	//------------------------------------------------------------------------------
+			
+	def objectMap(v:JSONValue):Map[String,JSONValue]	= v match {
+		case x:JSONObject	=> x.value.toMap
+		case x				=> fail("expected a JSONObject")
+	}
+	
+	def objectValue(v:JSONValue):Seq[(String,JSONValue)]	= v match {
 		case x:JSONObject	=> x.value
 		case x				=> fail("expected a JSONObject")
 	}
