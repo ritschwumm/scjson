@@ -4,7 +4,7 @@ import scala.util.control.Exception._
 import scala.collection.mutable
 import scala.collection.immutable
 
-import scutil.data._
+import scutil.tried._
 
 import scjson._
 

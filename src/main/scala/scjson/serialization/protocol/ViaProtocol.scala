@@ -1,6 +1,6 @@
 package scjson.serialization
 
-import scutil.data._
+import scutil.lang._
 
 import scjson._
 

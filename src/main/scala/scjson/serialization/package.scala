@@ -1,6 +1,6 @@
 package scjson
 
-import scutil.data.Bijection
+import scutil.lang._
 
 package object serialization {
 	import JSONSerializationUtil._

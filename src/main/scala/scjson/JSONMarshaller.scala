@@ -2,7 +2,7 @@ package scjson
 
 import scala.util.control.Exception._
 
-import scutil.data.Marshaller
+import scutil.lang._
 
 import scjson.codec._
 	
