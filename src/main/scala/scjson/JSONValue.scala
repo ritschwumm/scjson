@@ -36,13 +36,15 @@ object JSONArray {
 	val empty	= JSONArray(Seq.empty)
 }
 case class JSONArray(value:Seq[JSONValue])	extends JSONValue {
-	def ++ (that:JSONArray):JSONArray	= JSONArray(this.value ++ that.value)
+	def get(index:Int):Option[JSONValue]	= value lift index
+	def ++ (that:JSONArray):JSONArray		= JSONArray(this.value ++ that.value)
 }
 
 object JSONObject {
 	val empty	= JSONObject(Seq.empty)
 }
 case class JSONObject(value:Seq[(String,JSONValue)])	extends JSONValue {
-	def valueMap:Map[String,JSONValue]	= value.toMap
-	def ++ (that:JSONObject):JSONObject	= JSONObject(this.value ++ that.value)
+	def get(key:String):Option[JSONValue]	= value collectFirst { case (k,v) if (k == key) => v }
+	def ++ (that:JSONObject):JSONObject		= JSONObject(this.value ++ that.value)
+	def valueMap:Map[String,JSONValue]		= value.toMap
 }

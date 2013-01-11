@@ -31,5 +31,4 @@ final class JSONNavigation(value:Option[JSONValue]) {
 	def arraySeq:Option[Seq[JSONValue]]				= value collect { case JSONArray(data)		=> data }
 	def objectSeq:Option[Seq[(String,JSONValue)]]	= value collect { case JSONObject(data)		=> data }
 	def objectMap:Option[Map[String,JSONValue]]		= objectSeq map { _.toMap }
-	
 }
