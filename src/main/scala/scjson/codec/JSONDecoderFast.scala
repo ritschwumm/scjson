@@ -80,27 +80,15 @@ private final class JSONDecoderFast(text:String) {
 					else if (is('f'))	out	+= '\f'
 					else if (is('b'))	out	+= '\b'
 					else if (is('u')) {
-						// TODO slow
 						if (offset+4 > text.length)	throw expected("4 hex digits")
-						val before	= offset
-						offset += 4
-						try {
-							out	+= Integer.parseInt(from(before), 16).toChar
-						}
-						catch {
-							case e:NumberFormatException	=>
-								offset -= 4
-								throw expected("4 hex digits")
-						}
+						
+						val h1	= hexDigit()
+						val h2	= hexDigit()
+						val h3	= hexDigit()
+						val h4	= hexDigit()
+						
+						out	+= ((h1 << 12) | (h2 << 8) | (h3 << 4) | (h4 << 0)).toChar 
 					}
-					/*
-					// NOTE broken
-					else if (is('u')) {
-						val	h	= hex4()
-						if (h == NO_CHAR)	throw expected("4 hex digits")
-						out	+= h.toChar
-					}
-					*/
 					else throw expectedClass("\"\\/trnfbu")
 				}
 				else if (is('"')) {
@@ -108,7 +96,7 @@ private final class JSONDecoderFast(text:String) {
 				}
 				else if (rng('\u0000', '\u001f')) {
 					offset	-= 1
-					throw expected("no control character")
+					throw expected("not a control character")
 				}
 				else {
 					if (finished)	throw expected("more chars")
@@ -146,29 +134,19 @@ private final class JSONDecoderFast(text:String) {
 			// TODO JSON-encode charClass characters
 			new JSONDecodeException(text, offset, "one of " + charClass)
 
-	//------------------------------------------------------------------------------
-	//## hex
-	
-	/*
-	private def hex4():Int	= {
-		val before	= offset
-		val	h1	= hexDigit;	if (h1 != NO_CHAR)	{ offset += 1 } else { offset = before; return NO_CHAR }
-		val	h2	= hexDigit;	if (h2 != NO_CHAR)	{ offset += 1 } else { offset = before; return NO_CHAR }
-		val	h3	= hexDigit;	if (h3 != NO_CHAR)	{ offset += 1 } else { offset = before; return NO_CHAR }
-		val	h4	= hexDigit;	if (h4 != NO_CHAR)	{ offset += 1 } else { offset = before; return NO_CHAR }
-		(h1 << 12) | (h2 << 8) | (h3 << 4) | (h4 << 1) 
-	}
-			
-	private def hexDigit:Int	= {
-		val	c	= next
-			 if (c >= '0' && c <= '9')	c - '0'
-		else if (c >= 'a' && c <= 'f')	c - 'a' + 10
-		else							NO_CHAR
-	}
-	*/
-
 	//-------------------------------------------------------------------------
 	//## tokens
+	
+	private def hexDigit():Int	= {
+		val	c	= text charAt offset
+		val h	=		 
+					 if (c >= '0' && c <= '9')	c - '0'
+				else if (c >= 'a' && c <= 'f')	c - 'a' + 10
+				else if (c >= 'A' && c <= 'F')	c - 'A' + 10
+				else throw expected("a hex digit")
+		offset	+= 1
+		h
+	}
 	
 	private def digits():Boolean	= {
 		val before	= offset
@@ -192,18 +170,6 @@ private final class JSONDecoderFast(text:String) {
 			else			keepOn	= false
 		}
 	}
-	
-//	private boolean ws() {
-//		int	before	= offset;
-//		for (;;) {
-//			if (is(' '))	continue;
-//			if (is('\t'))	continue;
-//			if (is('\r'))	continue;
-//			if (is('\n'))	continue;
-//			break;
-//		}
-//		return offset != before;
-//	}
 	
 	private def rng(start:Char, end:Char):Boolean	= {
 		val c	= next

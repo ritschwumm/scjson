@@ -66,6 +66,9 @@ class FastDecoderTest extends Specification {
 		"decode big hex escapes" in {
 			(JSONDecoderFast read "\" \\uf3e2 \"") mustEqual Win(JSONString(" \uf3e2 "))
 		}
+		"decode upper case hex escapes" in {
+			(JSONDecoderFast read "\" \\uBEEF \"") mustEqual Win(JSONString(" \uBEEF "))
+		}
 		
 		"decode arrays with 0 elements" in {
 			(JSONDecoderFast read "[]") mustEqual Win(JSONArray(Seq()))
