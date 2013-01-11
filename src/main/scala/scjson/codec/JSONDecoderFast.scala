@@ -131,8 +131,7 @@ private final class JSONDecoderFast(text:String) {
 			new JSONDecodeException(text, offset, what)
 	
 	private def expectedClass(charClass:String)	=
-			// TODO JSON-encode charClass characters
-			new JSONDecodeException(text, offset, "one of " + charClass)
+			new JSONDecodeException(text, offset, "one of " + (JSONEncoderFast write JSONString(charClass)))
 
 	//-------------------------------------------------------------------------
 	//## tokens
