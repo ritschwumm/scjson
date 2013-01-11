@@ -24,7 +24,6 @@ object Boilerplate {
 		|package scjson.serialization
 		|
 		|import scutil.Implicits._
-		|import scmirror._
 		|import scjson._
 		|import JSONSerializationUtil._
 		|
@@ -66,8 +65,8 @@ object Boilerplate {
 		"""
 		|package scjson.serialization
 		|
+		|import reflect.runtime.universe._
 		|import scutil.Implicits._
-		|import scmirror._
 		|import scjson._
 		|import JSONSerializationUtil._
 		|
@@ -75,7 +74,7 @@ object Boilerplate {
 		""".stripMargin		+ 
 		(2 to 22 map genCaseClassMethod mkString "\n")	+
 		"""
-		|	protected def fieldNamesFor[T:Manifest]:Seq[String]
+		|	protected def fieldNamesFor[T:TypeTag]:Seq[String]
 		|}
 		""".stripMargin
 	}
@@ -86,7 +85,7 @@ object Boilerplate {
 		val typeNames	= awc("S$")
 		val fieldNames	= awc("k$")
 		("""
-		|	def caseClassJSONFormat"""+arity+"""["""+typeParams+""",T:Manifest](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):JSONFormat[T]	= {
+		|	def caseClassJSONFormat"""+arity+"""["""+typeParams+""",T:TypeTag](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):JSONFormat[T]	= {
 		|		val Seq("""+fieldNames+""")	= fieldNamesFor[T]
 		|		new JSONFormat[T] {
 		|			def write(out:T):JSONValue	= {

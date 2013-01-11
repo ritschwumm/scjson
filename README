@@ -5,7 +5,6 @@ To build this code, get and install SBT from
 
 Get and install these library/libraries before building:
 	https://github.com/ritschwumm/scutil
-	https://github.com/ritschwumm/scmirror
 
 Use these commands to build:
 	git clone git@github.com:ritschwumm/scjson.git

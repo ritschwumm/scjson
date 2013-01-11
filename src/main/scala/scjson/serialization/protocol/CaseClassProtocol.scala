@@ -1,8 +1,8 @@
 package scjson.serialization
 
-import scutil.Implicits._
+import reflect.runtime.universe._
 
-import scmirror._
+import scutil.Implicits._
 
 import scjson._
 
@@ -11,7 +11,7 @@ import JSONSerializationUtil._
 object CaseClassProtocol extends CaseClassProtocol
 
 trait CaseClassProtocol extends CaseClassProtocolGenerated {
-	def caseObjectJSONFormat[T:Manifest](singleton:T):JSONFormat[T]	= {
+	def caseObjectJSONFormat[T:TypeTag](singleton:T):JSONFormat[T]	= {
 		new JSONFormat[T] {
 			def write(out:T):JSONValue	= {
 				JSONObject.empty
@@ -22,7 +22,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 		}
 	}
 	
-	def caseClassJSONFormat1[S1:JSONFormat,T:Manifest](apply:S1=>T, unapply:T=>Option[S1]):JSONFormat[T]	= {
+	def caseClassJSONFormat1[S1:JSONFormat,T:TypeTag](apply:S1=>T, unapply:T=>Option[S1]):JSONFormat[T]	= {
 		val Seq(k1)	= fieldNamesFor[T]
 		new JSONFormat[T] {
 			def write(out:T):JSONValue	= {
@@ -41,7 +41,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	}
 	
 	/*
-	def caseClassJSONFormat2[S1:JSONFormat,S2:JSONFormat,T:Manifest](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):JSONFormat[T]	= {
+	def caseClassJSONFormat2[S1:JSONFormat,S2:JSONFormat,T:TypeTag](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):JSONFormat[T]	= {
 		val Seq(k1,k2)	= fieldNamesFor[T]
 		new JSONFormat[T] {
 			def write(out:T):JSONValue	= {
@@ -63,8 +63,16 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	*/
 	
 	// BETTER cache results
-	protected def fieldNamesFor[T:Manifest]:Seq[String]	=
-			(Reflector constructor manifest[T].erasure) getOrError ("cannot get fields for type " + manifest[T].erasure)
+	protected def fieldNamesFor[T:TypeTag]:Seq[String]	= {
+		val typ	= typeOf[T]
+		val names:Option[Seq[String]]	=
+				for {
+					primaryCtor	<- typ.declarations filter { _.isMethod } map { _.asMethod } filter { _.isPrimaryConstructor } singleOption;
+					paramNames	<- primaryCtor.paramss.singleOption
+				}
+				yield paramNames map { _.name.decoded }
+		names getOrError ("cannot get fields for type " + typ)
+	}
 		
 	//------------------------------------------------------------------------------
 	//## sums of case classes
