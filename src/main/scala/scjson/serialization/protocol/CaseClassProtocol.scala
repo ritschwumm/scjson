@@ -10,7 +10,7 @@ import JSONSerializationUtil._
 
 object CaseClassProtocol extends CaseClassProtocol
 
-trait CaseClassProtocol extends CaseClassProtocolGenerated {
+trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	def caseObjectJSONFormat[T:TypeTag](singleton:T):JSONFormat[T]	= {
 		new JSONFormat[T] {
 			def write(out:T):JSONValue	= {
@@ -62,6 +62,25 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	}
 	*/
 	
+	/** uses a field with an empty name for the specific constructor */
+	def caseClassSumJSONFormat[T](summands:Summand[T,_<:T]*):JSONFormat[T]	=
+			sumJSONFormat(summands map (new InlinePartialJSONFormat(_)))
+		
+	/** injects the type tag as a field with an empty name into an existing object */
+	private class InlinePartialJSONFormat[T,C<:T](summand:Summand[T,C]) extends PartialJSONFormat[T] {
+		import summand._
+		val typeTag	= ""
+		def write(value:T):Option[JSONValue]	=
+				castValue(value) map { it =>
+					JSONVarObject(typeTag -> JSONString(identifier)) ++ 
+					downcast[JSONObject](format write it)
+				}
+		def read(json:JSONValue):Option[T]	=
+				downcast[JSONObject](json).value 
+				.exists	{ _ == (typeTag, JSONString(identifier)) } 
+				.guard	{ format read json }
+	}
+	
 	// BETTER cache results
 	protected def fieldNamesFor[T:TypeTag]:Seq[String]	= {
 		val typ	= typeOf[T]
@@ -72,26 +91,5 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 				}
 				yield paramNames map { _.name.decoded }
 		names getOrError ("cannot get fields for type " + typ)
-	}
-		
-	//------------------------------------------------------------------------------
-	//## sums of case classes
-	
-	def caseClassSumJSONFormat[T](summands:Summand[_<:T]*):JSONFormat[T]	= {
-		val helper	= new SumHelper[T](summands)
-		JSONFormat[T](
-			out => {
-				val (identifier,formatted)	= helper write out
-				JSONObject(
-					(Summand.typeTag -> identifier)	+:
-					downcast[JSONObject](formatted).value
-				)
-			},
-			in => {
-				val formatted	= downcast[JSONObject](in)
-				val identifier	= downcast[JSONString](formatted valueMap Summand.typeTag)
-				helper read (identifier, formatted)
-			}
-		)
 	}
 }

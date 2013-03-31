@@ -1,5 +1,7 @@
 package scjson.serialization
 
+import scala.reflect._
+
 import scutil.lang._
 import scutil.tried._
 
@@ -17,7 +19,7 @@ trait CollectionProtocol {
 	
 	implicit def SetJSONFormat[T:JSONFormat]:JSONFormat[Set[T]]					= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toSet)
 	implicit def ListJSONFormat[T:JSONFormat]:JSONFormat[List[T]]				= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toList)
-	implicit def ArrayJSONFormat[T:JSONFormat:Manifest]:JSONFormat[Array[T]]	= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toArray)
+	implicit def ArrayJSONFormat[T:JSONFormat:ClassTag]:JSONFormat[Array[T]]	= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toArray)
 	
 	//------------------------------------------------------------------------------
 		

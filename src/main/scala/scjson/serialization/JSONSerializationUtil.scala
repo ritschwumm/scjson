@@ -2,7 +2,7 @@ package scjson.serialization
 
 import scjson._
 
-private object JSONSerializationUtil {
+object JSONSerializationUtil {
 	def fail(message:String):Nothing =
 			throw new JSONDeserializationException(message)
 	

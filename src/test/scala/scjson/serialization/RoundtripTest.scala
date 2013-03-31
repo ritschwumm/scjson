@@ -1,0 +1,63 @@
+package scjson.serialization
+
+import org.specs2.mutable._
+
+import scutil.Implicits._
+
+import scjson._
+
+class RoundtripTest extends Specification {
+	sealed trait SimpleBase
+	case object SimpleObject											extends SimpleBase
+	case class	SimpleClass(ok:Boolean, x:Option[Int], y:Set[String])	extends SimpleBase
+	
+	object MyProtocol extends FullProtocol {
+		implicit lazy val SimpleSumFormat:JSONFormat[Any]					= objectSumJSONFormat[Any](IntJSONFormat, StringJSONFormat)
+		
+		implicit lazy val SimpleBaseFormat:JSONFormat[SimpleBase]			= objectSumJSONFormat(SimpleObjectFormat, SimpleClassFormat)
+		implicit lazy val SimpleObjectFormat:JSONFormat[SimpleObject.type]	= caseObjectJSONFormat(SimpleObject)
+		implicit lazy val SimpleClassFormat:JSONFormat[SimpleClass]			= caseClassJSONFormat3(SimpleClass.apply, SimpleClass.unapply)
+	}
+	
+	//------------------------------------------------------------------------------
+	
+	"roundtrips" should {
+		"work for a simple String" in { 
+			import MyProtocol._
+			
+			val orig	= JSONString("hallo")
+			val json	= doWrite[JSONString](orig)
+			val back	= doRead[JSONString](json)
+			orig mustEqual back
+		}
+		
+		"work with primitive types in simple sums" in {
+			import MyProtocol._
+			
+			val orig1	= 1
+			val json1	= SimpleSumFormat write orig1
+			// println("json1=" + json1)
+			val back1	= SimpleSumFormat read  json1
+			orig1 mustEqual back1
+		}
+		
+		"work with AnyRef in simple sums" in {
+			import MyProtocol._
+			
+			val orig2	= "2"
+			val json2	= SimpleSumFormat write orig2
+			// println("json2=" + json2)
+			val back2	= SimpleSumFormat read  json2
+			orig2 mustEqual back2
+		}
+		
+		"work for ADTs" in { 
+			import MyProtocol._
+			
+			val orig	= SimpleClass(true, Some(1), Set("hallo", "welt"))
+			val json	= doWrite[SimpleBase](orig)
+			val back	= doRead[SimpleBase](json)
+			orig mustEqual back
+		}
+	}
+}

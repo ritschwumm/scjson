@@ -8,5 +8,7 @@ trait FullProtocol
 		with	CollectionProtocol 
 		with	TupleProtocol
 		with	SumProtocol
+		with	ObjectSumProtocol
+		with	EnumProtocol
 		with	CaseClassProtocol
 		with	IdentityProtocol

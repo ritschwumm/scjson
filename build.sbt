@@ -2,7 +2,7 @@ name			:= "scjson"
 
 organization	:= "de.djini"
 
-version			:= "0.17.0"
+version			:= "0.18.0"
 
 scalaVersion	:= "2.10.0"
 
