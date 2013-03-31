@@ -2,6 +2,7 @@ package scjson.serialization
 
 import scala.reflect._
 
+import scutil.lang._
 import scutil.Implicits._
 
 import scjson._
@@ -11,10 +12,7 @@ import JSONSerializationUtil._
 object SumProtocol extends SumProtocol
 
 trait SumProtocol {
-	trait PartialJSONFormat[T] {
-		def write(value:T):Option[JSONValue]
-		def read(json:JSONValue):Option[T]
-	}
+	type PartialJSONFormat[T]	= Bichance[T,JSONValue]
 
 	def sumJSONFormat[T](partials:Seq[PartialJSONFormat[T]]):JSONFormat[T]	=
 			JSONFormat[T](

@@ -33,8 +33,9 @@ private final class JSONDecoderFast(text:String) {
 	private def decodeNext():JSONValue = {
 		ws()
 		if (finished)		throw expected("any char")
-		if (is("null"))		return JSONNull
-		if (is("true"))		return JSONTrue
+			
+		if (is("null"))	return JSONNull
+		if (is("true"))	return JSONTrue
 		if (is("false"))	return JSONFalse
 		if (is('[')) {
 			val	out	= new immutable.VectorBuilder[JSONValue] 
@@ -105,25 +106,47 @@ private final class JSONDecoderFast(text:String) {
 				}
 			}
 		}
+		
 		val before	= offset
-		is('-')
-		if (next == '0') {
-			consume()
-			if (next >= '0' && next <= '9')	throw expected("number without leading zero")
+		
+		var numCommit	= false
+		numCommit	|= is('-')
+	
+		val beforeBody	= offset
+		val numHead	= digits()
+		if (numHead > 1 && (text charAt beforeBody) == '0') {
+			offset	= beforeBody
+			throw expected("number without leading zero")
 		}
-		digits()
-		is('.')
-		digits()
-		is('e') || is('E')
-		is('+') || is('-')
-		digits()
-		try {
-			JSONNumber(BigDecimal(from(before)))
+		val numDot	= is('.')
+		val numTail	= digits()
+		val numBody	= numHead != 0 || numTail != 0
+		if (numCommit && !numBody) {
+			offset	= beforeBody
+			throw expected("valid number")
 		}
-		catch {
-			case e:NumberFormatException	=>
-				offset	= before
-				throw expected("valid number")
+		numCommit	= numBody
+		
+		if (numCommit) {
+			if (is('e') || is('E')) {
+				is('+') || is('-')
+				val countExpo	= digits()
+				if (countExpo == 0) {
+					throw expected("at least 1 digit in the exponent")
+				}
+			}
+			try {
+				return JSONNumber(BigDecimal(from(before)))
+			}
+			catch {
+				case e:NumberFormatException	=>
+					offset	= before
+					throw expected("valid number")
+			}
+		}
+		else {
+			offset	= before
+			throw expected("unexpected character %04x" format (text charAt offset).toInt)
 		}
 	}
 	
@@ -147,7 +170,7 @@ private final class JSONDecoderFast(text:String) {
 		h
 	}
 	
-	private def digits():Boolean	= {
+	private def digits():Int	= {
 		val before	= offset
 		var keepOn	= true
 		while (!finished && keepOn) {
@@ -155,7 +178,7 @@ private final class JSONDecoderFast(text:String) {
 			if (c >= '0' && c <= '9')	consume()
 			else						keepOn	= false
 		}
-		offset != before
+		offset - before
 	}
 	
 	private def ws() {

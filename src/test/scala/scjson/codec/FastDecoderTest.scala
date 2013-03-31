@@ -53,6 +53,13 @@ class FastDecoderTest extends Specification {
 		"decode 47.11" in {
 			(JSONDecoderFast read "47.11") mustEqual Win(JSONNumber(47.11))
 		}
+		
+		"fail with a leading zero in the body" in {
+			(JSONDecoderFast read "00") must beLike { case Fail(_) => ok }
+		}
+		"allow a leading zero in the exponent" in {
+			(JSONDecoderFast read "0E00") mustEqual Win(JSONNumber(0))
+		}
 	
 		"decode simple strings" in {
 			(JSONDecoderFast read "\"hallo, welt!\"") mustEqual Win(JSONString("hallo, welt!"))
@@ -78,6 +85,13 @@ class FastDecoderTest extends Specification {
 		}
 		"decode arrays with 2 elements" in {
 			(JSONDecoderFast read "[1,2]") mustEqual Win(JSONArray(Seq(JSONNumber(1),JSONNumber(2))))
+		}
+		
+		"allow legal whitespace in arrays" in {
+			(JSONDecoderFast read "[ ]") mustEqual Win(JSONArray(Seq()))
+		}
+		"disallow illegal whitespace in arrays" in {
+			(JSONDecoderFast read "[ ]") must beLike { case Fail(_) => ok }
 		}
 		
 		"decode objects with 0 elements" in {
