@@ -55,10 +55,10 @@ object JSONEncoderFast {
 				case '\t'	=> b += '\\'; b += 't'
 				case c if c < 32	=>
 					b	+= '\\'; b += 'u'
-					b	+=  hexTable((c >> 12) & 0xf)
-					b	+=  hexTable((c >>  8) & 0xf)
-					b	+=  hexTable((c >>  4) & 0xf)
-					b	+=  hexTable((c >>  0) & 0xf)
+					b	+= hexTable((c >> 12) & 0xf)
+					b	+= hexTable((c >>  8) & 0xf)
+					b	+= hexTable((c >>  4) & 0xf)
+					b	+= hexTable((c >>  0) & 0xf)
 				case c 	=> b += c
 			}
 			i += 1
