@@ -11,8 +11,8 @@ import JSONSerializationUtil._
 object CaseClassProtocol extends CaseClassProtocol
 
 trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
-	def caseObjectJSONFormat[T:TypeTag](singleton:T):JSONFormat[T]	= {
-		new JSONFormat[T] {
+	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	= {
+		new Format[T] {
 			def write(out:T):JSONValue	= {
 				JSONObject.empty
 			}
@@ -22,9 +22,9 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		}
 	}
 	
-	def caseClassJSONFormat1[S1:JSONFormat,T:TypeTag](apply:S1=>T, unapply:T=>Option[S1]):JSONFormat[T]	= {
+	def caseClassFormat1[S1:Format,T:TypeTag](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
 		val Seq(k1)	= fieldNamesFor[T]
-		new JSONFormat[T] {
+		new Format[T] {
 			def write(out:T):JSONValue	= {
 				val fields	= unapply(out).get
 				JSONObject(Seq(
@@ -41,9 +41,9 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	}
 	
 	/*
-	def caseClassJSONFormat2[S1:JSONFormat,S2:JSONFormat,T:TypeTag](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):JSONFormat[T]	= {
+	def caseClassFormat2[S1:Format,S2:Format,T:TypeTag](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):Format[T]	= {
 		val Seq(k1,k2)	= fieldNamesFor[T]
-		new JSONFormat[T] {
+		new Format[T] {
 			def write(out:T):JSONValue	= {
 				val fields	= unapply(out).get
 				JSONObject(Map(
@@ -63,11 +63,11 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	*/
 	
 	/** uses a field with an empty name for the specific constructor */
-	def caseClassSumJSONFormat[T](summands:Summand[T,_<:T]*):JSONFormat[T]	=
-			sumJSONFormat(summands map (new InlinePartialJSONFormat(_)))
+	def caseClassSumFormat[T](summands:Summand[T,_<:T]*):Format[T]	=
+			sumFormat(summands map (new InlinePartialFormat(_)))
 		
 	/** injects the type tag as a field with an empty name into an existing object */
-	private class InlinePartialJSONFormat[T,C<:T](summand:Summand[T,C]) extends PartialJSONFormat[T] {
+	private class InlinePartialFormat[T,C<:T](summand:Summand[T,C]) extends PartialFormat[T] {
 		import summand._
 		val typeTag	= ""
 		def write(value:T):Option[JSONValue]	=

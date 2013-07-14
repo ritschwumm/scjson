@@ -12,11 +12,11 @@ class RoundtripTest extends Specification {
 	case class	SimpleClass(ok:Boolean, x:Option[Int], y:Set[String])	extends SimpleBase
 	
 	object MyProtocol extends FullProtocol {
-		implicit lazy val SimpleSumFormat:JSONFormat[Any]					= objectSumJSONFormat[Any](IntJSONFormat, StringJSONFormat)
+		implicit lazy val SimpleSumFormat:Format[Any]					= objectSumFormat[Any](IntFormat, StringFormat)
 		
-		implicit lazy val SimpleBaseFormat:JSONFormat[SimpleBase]			= objectSumJSONFormat(SimpleObjectFormat, SimpleClassFormat)
-		implicit lazy val SimpleObjectFormat:JSONFormat[SimpleObject.type]	= caseObjectJSONFormat(SimpleObject)
-		implicit lazy val SimpleClassFormat:JSONFormat[SimpleClass]			= caseClassJSONFormat3(SimpleClass.apply, SimpleClass.unapply)
+		implicit lazy val SimpleBaseFormat:Format[SimpleBase]			= objectSumFormat(SimpleObjectFormat, SimpleClassFormat)
+		implicit lazy val SimpleObjectFormat:Format[SimpleObject.type]	= caseObjectFormat(SimpleObject)
+		implicit lazy val SimpleClassFormat:Format[SimpleClass]			= caseClassFormat3(SimpleClass.apply, SimpleClass.unapply)
 	}
 	
 	//------------------------------------------------------------------------------

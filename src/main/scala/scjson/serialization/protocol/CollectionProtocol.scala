@@ -12,25 +12,25 @@ import JSONSerializationUtil._
 object CollectionProtocol extends CollectionProtocol
 
 trait CollectionProtocol {
-	implicit def SeqJSONFormat[T:JSONFormat]:JSONFormat[Seq[T]] = new JSONFormat[Seq[T]] {
+	implicit def SeqFormat[T:Format]:Format[Seq[T]] = new Format[Seq[T]] {
 		def write(out:Seq[T]):JSONValue	= JSONArray(out map doWrite[T])
 		def read(in:JSONValue):Seq[T]	= arrayValue(in) map doRead[T]
 	} 
 	
-	implicit def SetJSONFormat[T:JSONFormat]:JSONFormat[Set[T]]					= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toSet)
-	implicit def ListJSONFormat[T:JSONFormat]:JSONFormat[List[T]]				= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toList)
-	implicit def ArrayJSONFormat[T:JSONFormat:ClassTag]:JSONFormat[Array[T]]	= SeqJSONFormat[T] compose Bijection(_.toSeq,	_.toArray)
+	implicit def SetFormat[T:Format]:Format[Set[T]]					= SeqFormat[T] compose Bijection(_.toSeq,	_.toSet)
+	implicit def ListFormat[T:Format]:Format[List[T]]				= SeqFormat[T] compose Bijection(_.toSeq,	_.toList)
+	implicit def ArrayFormat[T:Format:ClassTag]:Format[Array[T]]	= SeqFormat[T] compose Bijection(_.toSeq,	_.toArray)
 	
 	//------------------------------------------------------------------------------
 		
 	/*
-	def mapJSONFormat[S,T:JSONFormat](conv:Bijection[S,String]):JSONFormat[Map[S,T]]	=
-			StringMapJSONFormat[T] compose Bijection[Map[S,T],Map[String,T]](
+	def mapFormat[S,T:Format](conv:Bijection[S,String]):Format[Map[S,T]]	=
+			StringMapFormat[T] compose Bijection[Map[S,T],Map[String,T]](
 				_ map { case (k,v) => (conv write k, v) },
 				_ map { case (k,v) => (conv read  k, v) }
 			)
 			
-	implicit def StringMapJSONFormat[T:JSONFormat]:JSONFormat[Map[String,T]]	= new JSONFormat[Map[String,T]] {
+	implicit def StringMapFormat[T:Format]:Format[Map[String,T]]	= new Format[Map[String,T]] {
 		def write(out:Map[String,T]):JSONValue	=
 				JSONObject(out map { 
 					case (k,v) => (k, doWrite[T](v)) 
@@ -42,9 +42,9 @@ trait CollectionProtocol {
 	}
 	*/
 	
-	implicit def ViaSetMapJSONFormat[K:JSONFormat,V:JSONFormat]:JSONFormat[Map[K,V]]	= new JSONFormat[Map[K,V]] {
+	implicit def ViaSetMapFormat[K:Format,V:Format]:Format[Map[K,V]]	= new Format[Map[K,V]] {
 		// TODO dubious
-		import TupleProtocol.Tuple2JSONFormat
+		import TupleProtocol.Tuple2Format
 		def write(out:Map[K,V]):JSONValue	= doWrite[Set[(K,V)]](out.toSet)
 		def read(in:JSONValue):Map[K,V]		= doRead[Set[(K,V)]](in).toMap
 	}
@@ -53,7 +53,7 @@ trait CollectionProtocol {
 		
 	/*
 	// alternative 0/1-sized array
-	implicit def OptionJSONFormat[T:JSONFormat]:JSONFormat[Option[T]]	= new JSONFormat[Option[T]] {
+	implicit def OptionFormat[T:Format]:Format[Option[T]]	= new Format[Option[T]] {
 		def write(out:Option[T]):JSONValue	= doWrite[Seq[T]](out.toSeq)
 		def read(in:JSONValue):Option[T]	= doRead[Seq[T]](in) match {
 			case Seq(t)	=> Some(t)
@@ -64,7 +64,7 @@ trait CollectionProtocol {
 	*/
 	
 	// alternative {some} or {none}
-	implicit def OptionJSONFormat[T:JSONFormat]:JSONFormat[Option[T]]	= new JSONFormat[Option[T]] {
+	implicit def OptionFormat[T:Format]:Format[Option[T]]	= new Format[Option[T]] {
 		private val someTag	= "some"
 		private val noneTag	= "none"
 		
@@ -83,7 +83,7 @@ trait CollectionProtocol {
 	}
 	
 	// alternative {left} or {right}
-	implicit def EitherJSONFormat[L:JSONFormat,R:JSONFormat]:JSONFormat[Either[L,R]]	= new JSONFormat[Either[L,R]] {
+	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	= new Format[Either[L,R]] {
 		private val rightTag	= "right"
 		private val leftTag		= "left"
 		
@@ -105,7 +105,7 @@ trait CollectionProtocol {
 		}
 	}
 	
-	implicit def TriedJSONFormat[F:JSONFormat,W:JSONFormat]:JSONFormat[Tried[F,W]]	= new JSONFormat[Tried[F,W]] {
+	implicit def TriedFormat[F:Format,W:Format]:Format[Tried[F,W]]	= new Format[Tried[F,W]] {
 		private val winTag	= "win"
 		private val failTag	= "fail"
 		

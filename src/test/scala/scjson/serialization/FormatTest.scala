@@ -23,26 +23,26 @@ class FormatTest extends Specification {
 	case class TestADT2(a:Int, b:Int)	extends TestADT
 	
 	object MyProtocol extends FullProtocol {
-		implicit val TestEnum_F:JSONFormat[TestEnum]	= enumJSONFormat(Seq(
+		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(Seq(
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
 				"2"	-> TestEnum2))
 				
-		implicit val TestSum_F:JSONFormat[TestSum]	= objectSumJSONFormat[TestSum](
+		implicit val TestSum_F:Format[TestSum]	= objectSumFormat[TestSum](
 				"0"	-> TestSum0_F,
 				"1"	-> TestSum1_F,
 				"2"	-> TestSum2_F)
-		implicit lazy val TestSum0_F	= caseObjectJSONFormat(TestSum0)
-		implicit lazy val TestSum1_F	= caseClassJSONFormat1(TestSum1.apply, TestSum1.unapply)
-		implicit lazy val TestSum2_F	= caseClassJSONFormat2(TestSum2.apply, TestSum2.unapply)
+		implicit lazy val TestSum0_F	= caseObjectFormat(TestSum0)
+		implicit lazy val TestSum1_F	= caseClassFormat1(TestSum1.apply, TestSum1.unapply)
+		implicit lazy val TestSum2_F	= caseClassFormat2(TestSum2.apply, TestSum2.unapply)
 		
-		implicit val TestADT_F:JSONFormat[TestADT]	= caseClassSumJSONFormat(
+		implicit val TestADT_F:Format[TestADT]	= caseClassSumFormat(
 				"0"	-> TestADT0_F,
 				"1"	-> TestADT1_F,
 				"2"	-> TestADT2_F)
-		implicit lazy val TestADT0_F	= caseObjectJSONFormat(TestADT0)
-		implicit lazy val TestADT1_F	= caseClassJSONFormat1(TestADT1.apply, TestADT1.unapply)
-		implicit lazy val TestADT2_F	= caseClassJSONFormat2(TestADT2.apply, TestADT2.unapply)
+		implicit lazy val TestADT0_F	= caseObjectFormat(TestADT0)
+		implicit lazy val TestADT1_F	= caseClassFormat1(TestADT1.apply, TestADT1.unapply)
+		implicit lazy val TestADT2_F	= caseClassFormat2(TestADT2.apply, TestADT2.unapply)
 	}
 	
 	import MyProtocol._

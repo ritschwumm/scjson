@@ -37,10 +37,10 @@ object Boilerplate {
 			
 	def genTupleMethod(arity:Int):String	= {
 		val awc	= aritywise(arity)(",") _
-		val typeParams	= awc("T$:JSONFormat") 
+		val typeParams	= awc("T$:Format") 
 		val typeNames	= awc("T$")
 		("""
-		|	implicit def Tuple"""+arity+"""JSONFormat["""+typeParams+"""]:JSONFormat[("""+typeNames+""")]	= new JSONFormat[("""+typeNames+""")] {
+		|	implicit def Tuple"""+arity+"""Format["""+typeParams+"""]:Format[("""+typeNames+""")]	= new Format[("""+typeNames+""")] {
 		|		def write(out:("""+typeNames+""")):JSONValue	= {
 		|			JSONArray(Seq("""+ awc("doWrite[T$](out._$)")	+"""))
 		|		}
@@ -81,13 +81,13 @@ object Boilerplate {
 	
 	def genCaseClassMethod(arity:Int):String	= {
 		val awc	= aritywise(arity)(",") _
-		val typeParams	= awc("S$:JSONFormat") 
+		val typeParams	= awc("S$:Format") 
 		val typeNames	= awc("S$")
 		val fieldNames	= awc("k$")
 		("""
-		|	def caseClassJSONFormat"""+arity+"""["""+typeParams+""",T:TypeTag](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):JSONFormat[T]	= {
+		|	def caseClassFormat"""+arity+"""["""+typeParams+""",T:TypeTag](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):Format[T]	= {
 		|		val Seq("""+fieldNames+""")	= fieldNamesFor[T]
-		|		new JSONFormat[T] {
+		|		new Format[T] {
 		|			def write(out:T):JSONValue	= {
 		|				val fields	= unapply(out).get
 		|				JSONObject(Seq(""" + awc("k$ -> doWrite[S$](fields._$)") + """))
