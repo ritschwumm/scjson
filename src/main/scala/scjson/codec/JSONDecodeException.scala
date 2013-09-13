@@ -1,14 +1,14 @@
 package scjson.codec
 
-import scala.collection.mutable
-
-import scjson._
+import scjson.JSONInputException
 
 /** the input is invalid */
-class JSONDecodeException(input:String, offset:Int, expectation:String) extends Exception {
-	override def getMessage:String	= 
-			"at offset: " + offset + " expected: " + expectation
-
+final class JSONDecodeException(
+	input:String, offset:Int, expectation:String
+)
+extends JSONInputException(
+	"at offset: " + offset + " expected: " + expectation
+) {
 	def lookingAt:String	= {
 		val width	= 80
 		val end		= (offset+width) min input.length

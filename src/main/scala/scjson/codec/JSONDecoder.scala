@@ -1,25 +1,23 @@
 package scjson.codec
 
-import scala.util.control.Exception._
-import scala.collection.mutable
 import scala.collection.immutable
 
 import scutil.tried._
 
 import scjson._
 
-object JSONDecoderFast {
+private object JSONDecoder {
 	/** parse a JSON formatted String into a JSONValue */
-	def read(s:String):Tried[JSONDecodeException,JSONValue]	=
-			try { Win(readOrThrow(s)) }
-			catch { case e:JSONDecodeException => Fail(e) }
-			
-	/** parse a JSON formatted String into a JSONValue */
-	def readOrThrow(s:String):JSONValue	= 
-			new JSONDecoderFast(s).decode()
+	def decode(s:String):Tried[JSONDecodeException,JSONValue]	=
+			try { 
+				Win(new JSONDecoder(s).decode()) 
+			}
+			catch { case e:JSONDecodeException => 
+				Fail(e) 
+			}
 }
 
-private final class JSONDecoderFast(text:String) {
+private final class JSONDecoder(text:String) {
 	val NO_CHAR	= -1
 	var	offset	= 0
 
@@ -68,7 +66,7 @@ private final class JSONDecoderFast(text:String) {
 			}
 		}
 		if (is('"')) {
-			val out	= new mutable.StringBuilder
+			val out	= new StringBuilder
 			while (true) {
 				if (is('\\')) {
 					if (finished)	throw expected("escape continuation")
@@ -154,7 +152,7 @@ private final class JSONDecoderFast(text:String) {
 			new JSONDecodeException(text, offset, what)
 	
 	private def expectedClass(charClass:String)	=
-			new JSONDecodeException(text, offset, "one of " + (JSONEncoderFast write JSONString(charClass)))
+			new JSONDecodeException(text, offset, "one of " + (JSONCodec encode JSONString(charClass)))
 
 	//-------------------------------------------------------------------------
 	//## tokens
