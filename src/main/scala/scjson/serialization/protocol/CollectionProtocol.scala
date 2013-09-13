@@ -3,7 +3,6 @@ package scjson.serialization
 import scala.reflect._
 
 import scutil.lang._
-import scutil.tried._
 
 import scjson._
 

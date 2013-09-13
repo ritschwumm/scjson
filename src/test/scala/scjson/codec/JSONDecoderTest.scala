@@ -3,7 +3,7 @@ package scjson.codec
 import org.specs2.mutable._
 
 import scutil.Implicits._
-import scutil.tried._
+import scutil.lang._
 
 import scjson._
 import scjson.codec._

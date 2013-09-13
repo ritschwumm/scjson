@@ -2,7 +2,7 @@ package scjson.codec
 
 import scala.collection.immutable
 
-import scutil.tried._
+import scutil.lang._
 
 import scjson._
 

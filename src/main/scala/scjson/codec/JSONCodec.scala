@@ -1,7 +1,6 @@
 package scjson.codec
 
 import scutil.lang._
-import scutil.tried._
 
 import scjson._
 

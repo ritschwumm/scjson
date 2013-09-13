@@ -2,9 +2,9 @@ package scjson
 
 import java.io._
 
+import scutil.lang._
 import scutil.Implicits._
-import scutil.Charsets
-import scutil.tried._
+import scutil.io.Charsets
 
 import scjson.codec._
 import scjson.serialization._
