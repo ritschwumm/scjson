@@ -1,4 +1,4 @@
-JSON utilities for conversion between Strings, JSON-ASTs and scala objects.
+JSON utilities for conversion between Strings, JSON-ASTs and scala objects
 
 To build this code, get and install SBT from 
     https://github.com/sbt/sbt

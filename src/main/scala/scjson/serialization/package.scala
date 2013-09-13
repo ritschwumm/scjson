@@ -18,11 +18,12 @@ package object serialization {
 			Bijection(writeFunc, it => readFunc(downcast(it)))
 		
 	/** delay the construction of an actual Format until it's used */
-	def LazyFormat[T](sub: =>Format[T]):Format[T]	= new Bijection[T,JSONValue] {
-		lazy val delegate = sub
-		def write(t:T):JSONValue	= delegate write t
-		def read(s:JSONValue):T		= delegate read s
-	}
+	def LazyFormat[T](sub: =>Format[T]):Format[T]	=
+			new Bijection[T,JSONValue] {
+				lazy val delegate = sub
+				def write(t:T):JSONValue	= delegate write t
+				def read(s:JSONValue):T		= delegate read s
+			}
 	
 	//------------------------------------------------------------------------------
 	
