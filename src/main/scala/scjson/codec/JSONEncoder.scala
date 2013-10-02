@@ -120,7 +120,7 @@ private final class JSONEncoder(pretty:Boolean) {
 	}
 	
 	private def indent() {
-		var x		= 0
+		var x	= 0
 		while (x < level) {
 			b	++= JSONEncoder.indention
 			x	+= 1
