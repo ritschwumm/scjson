@@ -1,5 +1,7 @@
 package scjson.serialization
 
+import scutil.lang._
+
 import scjson._
 
 import JSONSerializationUtil._
@@ -7,61 +9,61 @@ import JSONSerializationUtil._
 object NativeProtocol extends NativeProtocol
 
 trait NativeProtocol {
-	implicit object UnitFormat extends Format[Unit] {
-		def write(out:Unit):JSONValue	= JSONObject.empty
-		def read(in:JSONValue):Unit		= ()
-	}
+	implicit val UnitFormat	= Format[Unit](
+		constant(JSONObject.empty),
+		constant(())
+	)
 	
-	implicit object NullFormat extends Format[Null] {
-		def write(out:Null):JSONValue	= JSONNull
-		def read(in:JSONValue):Null		= null
-	}
+	implicit val NullFormat = Format[Null](
+		constant(JSONNull),
+		constant(null)
+	)
 
-	implicit object ByteFormat extends Format[Byte] {
-		def write(out:Byte):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):Byte		= numberValue(in).toByte
-	}
-	implicit object ShortFormat extends Format[Short] {
-		def write(out:Short):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):Short	= numberValue(in).toShort
-	}
-	implicit object IntFormat extends Format[Int] {
-		def write(out:Int):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):Int		= numberValue(in).toInt
-	}
-	implicit object LongFormat extends Format[Long] {
-		def write(out:Long):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):Long		= numberValue(in).toLong
-	} 
-	implicit object FloatFormat extends Format[Float] {
-		def write(out:Float):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):Float	= numberValue(in).toFloat
-	}
-	implicit object DoubleFormat extends Format[Double] {
-		def write(out:Double):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):Double	= numberValue(in).toDouble
-	}
+	implicit val ByteFormat = Format[Byte](
+		JSONNumber(_),
+		in	=> numberValue(in).toByte
+	)
+	implicit val ShortFormat = Format[Short](
+		JSONNumber(_),
+		in	=> numberValue(in).toShort
+	)
+	implicit val IntFormat = Format[Int](
+		JSONNumber(_),
+		in	=> numberValue(in).toInt
+	)
+	implicit val LongFormat = Format[Long](
+		JSONNumber(_),
+		in	=> numberValue(in).toLong
+	) 
+	implicit val FloatFormat = Format[Float](
+		JSONNumber(_),
+		in	=> numberValue(in).toFloat
+	)
+	implicit val DoubleFormat = Format[Double](
+		JSONNumber(_),
+		in	=> numberValue(in).toDouble
+	)
 	
-	implicit object BigIntFormat extends Format[BigInt] {
-		def write(out:BigInt):JSONValue		= JSONNumber(out)
-		def read(in:JSONValue):BigInt		= numberValue(in).toBigInt
-	}
-	implicit object BigDecimalFormat  extends Format[BigDecimal] {
-		def write(out:BigDecimal):JSONValue	= JSONNumber(out)
-		def read(in:JSONValue):BigDecimal	= numberValue(in)
-	}
+	implicit val BigIntFormat = Format[BigInt](
+		JSONNumber(_),
+		in	=> numberValue(in).toBigInt
+	)
+	implicit val BigDecimalFormat  = Format[BigDecimal](
+		JSONNumber(_),
+		in	=> numberValue(in)
+	)
 	
-	implicit object BooleanFormat extends Format[Boolean] {
-		def write(out:Boolean):JSONValue	= JSONBoolean(out)
-		def read(in:JSONValue):Boolean		= booleanValue(in)
-	}
+	implicit val BooleanFormat = Format[Boolean](
+		JSONBoolean(_),
+		in	=> booleanValue(in)
+	)
 	
-	implicit object CharFormat extends Format[Char] {
-		def write(out:Char):JSONValue	= JSONString(out.toString)
-		def read(in:JSONValue):Char		= stringValue(in).head
-	}
-	implicit object StringFormat extends Format[String] {
-		def write(out:String):JSONValue	= JSONString(out)
-		def read(in:JSONValue):String	= stringValue(in)
-	}
+	implicit val CharFormat = Format[Char](
+		out => JSONString(out.toString),
+		in	=> stringValue(in).head
+	)
+	implicit val StringFormat = Format[String](
+		JSONString(_),
+		in	=> stringValue(in)
+	)
 }

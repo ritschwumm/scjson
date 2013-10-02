@@ -15,39 +15,41 @@ object JSONSerializationUtil {
 	
 	//------------------------------------------------------------------------------
 			
-	def objectMap(v:JSONValue):Map[String,JSONValue]	=
-			v match {
-				case x:JSONObject	=> x.value.toMap
-				case x				=> fail("expected a JSONObject")
+	def objectMap(it:JSONValue):Map[String,JSONValue]	=
+			it match {
+				case JSONObject(value)	=> value.toMap
+				case _					=> fail("expected a JSONObject")
 			}
 	
-	def objectValue(v:JSONValue):Seq[(String,JSONValue)]	=
-			v match {
-				case x:JSONObject	=> x.value
-				case x				=> fail("expected a JSONObject")
+	def objectValue(it:JSONValue):Seq[(String,JSONValue)]	=
+			it match {
+				case JSONObject(value)	=> value
+				case _					=> fail("expected a JSONObject")
 			}
 	
-	def arrayValue(v:JSONValue):Seq[JSONValue]	=
-			v match {
-				case x:JSONArray	=> x.value
-				case x				=> fail("expected a JSONArray")
+	def arrayValue(it:JSONValue):Seq[JSONValue]	=
+			it match {
+				case JSONArray(value)	=> value
+				case _					=> fail("expected a JSONArray")
 			}
 	
-	def stringValue(v:JSONValue):String	=
-			v match {
-				case x:JSONString	=> x.value
-				case x				=> fail("expected a JSONString")
+	//------------------------------------------------------------------------------
+	
+	def stringValue(it:JSONValue):String	=
+			it match {
+				case JSONString(value)	=> value
+				case _					=> fail("expected a JSONString")
 			}
 	
-	def numberValue(v:JSONValue):BigDecimal	=
-			v match {
-				case x:JSONNumber	=> x.value
-				case x				=> fail("expected a JSONNumber")
+	def numberValue(it:JSONValue):BigDecimal	=
+			it match {
+				case JSONNumber(value)	=> value
+				case _					=> fail("expected a JSONNumber")
 			}
 	
-	def booleanValue(v:JSONValue):Boolean	=
-			v match {
-				case x:JSONBoolean	=> x.value
-				case x				=> fail("expected a JSONBoolean")
+	def booleanValue(it:JSONValue):Boolean	=
+			it match {
+				case JSONBoolean(value)	=> value
+				case _					=> fail("expected a JSONBoolean")
 			}
 }

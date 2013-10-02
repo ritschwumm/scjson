@@ -2,6 +2,7 @@ package scjson.serialization
 
 import reflect.runtime.universe._
 
+import scutil.lang._
 import scutil.Implicits._
 
 import scjson._
@@ -11,63 +12,55 @@ import JSONSerializationUtil._
 object CaseClassProtocol extends CaseClassProtocol
 
 trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
-	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	= {
-		new Format[T] {
-			def write(out:T):JSONValue	= {
-				JSONObject.empty
-			}
-			def read(in:JSONValue):T	= {
-				singleton
-			}
-		}
-	}
+	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
+			Format[T](constant(JSONObject.empty), constant(singleton))
 	
 	def caseClassFormat1[S1:Format,T:TypeTag](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
 		val Seq(k1)	= fieldNamesFor[T]
-		new Format[T] {
-			def write(out:T):JSONValue	= {
+		Format[T](
+			(out:T)	=> {
 				val fields	= unapply(out).get
-				JSONObject(Seq(
+				JSONVarObject(
 					k1	-> doWrite[S1](fields)
-				))
-			}
-			def read(in:JSONValue):T	= {
+				)
+			},
+			(in:JSONValue)	=> {
 				val map	= objectMap(in)
 				apply(
 					doRead[S1](map(k1))
 				)
 			}
-		}
+		)
 	}
 	
 	/*
 	def caseClassFormat2[S1:Format,S2:Format,T:TypeTag](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):Format[T]	= {
 		val Seq(k1,k2)	= fieldNamesFor[T]
-		new Format[T] {
-			def write(out:T):JSONValue	= {
+		Format[T](
+			(out:T)	=> {
 				val fields	= unapply(out).get
-				JSONObject(Map(
+				BSONVarDocument(
 					k1	-> doWrite[S1](fields._1),
 					k2	-> doWrite[S2](fields._2)
-				))
-			}
-			def read(in:JSONValue):T	= {
-				val map	= objectValue(in)
+				)
+			},
+			(in:JSONValue)	=> {
+				val map	= objectMap(in)
 				apply(
 					doRead[S1](map(k1)),
 					doRead[S2](map(k2))
 				)
 			}
-		}
+		)
 	}
 	*/
 	
 	/** uses a field with an empty name for the specific constructor */
 	def caseClassSumFormat[T](summands:Summand[T,_<:T]*):Format[T]	=
-			sumFormat(summands map (new InlinePartialFormat(_)))
+			sumFormat(summands map (new InlinePartialFormat(_).pf))
 		
 	/** injects the type tag as a field with an empty name into an existing object */
-	private class InlinePartialFormat[T,C<:T](summand:Summand[T,C]) extends PartialFormat[T] {
+	private class InlinePartialFormat[T,C<:T](summand:Summand[T,C]) {
 		import summand._
 		val typeTag	= ""
 		def write(value:T):Option[JSONValue]	=
@@ -76,9 +69,11 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 					downcast[JSONObject](format write it)
 				}
 		def read(json:JSONValue):Option[T]	=
-				downcast[JSONObject](json).value 
+				objectValue(json) 
 				.exists	{ _ == (typeTag, JSONString(identifier)) } 
 				.guard	{ format read json }
+				
+		def pf:PartialFormat[T]	= PBijection(write, read)
 	}
 	
 	// BETTER cache results

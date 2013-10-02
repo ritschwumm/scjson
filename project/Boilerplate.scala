@@ -40,15 +40,16 @@ object Boilerplate {
 		val typeParams	= awc("T$:Format") 
 		val typeNames	= awc("T$")
 		("""
-		|	implicit def Tuple"""+arity+"""Format["""+typeParams+"""]:Format[("""+typeNames+""")]	= new Format[("""+typeNames+""")] {
-		|		def write(out:("""+typeNames+""")):JSONValue	= {
-		|			JSONArray(Seq("""+ awc("doWrite[T$](out._$)")	+"""))
-		|		}
-		|		def read(in:JSONValue):("""+typeNames+""")	= {
-		|			val	arr	= arrayValue(in)
-		|			("""+ awc("doRead[T$](arr($-1))") +	""")
-		|		}
-		|	}
+		|	implicit def Tuple"""+arity+"""Format["""+typeParams+"""]:Format[("""+typeNames+""")]	=
+		|			Format[("""+typeNames+""")](
+		|				(out:("""+typeNames+"""))	=> {
+		|					JSONVarArray("""+ awc("doWrite[T$](out._$)")	+""")
+		|				},
+		|				(in:JSONValue)	=> {
+		|					val	arr	= arrayValue(in)
+		|					("""+ awc("doRead[T$](arr($-1))") +	""")
+		|				}
+		|			)
 		""").stripMargin
 	}
 	
@@ -87,16 +88,16 @@ object Boilerplate {
 		("""
 		|	def caseClassFormat"""+arity+"""["""+typeParams+""",T:TypeTag](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):Format[T]	= {
 		|		val Seq("""+fieldNames+""")	= fieldNamesFor[T]
-		|		new Format[T] {
-		|			def write(out:T):JSONValue	= {
+		|		Format[T](
+		|			(out:T)	=> {
 		|				val fields	= unapply(out).get
-		|				JSONObject(Seq(""" + awc("k$ -> doWrite[S$](fields._$)") + """))
-		|			}
-		|			def read(in:JSONValue):T	= {
+		|				JSONVarObject(""" + awc("k$ -> doWrite[S$](fields._$)") + """)
+		|			},
+		|			(in:JSONValue)	=> {
 		|				val map	= objectMap(in)
 		|				apply(""" + awc("doRead[S$](map(k$))") + """)
 		|			}
-		|		}
+		|		)
 		|	}
 		""").stripMargin
 	}

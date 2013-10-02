@@ -2,7 +2,7 @@ package scjson
 
 import scutil.lang._
 
-/** typeclass-bases, bidirectional JSON serialization */
+/** typeclass-based, bidirectional JSON serialization */
 package object serialization {
 	import JSONSerializationUtil._
 	
@@ -18,12 +18,8 @@ package object serialization {
 			Bijection(writeFunc, it => readFunc(downcast(it)))
 		
 	/** delay the construction of an actual Format until it's used */
-	def LazyFormat[T](sub: =>Format[T]):Format[T]	=
-			new Bijection[T,JSONValue] {
-				lazy val delegate = sub
-				def write(t:T):JSONValue	= delegate write t
-				def read(s:JSONValue):T		= delegate read s
-			}
+	def LazyFormat[T](sub: =>Format[T]):Format[T]	= 
+			Format(it => sub write it, it => sub read it)
 	
 	//------------------------------------------------------------------------------
 	

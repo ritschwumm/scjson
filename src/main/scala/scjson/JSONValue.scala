@@ -33,7 +33,7 @@ case class JSONNumber(value:BigDecimal)	extends JSONValue
 case class JSONString(value:String)		extends JSONValue
 
 object JSONArray {
-	val empty	= JSONArray(Seq.empty)
+	val empty	= JSONVarArray()
 }
 case class JSONArray(value:Seq[JSONValue])	extends JSONValue {
 	def get(index:Int):Option[JSONValue]	= value lift index
