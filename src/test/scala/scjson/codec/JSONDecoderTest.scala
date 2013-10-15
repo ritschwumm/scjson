@@ -76,6 +76,13 @@ class JSONDecoderTest extends Specification {
 		"decode upper case hex escapes" in {
 			(JSONCodec decode "\" \\uBEEF \"") mustEqual Win(JSONString(" \uBEEF "))
 		}
+		"decode hex escapes outside the basic plane" in {
+			(JSONCodec decode "\"\\uD834\\uDD1E\"") mustEqual Win(JSONString("\uD834\uDD1E"))
+		}
+		"decode hex escapes outside the basic plane" in {
+			val cs	= new java.lang.StringBuilder appendCodePoint 0x1D11E toString;
+			(JSONCodec decode "\"\\uD834\\uDD1E\"") mustEqual Win(JSONString(cs))
+		}
 		
 		"decode arrays with 0 elements" in {
 			(JSONCodec decode "[]") mustEqual Win(JSONArray(Seq()))
