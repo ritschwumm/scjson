@@ -39,7 +39,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
-				BSONVarDocument(
+				JSONVarDocument(
 					k1	-> doWrite[S1](fields._1),
 					k2	-> doWrite[S2](fields._2)
 				)
