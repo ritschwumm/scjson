@@ -1,7 +1,7 @@
 package scjson.serialization
 
 import scutil.lang._
-import scutil.Implicits._
+import scutil.implicits._
 
 import scjson._
 

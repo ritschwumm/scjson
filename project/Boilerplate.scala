@@ -23,7 +23,7 @@ object Boilerplate {
 		"""
 		|package scjson.serialization
 		|
-		|import scutil.Implicits._
+		|import scutil.implicits._
 		|import scjson._
 		|import JSONSerializationUtil._
 		|
@@ -67,7 +67,7 @@ object Boilerplate {
 		|package scjson.serialization
 		|
 		|import reflect.runtime.universe._
-		|import scutil.Implicits._
+		|import scutil.implicits._
 		|import scjson._
 		|import JSONSerializationUtil._
 		|

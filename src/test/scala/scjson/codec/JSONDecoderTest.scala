@@ -2,7 +2,7 @@ package scjson.codec
 
 import org.specs2.mutable._
 
-import scutil.Implicits._
+import scutil.implicits._
 import scutil.lang._
 
 import scjson._

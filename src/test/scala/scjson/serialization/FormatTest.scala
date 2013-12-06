@@ -2,7 +2,7 @@ package scjson.serialization
 
 import org.specs2.mutable._
 
-import scutil.Implicits._
+import scutil.implicits._
 
 import scjson._
 
