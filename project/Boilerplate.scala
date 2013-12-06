@@ -75,7 +75,7 @@ object Boilerplate {
 		""".stripMargin		+ 
 		(2 to 22 map genCaseClassMethod mkString "\n")	+
 		"""
-		|	protected def fieldNamesFor[T:TypeTag]:Seq[String]
+		|	protected def caseClassFieldNames[T:TypeTag]:Seq[String]
 		|}
 		""".stripMargin
 	}
@@ -87,7 +87,7 @@ object Boilerplate {
 		val fieldNames	= awc("k$")
 		("""
 		|	def caseClassFormat"""+arity+"""["""+typeParams+""",T:TypeTag](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):Format[T]	= {
-		|		val Seq("""+fieldNames+""")	= fieldNamesFor[T]
+		|		val Seq("""+fieldNames+""")	= caseClassFieldNames[T]
 		|		Format[T](
 		|			(out:T)	=> {
 		|				val fields	= unapply(out).get

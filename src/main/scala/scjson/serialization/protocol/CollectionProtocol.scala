@@ -56,7 +56,7 @@ trait CollectionProtocol {
 	*/
 	
 	// TODO careful, should sort it's keys maybe
-	implicit def ViaSetMapFormat[K:Format,V:Format]:Format[Map[K,V]]	= {
+	implicit def MapViaSetFormat[K:Format,V:Format]:Format[Map[K,V]]	= {
 		// TODO dubious
 		import TupleProtocol.Tuple2Format
 		Format[Map[K,V]](
