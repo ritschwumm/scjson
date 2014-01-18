@@ -14,7 +14,7 @@ object Boilerplate {
 	//## tuples
 	
 	def genTupleFile(outDir:File):File	= {
-		val outFile		= outDir / "TupleProtocolGenerated.scala"
+		val outFile	= outDir / "TupleProtocolGenerated.scala"
 		IO write (outFile,	genTupleTrait)
 		outFile
 	}
@@ -57,7 +57,7 @@ object Boilerplate {
 	//## case classes
 	
 	def genCaseClassFile(outDir:File):File	= {
-		val outFile		= outDir / "CaseClassProtocolGenerated.scala"
+		val outFile	= outDir / "CaseClassProtocolGenerated.scala"
 		IO write (outFile,	genCaseClassTrait)
 		outFile
 	}

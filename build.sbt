@@ -2,14 +2,14 @@ name			:= "scjson"
 
 organization	:= "de.djini"
 
-version			:= "0.44.0"
+version			:= "0.45.0"
 
 scalaVersion	:= "2.10.3"
 
 libraryDependencies	++= Seq(
-	"de.djini"			%%	"scutil"		% "0.39.0"				% "compile",
+	"de.djini"			%%	"scutil"		% "0.40.0"				% "compile",
 	"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-	"org.specs2"		%%	"specs2"		% "2.3.4"				% "test"		exclude("org.scala-lang", "scala-library")
+	"org.specs2"		%%	"specs2"		% "2.3.7"				% "test"		exclude("org.scala-lang", "scala-library")
 )
 
 scalacOptions	++= Seq(
