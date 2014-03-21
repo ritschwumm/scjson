@@ -66,8 +66,9 @@ object Boilerplate {
 		"""
 		|package scjson.serialization
 		|
-		|import reflect.runtime.universe._
 		|import scutil.implicits._
+		|import scutil.lang.Fielder
+		|import scutil.lang.Fielding
 		|import scjson._
 		|import JSONSerializationUtil._
 		|
@@ -75,7 +76,6 @@ object Boilerplate {
 		""".stripMargin		+ 
 		(2 to 22 map genCaseClassMethod mkString "\n")	+
 		"""
-		|	protected def caseClassFieldNames[T:TypeTag]:Seq[String]
 		|}
 		""".stripMargin
 	}
@@ -86,8 +86,8 @@ object Boilerplate {
 		val typeNames	= awc("S$")
 		val fieldNames	= awc("k$")
 		("""
-		|	def caseClassFormat"""+arity+"""["""+typeParams+""",T:TypeTag](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):Format[T]	= {
-		|		val Seq("""+fieldNames+""")	= caseClassFieldNames[T]
+		|	def caseClassFormat"""+arity+"""["""+typeParams+""",T:Fielding](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):Format[T]	= {
+		|		val Seq("""+fieldNames+""")	= Fielder[T]
 		|		Format[T](
 		|			(out:T)	=> {
 		|				val fields	= unapply(out).get

@@ -15,8 +15,8 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
 			Format[T](constant(JSONObject.empty), constant(singleton))
 	
-	def caseClassFormat1[S1:Format,T:TypeTag](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
-		val Seq(k1)	= caseClassFieldNames[T]
+	def caseClassFormat1[S1:Format,T:Fielding](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
+		val Seq(k1)	= Fielder[T]
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
@@ -34,8 +34,8 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	}
 	
 	/*
-	def caseClassFormat2[S1:Format,S2:Format,T:TypeTag](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):Format[T]	= {
-		val Seq(k1,k2)	= caseClassFieldNames[T]
+	def caseClassFormat2[S1:Format,S2:Format,T:Fielding](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):Format[T]	= {
+		val Seq(k1,k2)	= Fielder[T]
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
@@ -74,17 +74,5 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 				.guard	{ format read json }
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)
-	}
-	
-	// BETTER cache results
-	protected def caseClassFieldNames[T:TypeTag]:Seq[String]	= {
-		val typ	= typeOf[T]
-		val names:Option[Seq[String]]	=
-				for {
-					primaryCtor	<- typ.declarations filter { _.isMethod } map { _.asMethod } filter { _.isPrimaryConstructor } singleOption;
-					paramNames	<- primaryCtor.paramss.singleOption
-				}
-				yield paramNames map { _.name.decoded }
-		names getOrError ("cannot get fields for type " + typ)
 	}
 }
