@@ -17,9 +17,10 @@ object JSONCodec {
 	def decode(it:String):Tried[JSONDecodeException,JSONValue]	=
 			JSONDecoder decode it
 		
-	/** small-style marshaller */
-	def asMarshaller:Marshaller[JSONValue,String]	=
-			Marshaller[JSONValue,String](
-					encode,
-					decode _ andThen { _.toOption })
+	/** small-style */
+	def asPrism:Prism[String,JSONValue]	=
+			Prism(
+				decode _ andThen { _.toOption },
+				encode
+			)
 }
