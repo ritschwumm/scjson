@@ -24,7 +24,7 @@ case object JSONFalse	extends JSONBoolean
 object JSONNumber {
 	def apply(value:Int):JSONNumber		= JSONNumber(BigDecimal(value))
 	def apply(value:Long):JSONNumber	= JSONNumber(BigDecimal(value))
-	def apply(value:Float):JSONNumber	= JSONNumber(BigDecimal(value))
+	def apply(value:Float):JSONNumber	= JSONNumber(BigDecimal(value.toDouble))
 	def apply(value:Double):JSONNumber	= JSONNumber(BigDecimal(value))
 	def apply(value:BigInt):JSONNumber	= JSONNumber(BigDecimal(value))
 }
