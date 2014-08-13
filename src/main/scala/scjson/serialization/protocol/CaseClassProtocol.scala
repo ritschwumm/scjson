@@ -16,7 +16,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 			Format[T](constant(JSONObject.empty), constant(singleton))
 	
 	def caseClassFormat1[S1:Format,T:Fielding](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
-		val Seq(k1)	= Fielder[T]
+		val ISeq(k1)	= Fielder[T]
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
@@ -35,7 +35,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	
 	/*
 	def caseClassFormat2[S1:Format,S2:Format,T:Fielding](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):Format[T]	= {
-		val Seq(k1,k2)	= Fielder[T]
+		val ISeq(k1,k2)	= Fielder[T]
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
@@ -57,7 +57,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	
 	/** uses a field with an empty name for the specific constructor */
 	def caseClassSumFormat[T](summands:Summand[T,_<:T]*):Format[T]	=
-			sumFormat(summands map (new InlinePartialFormat(_).pf))
+			sumFormat(summands.toVector map (new InlinePartialFormat(_).pf))
 		
 	/** injects the type tag as a field with an empty name into an existing object */
 	private class InlinePartialFormat[T,C<:T](summand:Summand[T,C]) {

@@ -69,6 +69,7 @@ object Boilerplate {
 		|import scutil.implicits._
 		|import scutil.lang.Fielder
 		|import scutil.lang.Fielding
+		|import scutil.lang.ISeq
 		|import scjson._
 		|import JSONSerializationUtil._
 		|
@@ -87,7 +88,7 @@ object Boilerplate {
 		val fieldNames	= awc("k$")
 		("""
 		|	def caseClassFormat"""+arity+"""["""+typeParams+""",T:Fielding](apply:("""+typeNames+""")=>T, unapply:T=>Option[("""+typeNames+""")]):Format[T]	= {
-		|		val Seq("""+fieldNames+""")	= Fielder[T]
+		|		val ISeq("""+fieldNames+""")	= Fielder[T]
 		|		Format[T](
 		|			(out:T)	=> {
 		|				val fields	= unapply(out).get

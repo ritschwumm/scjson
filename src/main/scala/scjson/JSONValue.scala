@@ -1,5 +1,7 @@
 package scjson
 
+import scutil.lang.ISeq
+
 sealed abstract class JSONValue {
 	def downcast[T<:JSONValue]:Option[T]	=
 			try { Some(asInstanceOf[T]) }
@@ -35,15 +37,15 @@ case class JSONString(value:String)		extends JSONValue
 object JSONArray {
 	val empty	= JSONVarArray()
 }
-case class JSONArray(value:Seq[JSONValue])	extends JSONValue {
+case class JSONArray(value:ISeq[JSONValue])	extends JSONValue {
 	def get(index:Int):Option[JSONValue]	= value lift index
 	def ++ (that:JSONArray):JSONArray		= JSONArray(this.value ++ that.value)
 }
 
 object JSONObject {
-	val empty	= JSONObject(Seq.empty)
+	val empty	= JSONObject(ISeq.empty)
 }
-case class JSONObject(value:Seq[(String,JSONValue)])	extends JSONValue {
+case class JSONObject(value:ISeq[(String,JSONValue)])	extends JSONValue {
 	def get(key:String):Option[JSONValue]	= value collectFirst { case (k,v) if (k == key) => v }
 	def ++ (that:JSONObject):JSONObject		= JSONObject(this.value ++ that.value)
 	def valueMap:Map[String,JSONValue]		= value.toMap

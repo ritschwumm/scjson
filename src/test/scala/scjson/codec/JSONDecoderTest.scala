@@ -85,17 +85,17 @@ class JSONDecoderTest extends Specification {
 		}
 		
 		"decode arrays with 0 elements" in {
-			(JSONCodec decode "[]") mustEqual Win(JSONArray(Seq()))
+			(JSONCodec decode "[]") mustEqual Win(JSONArray(ISeq()))
 		}
 		"decode arrays with 1 elements" in {
-			(JSONCodec decode "[1]") mustEqual Win(JSONArray(Seq(JSONNumber(1))))
+			(JSONCodec decode "[1]") mustEqual Win(JSONArray(ISeq(JSONNumber(1))))
 		}
 		"decode arrays with 2 elements" in {
-			(JSONCodec decode "[1,2]") mustEqual Win(JSONArray(Seq(JSONNumber(1),JSONNumber(2))))
+			(JSONCodec decode "[1,2]") mustEqual Win(JSONArray(ISeq(JSONNumber(1),JSONNumber(2))))
 		}
 		
 		"allow legal whitespace in arrays" in {
-			(JSONCodec decode "[ ]") mustEqual Win(JSONArray(Seq()))
+			(JSONCodec decode "[ ]") mustEqual Win(JSONArray(ISeq()))
 		}
 		"disallow illegal whitespace in arrays" in {
 			(JSONCodec decode "[ ]") must beLike { case Fail(_) => ok }
@@ -105,10 +105,10 @@ class JSONDecoderTest extends Specification {
 			(JSONCodec decode "{}") mustEqual Win(JSONObject.empty)
 		}
 		"decode objects with 1 elements" in {
-			(JSONCodec decode "{\"a\":1}") mustEqual Win(JSONObject(Seq("a"->JSONNumber(1))))
+			(JSONCodec decode "{\"a\":1}") mustEqual Win(JSONObject(ISeq("a"->JSONNumber(1))))
 		}
 		"decode objects with 2 elements" in {
-			(JSONCodec decode "{\"a\":1,\"b\":2}") mustEqual Win(JSONObject(Seq("a"->JSONNumber(1),"b"->JSONNumber(2))))
+			(JSONCodec decode "{\"a\":1,\"b\":2}") mustEqual Win(JSONObject(ISeq("a"->JSONNumber(1),"b"->JSONNumber(2))))
 		}
 	}
 }

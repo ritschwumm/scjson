@@ -2,6 +2,7 @@ package scjson.serialization
 
 import org.specs2.mutable._
 
+import scutil.lang._
 import scutil.implicits._
 
 import scjson._
@@ -23,7 +24,7 @@ class FormatTest extends Specification {
 	case class TestADT2(a:Int, b:Int)	extends TestADT
 	
 	object MyProtocol extends FullProtocol {
-		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(Seq(
+		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq(
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
 				"2"	-> TestEnum2))

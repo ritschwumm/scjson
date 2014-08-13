@@ -9,7 +9,7 @@ object ObjectSumProtocol extends ObjectSumProtocol
 
 trait ObjectSumProtocol extends SumProtocol {
 	def objectSumFormat[T](summands:Summand[T,_<:T]*):Format[T]	=
-			sumFormat(summands map (new ObjectPartialFormat(_).pf))
+			sumFormat(summands.toVector map (new ObjectPartialFormat(_).pf))
 	
 	/** uses an object with a single field where the identifier is the key */
 	private class ObjectPartialFormat[T,C<:T](summand:Summand[T,C]) {

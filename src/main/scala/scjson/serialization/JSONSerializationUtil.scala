@@ -1,5 +1,7 @@
 package scjson.serialization
 
+import scutil.lang.ISeq
+
 import scjson._
 
 object JSONSerializationUtil {
@@ -21,13 +23,13 @@ object JSONSerializationUtil {
 				case _					=> fail("expected a JSONObject")
 			}
 	
-	def objectValue(it:JSONValue):Seq[(String,JSONValue)]	=
+	def objectValue(it:JSONValue):ISeq[(String,JSONValue)]	=
 			it match {
 				case JSONObject(value)	=> value
 				case _					=> fail("expected a JSONObject")
 			}
 	
-	def arrayValue(it:JSONValue):Seq[JSONValue]	=
+	def arrayValue(it:JSONValue):ISeq[JSONValue]	=
 			it match {
 				case JSONArray(value)	=> value
 				case _					=> fail("expected a JSONArray")

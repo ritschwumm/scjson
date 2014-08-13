@@ -3,6 +3,7 @@ package scjson.serialization
 import scala.reflect._
 
 import scutil.lang._
+import scutil.implicits._
 
 import scjson._
 
@@ -12,22 +13,23 @@ object CollectionProtocol extends CollectionProtocol
 
 trait CollectionProtocol {
 	/*
-	implicit def SeqFormat[T:Format]:Format[Seq[T]]	= {
+	implicit def ISeqFormat[T:Format]:Format[ISeq[T]]	= {
 		val sub	= format[T]
-		SubtypeFormat[Seq[T],JSONArray](
-				it	=> JSONArray(it map doWrite[T]),
-				it	=> it.value map sub.read)
+		SubtypeFormat[ISeq[T],JSONArray](
+			it	=> JSONArray(it map doWrite[T]),
+			it	=> it.value map sub.read
+		)
 	}
 	*/
-	implicit def SeqFormat[T:Format]:Format[Seq[T]] = 
-			Format[Seq[T]](
-				(out:Seq[T])	=> JSONArray(out map doWrite[T]),
+	implicit def ISeqFormat[T:Format]:Format[ISeq[T]] = 
+			Format[ISeq[T]](
+				(out:ISeq[T])	=> JSONArray(out map doWrite[T]),
 				(in:JSONValue)	=> arrayValue(in) map doRead[T]
 			)
 	
-	implicit def SetFormat[T:Format]:Format[Set[T]]					= SeqFormat[T] compose Bijection(_.toSeq,	_.toSet)
-	implicit def ListFormat[T:Format]:Format[List[T]]				= SeqFormat[T] compose Bijection(_.toSeq,	_.toList)
-	implicit def ArrayFormat[T:Format:ClassTag]:Format[Array[T]]	= SeqFormat[T] compose Bijection(_.toSeq,	_.toArray)
+	implicit def SetFormat[T:Format]:Format[Set[T]]					= ISeqFormat[T] compose Bijection(_.toVector,	_.toSet)
+	implicit def ListFormat[T:Format]:Format[List[T]]				= ISeqFormat[T] compose Bijection(_.toVector,	_.toList)
+	implicit def ArrayFormat[T:Format:ClassTag]:Format[Array[T]]	= ISeqFormat[T] compose Bijection(_.toVector,	_.toArray)
 	
 	//------------------------------------------------------------------------------
 	
@@ -71,11 +73,11 @@ trait CollectionProtocol {
 	// alternative 0/1-sized array
 	implicit def OptionFormat1[T:Format]:Format[Option[T]]	=
 			Format[Option[T]](
-				(out:Option[T])	=> doWrite[Seq[T]](out.toSeq),
-				(in:JSONValue)	=> doRead[Seq[T]](in) match {
-					case Seq(t)	=> Some(t)
-					case Seq()	=> None
-					case _		=> fail("expected 0 or 1 elements for an Option")
+				(out:Option[T])	=> doWrite[ISeq[T]](out.toSeq),
+				(in:JSONValue)	=> doRead[ISeq[T]](in) match {
+					case ISeq(t)	=> Some(t)
+					case ISeq()		=> None
+					case _			=> fail("expected 0 or 1 elements for an Option")
 				}
 			)
 	*/

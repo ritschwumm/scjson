@@ -36,7 +36,7 @@ final class JSONNavigation(peer:Option[JSONValue]) {
 	def double:Option[Double]						= decimal map { _.doubleValue	}
 	def float:Option[Float]							= decimal map { _.floatValue	}
 	def boolean:Option[Boolean]						= extract(JSONSubtypes.jsonBoolean,	JSONBijections.jsonBoolean)
-	def arraySeq:Option[Seq[JSONValue]]				= extract(JSONSubtypes.jsonArray,	JSONBijections.jsonArray)
-	def objectSeq:Option[Seq[(String,JSONValue)]]	= extract(JSONSubtypes.jsonObject,	JSONBijections.jsonObject)
+	def arraySeq:Option[ISeq[JSONValue]]			= extract(JSONSubtypes.jsonArray,	JSONBijections.jsonArray)
+	def objectSeq:Option[ISeq[(String,JSONValue)]]	= extract(JSONSubtypes.jsonObject,	JSONBijections.jsonObject)
 	def objectMap:Option[Map[String,JSONValue]]		= objectSeq map { _.toMap }
 }
