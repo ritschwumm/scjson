@@ -2,14 +2,16 @@ name			:= "scjson"
 
 organization	:= "de.djini"
 
-version			:= "0.56.1"
+version			:= "0.57.0"
 
 scalaVersion	:= "2.11.2"
 
+resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
+
 libraryDependencies	++= Seq(
-	"de.djini"			%%	"scutil-core"	% "0.51.1"				% "compile",
+	"de.djini"			%%	"scutil-core"	% "0.52.0"				% "compile",
 	"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-	"org.specs2"		%%	"specs2"		% "2.4.2"				% "test"		exclude("org.scala-lang", "scala-library")	exclude("org.scala-lang", "scala-reflect")
+	"org.specs2"		%%	"specs2"		% "2.4.6"				% "test"
 )
 
 scalacOptions	++= Seq(
