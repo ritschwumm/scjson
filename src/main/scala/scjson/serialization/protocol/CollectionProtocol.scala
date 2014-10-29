@@ -82,70 +82,70 @@ trait CollectionProtocol {
 			)
 	*/
 	
+	private val someTag	= "some"
+	private val noneTag	= "none"
+		
 	// alternative {some} or {none}
-	implicit def OptionFormat[T:Format]:Format[Option[T]]	= {
-		val someTag	= "some"
-		val noneTag	= "none"
-		Format[Option[T]](
-			_ match {
-				case Some(value)	=> JSONVarObject(someTag -> doWrite(value))
-				case None			=> JSONVarObject(noneTag -> JSONTrue)
-			},
-			(in:JSONValue)	=> {
-				val map	= objectMap(in)
-				(map get someTag, map get noneTag) match {
-					case (Some(js), None)	=> Some(doRead[T](js))
-					case (None, Some(js))	=> None
-					case _					=> fail("unexpected option")
+	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
+			Format[Option[T]](
+				_ match {
+					case Some(value)	=> JSONVarObject(someTag -> doWrite(value))
+					case None			=> JSONVarObject(noneTag -> JSONTrue)
+				},
+				(in:JSONValue)	=> {
+					val map	= objectMap(in)
+					(map get someTag, map get noneTag) match {
+						case (Some(js), None)	=> Some(doRead[T](js))
+						case (None, Some(js))	=> None
+						case _					=> fail("unexpected option")
+					}
 				}
-			}
-		)
-	}
+			)
 	
+	private val rightTag	= "right"
+	private val leftTag		= "left"
+		
 	// alternative {left} or {right}
-	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	= {
-		val rightTag	= "right"
-		val leftTag		= "left"
-		Format[Either[L,R]]( 
-			_ match {
-				case Right(value)	=> JSONVarObject(
-					rightTag	-> doWrite[R](value)
-				)
-				case Left(value)	=> JSONVarObject(
-					leftTag		-> doWrite[L](value)
-				)
-			},
-			(in:JSONValue)	=> {
-				val	map	= objectMap(in)
-				(map get leftTag, map get rightTag) match {
-					case (None, Some(js))	=> Right(doRead[R](js))
-					case (Some(js), None)	=> Left(doRead[L](js))
-					case _					=> fail("unexpected either")
+	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	=
+			Format[Either[L,R]]( 
+				_ match {
+					case Right(value)	=> JSONVarObject(
+						rightTag	-> doWrite[R](value)
+					)
+					case Left(value)	=> JSONVarObject(
+						leftTag		-> doWrite[L](value)
+					)
+				},
+				(in:JSONValue)	=> {
+					val	map	= objectMap(in)
+					(map get leftTag, map get rightTag) match {
+						case (None, Some(js))	=> Right(doRead[R](js))
+						case (Some(js), None)	=> Left(doRead[L](js))
+						case _					=> fail("unexpected either")
+					}
 				}
-			}
-		)
-	}
+			)
 	
-	implicit def TriedFormat[F:Format,W:Format]:Format[Tried[F,W]]	= {
-		val winTag	= "win"
-		val failTag	= "fail"
-		Format[Tried[F,W]]( 
-			_ match {
-				case Fail(value)	=> JSONVarObject(
-					failTag	-> doWrite[F](value)
-				)
-				case Win(value)		=> JSONVarObject(
-					winTag	-> doWrite[W](value)
-				)
-			},
-			(in:JSONValue)	=> { 
-				val	map	= objectMap(in)
-				(map get failTag, map get winTag) match {
-					case (Some(bs), None)	=> Fail(doRead[F](bs))
-					case (None, Some(bs))	=> Win(doRead[W](bs))
-					case _					=> fail("unexpected trial")
+	private val winTag	= "win"
+	private val failTag	= "fail"
+		
+	implicit def TriedFormat[F:Format,W:Format]:Format[Tried[F,W]]	=
+			Format[Tried[F,W]]( 
+				_ match {
+					case Fail(value)	=> JSONVarObject(
+						failTag	-> doWrite[F](value)
+					)
+					case Win(value)		=> JSONVarObject(
+						winTag	-> doWrite[W](value)
+					)
+				},
+				(in:JSONValue)	=> { 
+					val	map	= objectMap(in)
+					(map get failTag, map get winTag) match {
+						case (Some(bs), None)	=> Fail(doRead[F](bs))
+						case (None, Some(bs))	=> Win(doRead[W](bs))
+						case _					=> fail("unexpected trial")
+					}
 				}
-			}
-		)
-	}
+			)
 }
