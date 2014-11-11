@@ -19,12 +19,12 @@ class RoundtripTest extends Specification {
 		implicit lazy val SimpleClassFormat:Format[SimpleClass]			= caseClassFormat3(SimpleClass.apply, SimpleClass.unapply)
 	}
 	
+	import MyProtocol._
+	
 	//------------------------------------------------------------------------------
 	
 	"roundtrips" should {
 		"work for a simple String" in { 
-			import MyProtocol._
-			
 			val orig	= JSONString("hallo")
 			val json	= doWrite[JSONString](orig)
 			val back	= doRead[JSONString](json)
@@ -32,8 +32,6 @@ class RoundtripTest extends Specification {
 		}
 		
 		"work with primitive types in simple sums" in {
-			import MyProtocol._
-			
 			val orig1	= 1
 			val json1	= SimpleSumFormat write orig1
 			// println("json1=" + json1)
@@ -42,8 +40,6 @@ class RoundtripTest extends Specification {
 		}
 		
 		"work with AnyRef in simple sums" in {
-			import MyProtocol._
-			
 			val orig2	= "2"
 			val json2	= SimpleSumFormat write orig2
 			// println("json2=" + json2)
@@ -52,8 +48,6 @@ class RoundtripTest extends Specification {
 		}
 		
 		"work for ADTs" in { 
-			import MyProtocol._
-			
 			val orig	= SimpleClass(true, Some(1), Set("hallo", "welt"))
 			val json	= doWrite[SimpleBase](orig)
 			val back	= doRead[SimpleBase](json)
