@@ -5,7 +5,7 @@ import org.specs2.mutable._
 import scjson._
 
 class NullOptionTest extends Specification {
-	object TestProtocoll extends NativeProtocol with NullOptionProtocoll
+	object TestProtocoll extends NativeProtocol with NullOptionProtocol
 	import TestProtocoll._
 	
 	"plain option" should {

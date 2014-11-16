@@ -4,9 +4,9 @@ import scjson._
 
 import JSONSerializationUtil._
 
-object NullOptionProtocoll extends NullOptionProtocoll
+object NullOptionProtocol extends NullOptionProtocol
 
-trait LowPrioNullOptionProtocoll {
+trait LowPrioNullOptionProtocol {
 	// alternative value or null
 	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
 			Format[Option[T]](
@@ -21,7 +21,7 @@ trait LowPrioNullOptionProtocoll {
 			)
 }
 
-trait NullOptionProtocoll extends LowPrioNullOptionProtocoll {
+trait NullOptionProtocol extends LowPrioNullOptionProtocol {
 	private val someTag	= "some"
 	private val noneTag	= "none"
 	
