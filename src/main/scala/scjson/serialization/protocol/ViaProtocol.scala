@@ -1,9 +1,6 @@
 package scjson.serialization
 
 import scutil.lang._
-import scutil.implicits._
-
-import scjson._
 
 object ViaProtocol extends ViaProtocol
 

@@ -1,9 +1,5 @@
 package scjson.serialization
 
-import scjson._
-
-import JSONSerializationUtil._
-
 object TupleProtocol extends TupleProtocol
 
 trait TupleProtocol extends TupleProtocolGenerated {

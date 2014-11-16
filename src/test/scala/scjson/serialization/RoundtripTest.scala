@@ -2,8 +2,6 @@ package scjson.serialization
 
 import org.specs2.mutable._
 
-import scutil.implicits._
-
 import scjson._
 
 class RoundtripTest extends Specification {

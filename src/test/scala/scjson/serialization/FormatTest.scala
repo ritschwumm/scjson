@@ -3,7 +3,6 @@ package scjson.serialization
 import org.specs2.mutable._
 
 import scutil.lang._
-import scutil.implicits._
 
 import scjson._
 

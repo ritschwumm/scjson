@@ -1,6 +1,5 @@
 package scjson
 
-import scjson._
 import scjson.serialization._
 
 package object syntax {

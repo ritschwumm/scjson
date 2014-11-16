@@ -2,7 +2,7 @@ name			:= "scjson"
 
 organization	:= "de.djini"
 
-version			:= "0.62.0"
+version			:= "0.63.0"
 
 scalaVersion	:= "2.11.4"
 
@@ -14,9 +14,11 @@ scalacOptions	++= Seq(
 	// "-language:higherKinds",
 	// "-language:reflectiveCalls",
 	// "-language:dynamics",
-	"-language:postfixOps",
+	// "-language:postfixOps",
 	// "-language:experimental.macros"
-	"-feature"
+	"-feature",
+	"-Ywarn-unused-import",
+	"-Xfatal-warnings"
 )
 
 (sourceGenerators in Compile)	<+= (sourceManaged in Compile) map Boilerplate.generate
@@ -26,7 +28,7 @@ conflictManager	:= ConflictManager.strict
 resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies	++= Seq(
-	"de.djini"			%%	"scutil-core"	% "0.57.0"				% "compile",
+	"de.djini"			%%	"scutil-core"	% "0.58.0"				% "compile",
 	"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
 	"org.specs2"		%%	"specs2"		% "2.4.11"				% "test"
 )

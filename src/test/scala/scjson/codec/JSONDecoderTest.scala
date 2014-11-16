@@ -2,11 +2,9 @@ package scjson.codec
 
 import org.specs2.mutable._
 
-import scutil.implicits._
 import scutil.lang._
 
 import scjson._
-import scjson.codec._
 
 class JSONDecoderTest extends Specification {
 	"JSONDecoderTest" should {

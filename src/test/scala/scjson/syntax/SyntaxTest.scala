@@ -2,9 +2,6 @@ package scjson.syntax
 
 import org.specs2.mutable._
 
-import scutil.lang._
-import scutil.implicits._
-
 import scjson._
 import scjson.serialization.FullProtocol._
 

@@ -6,8 +6,6 @@ import scutil.lang._
 
 import scjson._
 
-import JSONSerializationUtil._
-
 object CollectionProtocol extends CollectionProtocol
 
 trait CollectionProtocol {
