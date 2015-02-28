@@ -12,7 +12,7 @@ trait EitherProtocol {
 		
 	// alternative {left} or {right}
 	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	=
-			Format[Either[L,R]]( 
+			Format[Either[L,R]](
 				_ match {
 					case Right(value)	=> JSONVarObject(
 						rightTag	-> doWrite[R](value)

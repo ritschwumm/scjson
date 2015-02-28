@@ -15,7 +15,7 @@ trait NativeProtocol {
 	implicit lazy val ByteFormat		= Format[Byte]		(JSONNumber(_),		in => numberValue(in).toByte)
 	implicit lazy val ShortFormat		= Format[Short]		(JSONNumber(_),		in => numberValue(in).toShort)
 	implicit lazy val IntFormat			= Format[Int]		(JSONNumber(_),		in => numberValue(in).toInt)
-	implicit lazy val LongFormat		= Format[Long]		(JSONNumber(_),		in => numberValue(in).toLong) 
+	implicit lazy val LongFormat		= Format[Long]		(JSONNumber(_),		in => numberValue(in).toLong)
 	implicit lazy val FloatFormat		= Format[Float]		(JSONNumber(_),		in => numberValue(in).toFloat)
 	implicit lazy val DoubleFormat		= Format[Double]	(JSONNumber(_),		in => numberValue(in).toDouble)
 	implicit lazy val BooleanFormat		= Format[Boolean]	(JSONBoolean(_),	in => booleanValue(in))

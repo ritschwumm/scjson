@@ -9,11 +9,11 @@ import scjson._
 private object JSONDecoder {
 	/** parse a JSON formatted String into a JSONValue */
 	def decode(s:String):Tried[JSONDecodeException,JSONValue]	=
-			try { 
-				Win(new JSONDecoder(s).decode()) 
+			try {
+				Win(new JSONDecoder(s).decode())
 			}
-			catch { case e:JSONDecodeException => 
-				Fail(e) 
+			catch { case e:JSONDecodeException =>
+				Fail(e)
 			}
 }
 
@@ -36,7 +36,7 @@ private final class JSONDecoder(text:String) {
 		if (is("true"))	return JSONTrue
 		if (is("false"))	return JSONFalse
 		if (is('[')) {
-			val	out	= new immutable.VectorBuilder[JSONValue] 
+			val	out	= new immutable.VectorBuilder[JSONValue]
 			ws()
 			if (is(']'))	return JSONArray(out.result)
 			while (true) {
@@ -48,7 +48,7 @@ private final class JSONDecoder(text:String) {
 			}
 		}
 		if (is('{')) {
-			val out	= new immutable.VectorBuilder[(String,JSONValue)] 
+			val out	= new immutable.VectorBuilder[(String,JSONValue)]
 			ws()
 			if (is('}'))	return JSONObject(out.result)
 			while (true) {
@@ -86,7 +86,7 @@ private final class JSONDecoder(text:String) {
 						val h3	= hexDigit()
 						val h4	= hexDigit()
 						
-						out	+= ((h1 << 12) | (h2 << 8) | (h3 << 4) | (h4 << 0)).toChar 
+						out	+= ((h1 << 12) | (h2 << 8) | (h3 << 4) | (h4 << 0)).toChar
 					}
 					else throw expectedClass("\"\\/trnfbu")
 				}
@@ -159,7 +159,7 @@ private final class JSONDecoder(text:String) {
 	
 	private def hexDigit():Int	= {
 		val	c	= text charAt offset
-		val h	=		 
+		val h	=
 					 if (c >= '0' && c <= '9')	c - '0'
 				else if (c >= 'a' && c <= 'f')	c - 'a' + 10
 				else if (c >= 'A' && c <= 'F')	c - 'A' + 10
@@ -183,9 +183,9 @@ private final class JSONDecoder(text:String) {
 		var keepOn	= true
 		while (!finished && keepOn) {
 			val c	= next
-			if (c == ' '  
-			|| c == '\t' 
-			|| c == '\r' 
+			if (c == ' '
+			|| c == '\t'
+			|| c == '\r'
 			|| c == '\n')	consume()
 			else			keepOn	= false
 		}

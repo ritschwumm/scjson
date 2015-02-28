@@ -10,7 +10,7 @@ package object serialization {
 	type Format[T] = Bijection[T,JSONValue]
 	
 	/** create a Format from the two halves of a Bijection */
-	def Format[T](writeFunc:T=>JSONValue, readFunc:JSONValue=>T):Format[T]	= 
+	def Format[T](writeFunc:T=>JSONValue, readFunc:JSONValue=>T):Format[T]	=
 			Bijection(writeFunc, readFunc)
 		
 	/** this is a bit of a hack to force a specific constructor to be used for decoding */
@@ -18,7 +18,7 @@ package object serialization {
 			Bijection(writeFunc, it => readFunc(downcast(it)))
 		
 	/** delay the construction of an actual Format until it's used */
-	def LazyFormat[T](sub: =>Format[T]):Format[T]	= 
+	def LazyFormat[T](sub: =>Format[T]):Format[T]	=
 			Format(it => sub write it, it => sub read it)
 	
 	//------------------------------------------------------------------------------

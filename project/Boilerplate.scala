@@ -5,7 +5,7 @@ object Boilerplate {
 		val	outDir	= srcDir / "boilerplate"
 		outDir.mkdirs()
 		Seq(
-			genTupleFile(outDir), 
+			genTupleFile(outDir),
 			genCaseClassFile(outDir)
 		)
 	}	
@@ -27,7 +27,7 @@ object Boilerplate {
 		|import JSONSerializationUtil._
 		|
 		|trait TupleProtocolGenerated {
-		""".stripMargin		+ 
+		""".stripMargin		+
 		(2 to 22 map genTupleMethod mkString "\n")	+
 		"""
 		|}
@@ -36,7 +36,7 @@ object Boilerplate {
 			
 	def genTupleMethod(arity:Int):String	= {
 		val awc	= aritywise(arity)(",") _
-		val typeParams	= awc("T$:Format") 
+		val typeParams	= awc("T$:Format")
 		val typeNames	= awc("T$")
 		("""
 		|	implicit def Tuple"""+arity+"""Format["""+typeParams+"""]:Format[("""+typeNames+""")]	=
@@ -72,7 +72,7 @@ object Boilerplate {
 		|import JSONSerializationUtil._
 		|
 		|trait CaseClassProtocolGenerated {
-		""".stripMargin		+ 
+		""".stripMargin		+
 		(2 to 22 map genCaseClassMethod mkString "\n")	+
 		"""
 		|}
@@ -81,7 +81,7 @@ object Boilerplate {
 	
 	def genCaseClassMethod(arity:Int):String	= {
 		val awc	= aritywise(arity)(",") _
-		val typeParams	= awc("S$:Format") 
+		val typeParams	= awc("S$:Format")
 		val typeNames	= awc("S$")
 		val fieldNames	= awc("k$")
 		("""
@@ -104,6 +104,6 @@ object Boilerplate {
 	//------------------------------------------------------------------------------
 	//## helper
 	
-	private def aritywise(arity:Int)(separator:String)(format:String):String	= 
+	private def aritywise(arity:Int)(separator:String)(format:String):String	=
 			1 to arity map { i => format replace ("$", i.toString) } mkString separator
 }

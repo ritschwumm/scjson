@@ -22,7 +22,7 @@ class RoundtripTest extends Specification {
 	//------------------------------------------------------------------------------
 	
 	"roundtrips" should {
-		"work for a simple String" in { 
+		"work for a simple String" in {
 			val orig	= JSONString("hallo")
 			val json	= doWrite[JSONString](orig)
 			val back	= doRead[JSONString](json)
@@ -45,7 +45,7 @@ class RoundtripTest extends Specification {
 			orig2 mustEqual back2
 		}
 		
-		"work for ADTs" in { 
+		"work for ADTs" in {
 			val orig	= SimpleClass(true, Some(1), Set("hallo", "welt"))
 			val json	= doWrite[SimpleBase](orig)
 			val back	= doRead[SimpleBase](json)

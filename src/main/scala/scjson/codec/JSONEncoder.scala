@@ -3,7 +3,7 @@ package scjson.codec
 import scjson._
 
 private object JSONEncoder {
-	/** unparse a JSONValue into a String */ 
+	/** unparse a JSONValue into a String */
 	def encode(v:JSONValue, pretty:Boolean):String	= {
 		val encoder	= new JSONEncoder(pretty)
 		encoder encode v
@@ -20,7 +20,7 @@ private final class JSONEncoder(pretty:Boolean) {
 	
 	def result:String	= b.toString
 	
-	/** unparse a JSONValue into a String */ 
+	/** unparse a JSONValue into a String */
 	private def encode(v:JSONValue) {
 		v match {
 			case JSONNull			=> b append "null"
@@ -41,7 +41,7 @@ private final class JSONEncoder(pretty:Boolean) {
 						if (sep)	b += ','
 						else		sep	= true
 						b	+= '\n';	indent()
-						encode(it) 
+						encode(it)
 					}
 					level	-= 1
 					b	+= '\n';	indent()
@@ -53,7 +53,7 @@ private final class JSONEncoder(pretty:Boolean) {
 					data foreach { it =>
 						if (sep)	b += ','
 						else		sep	= true
-						encode(it) 
+						encode(it)
 					}
 					b	+= ']'
 				}
@@ -73,7 +73,7 @@ private final class JSONEncoder(pretty:Boolean) {
 						encodeString(key)
 						b	+= ':'
 						b	++= JSONEncoder.indention
-						encode(value) 
+						encode(value)
 					}
 					level	-= 1
 					b	+= '\n';	indent()
@@ -85,9 +85,9 @@ private final class JSONEncoder(pretty:Boolean) {
 					data foreach { case (key, value) =>
 						if (sep)	b += ','
 						else		sep	= true
-						encodeString(key) 
+						encodeString(key)
 						b	+= ':'
-						encode(value) 
+						encode(value)
 					}
 					b	+= '}'
 				}

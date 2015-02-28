@@ -45,7 +45,7 @@ trait SumProtocol {
 			else						origTag
 		}
 		
-		def castValue(value:T):Option[C]	= 
+		def castValue(value:T):Option[C]	=
 				tag unapply value
 	}
 }

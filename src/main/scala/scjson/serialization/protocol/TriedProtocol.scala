@@ -13,7 +13,7 @@ trait TriedProtocol {
 	private val failTag	= "fail"
 		
 	implicit def TriedFormat[F:Format,W:Format]:Format[Tried[F,W]]	=
-			Format[Tried[F,W]]( 
+			Format[Tried[F,W]](
 				_ match {
 					case Fail(value)	=> JSONVarObject(
 						failTag	-> doWrite[F](value)
@@ -22,7 +22,7 @@ trait TriedProtocol {
 						winTag	-> doWrite[W](value)
 					)
 				},
-				(in:JSONValue)	=> { 
+				(in:JSONValue)	=> {
 					val	map	= objectMap(in)
 					(map get failTag, map get winTag) match {
 						case (Some(bs), None)	=> Fail(doRead[F](bs))

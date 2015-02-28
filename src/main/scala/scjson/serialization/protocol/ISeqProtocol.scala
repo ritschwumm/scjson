@@ -9,7 +9,7 @@ import JSONSerializationUtil._
 object ISeqProtocol extends ISeqProtocol
 
 trait ISeqProtocol {
-	implicit def ISeqFormat[T:Format]:Format[ISeq[T]] = 
+	implicit def ISeqFormat[T:Format]:Format[ISeq[T]] =
 			Format[ISeq[T]](
 				(out:ISeq[T])	=> JSONArray(out map doWrite[T]),
 				(in:JSONValue)	=> arrayValue(in) map doRead[T]

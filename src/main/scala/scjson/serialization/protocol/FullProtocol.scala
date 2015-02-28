@@ -2,11 +2,11 @@ package scjson.serialization
 
 object FullProtocol extends FullProtocol
 
-trait FullProtocol 
-		extends	NativeProtocol 
+trait FullProtocol
+		extends	NativeProtocol
 		with	ViaProtocol
 		with	ISeqProtocol
-		with	CollectionProtocol 
+		with	CollectionProtocol
 		with	OptionProtocol
 		with	EitherProtocol
 		with	TriedProtocol

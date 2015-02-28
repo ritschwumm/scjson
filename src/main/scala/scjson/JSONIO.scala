@@ -14,7 +14,7 @@ object JSONIO {
 	
 	def loadFile[T:Format](file:File):Tried[JSONInputException,T]	=
 			for {
-				str	<- 
+				str	<-
 						try {
 							Win(file readString charset)
 						}
@@ -50,11 +50,11 @@ object JSONIO {
 			try {
 				Win(doRead[T](json))
 			}
-			catch { 
+			catch {
 				case e:JSONDeserializationException	=> Fail(e)
 				case e:Exception					=> Fail(new JSONDeserializationException("cannot decode json", e))
 			}
 		
-	def writeAST[T:Format](value:T):JSONValue	= 
+	def writeAST[T:Format](value:T):JSONValue	=
 			doWrite[T](value)
 }
