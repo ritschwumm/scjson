@@ -10,34 +10,37 @@ import scjson.codec._
 import scjson.serialization._
 
 object JSONIO {
-	val charset	= Charsets.utf_8
-	
 	def loadFile[T:Format](file:File):Tried[JSONInputException,T]	=
-			for {
-				str	<-
-						try {
-							Win(file readString charset)
-						}
-						catch { case e:Exception =>
-							Fail(new JSONFileException(file, e))
-						}
-				out	<- readString(str)
-			}
-			yield out
+			file			into
+			readFileString	flatMap
+			readString[T]
 							
 	def saveFile[T:Format](file:File, value:T):Unit	=
 			value			|>
 			writeString[T]	|>
-			{ file writeString (charset, _) }
+			writeFileString(file)
+			
+	//------------------------------------------------------------------------------
+			
+	val charset	= Charsets.utf_8
+	
+	def readFileString(file:File):Tried[JSONInputException,String]	=
+			try {
+				Win(file readString charset)
+			}
+			catch { case e:Exception =>
+				Fail(new JSONFileException(file, e))
+			}
+			
+	def writeFileString(file:File)(content:String):Unit	=
+			file writeString (charset, content)
 			
 	//------------------------------------------------------------------------------
 	
 	def readString[T:Format](json:String):Tried[JSONInputException,T]	=
-			for {
-				ast	<- JSONCodec decode json
-				out	<- readAST(ast)
-			}
-			yield out
+			json				into
+			JSONCodec.decode	flatMap
+			readAST[T]
 			
 	def writeString[T:Format](value:T):String	=
 			value		|>
