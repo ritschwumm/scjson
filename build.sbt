@@ -1,8 +1,8 @@
 name			:= "scjson"
 organization	:= "de.djini"
-version			:= "0.75.0"
+version			:= "0.76.0"
 
-scalaVersion	:= "2.11.6"
+scalaVersion	:= "2.11.7"
 scalacOptions	++= Seq(
 	"-deprecation",
 	"-unchecked",
@@ -23,7 +23,7 @@ scalacOptions	++= Seq(
 conflictManager	:= ConflictManager.strict
 resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 libraryDependencies	++= Seq(
-	"de.djini"			%%	"scutil-core"	% "0.70.0"				% "compile",
+	"de.djini"			%%	"scutil-core"	% "0.71.0"				% "compile",
 	"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
 	"org.specs2"		%%	"specs2"		% "2.4.17"				% "test"
 )
