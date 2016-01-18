@@ -16,8 +16,8 @@ trait SumProtocol {
 
 	def sumFormat[T](partials:ISeq[PartialFormat[T]]):Format[T]	=
 			Format[T](
-				(it:T)			=> partials collapseFirst { _ write it } getOrElse fail("no matching constructor found"),
-				(it:JSONValue)	=> partials collapseFirst { _ read  it } getOrElse fail("no matching constructor found")
+				(it:T)			=> partials collapseMapFirst { _ write it } getOrElse fail("no matching constructor found"),
+				(it:JSONValue)	=> partials collapseMapFirst { _ read  it } getOrElse fail("no matching constructor found")
 			)
 			
 	//------------------------------------------------------------------------------
