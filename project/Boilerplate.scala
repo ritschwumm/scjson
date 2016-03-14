@@ -89,7 +89,7 @@ object Boilerplate {
 		|		val ISeq("""+fieldNames+""")	= Fielder[T]
 		|		Format[T](
 		|			(out:T)	=> {
-		|				val fields	= unapply(out).get
+		|				val fields	= unapplyTotal(unapply, out)
 		|				JSONVarObject(""" + awc("k$ -> doWrite[S$](fields._$)") + """)
 		|			},
 		|			(in:JSONValue)	=> {

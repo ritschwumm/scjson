@@ -1,6 +1,6 @@
 name			:= "scjson"
 organization	:= "de.djini"
-version			:= "0.86.0"
+version			:= "0.87.0"
 
 scalaVersion	:= "2.11.8"
 scalacOptions	++= Seq(
@@ -23,11 +23,22 @@ scalacOptions	++= Seq(
 conflictManager	:= ConflictManager.strict
 resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 libraryDependencies	++= Seq(
-	"de.djini"			%%	"scutil-core"	% "0.81.0"				% "compile",
+	"de.djini"			%%	"scutil-core"	% "0.82.0"				% "compile",
 	"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
 	"org.specs2"		%%	"specs2-core"	% "3.7.2"				% "test"
 )
 dependencyOverrides	++= Set(
 	"org.scala-lang"	% "scala-library"	% scalaVersion.value,
 	"org.scala-lang"	% "scala-reflect"	% scalaVersion.value
+)
+
+wartremoverErrors ++= Seq(
+	Wart.Any2StringAdd,
+	Wart.EitherProjectionPartial,
+	Wart.OptionPartial,
+	Wart.Enumeration,
+	Wart.FinalCaseClass,
+	Wart.JavaConversions,
+	Wart.Option2Iterable,
+	Wart.TryPartial
 )
