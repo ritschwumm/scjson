@@ -3,7 +3,7 @@ package scjson
 import scjson.serialization._
 
 package object syntax {
-	// NOTE must no be passed null values
+	// NOTE must not be passed null values
 	
 	def jsonArray(values:JSONWrapper*):JSONArray	=
 			JSONArray(values.toVector map { _.unwrap })
