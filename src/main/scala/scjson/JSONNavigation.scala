@@ -14,9 +14,6 @@ final class JSONNavigation(peer:Option[JSONValue]) {
 	def downcast[T<:JSONValue](subtype:Subtype[JSONValue,T]):Option[T]	=
 			peer flatMap subtype.unapply
 	
-	def extract[S<:JSONValue,T](subtype:Subtype[JSONValue,S], bijection:Bijection[S,T]):Option[T]	=
-			downcast(subtype) map bijection.write
-	
 	//------------------------------------------------------------------------------
 			
 	def jsonNull:Option[JSONNull.type]	= downcast(JSONSubtypes.jsonNull)
@@ -28,15 +25,15 @@ final class JSONNavigation(peer:Option[JSONValue]) {
 	
 	//------------------------------------------------------------------------------
 	
-	def nullRef:Option[Null]						= extract(JSONSubtypes.jsonNull,	JSONBijections.jsonNull)
-	def string:Option[String]						= extract(JSONSubtypes.jsonString,	JSONBijections.jsonString)
-	def decimal:Option[BigDecimal]					= extract(JSONSubtypes.jsonNumber,	JSONBijections.jsonNumber)
+	def nullRef:Option[Null]						= downcast(JSONSubtypes.jsonNull)	map	JSONBijections.jsonNull.write
+	def string:Option[String]						= downcast(JSONSubtypes.jsonString)	map JSONBijections.jsonString.write
+	def decimal:Option[BigDecimal]					= downcast(JSONSubtypes.jsonNumber)	map JSONBijections.jsonNumber.write
 	def long:Option[Long]							= decimal map { _.longValue		}
 	def int:Option[Int]								= decimal map { _.intValue		}
 	def double:Option[Double]						= decimal map { _.doubleValue	}
 	def float:Option[Float]							= decimal map { _.floatValue	}
-	def boolean:Option[Boolean]						= extract(JSONSubtypes.jsonBoolean,	JSONBijections.jsonBoolean)
-	def arraySeq:Option[ISeq[JSONValue]]			= extract(JSONSubtypes.jsonArray,	JSONBijections.jsonArray)
-	def objectSeq:Option[ISeq[(String,JSONValue)]]	= extract(JSONSubtypes.jsonObject,	JSONBijections.jsonObject)
+	def boolean:Option[Boolean]						= downcast(JSONSubtypes.jsonBoolean)	map JSONBijections.jsonBoolean.write
+	def arraySeq:Option[ISeq[JSONValue]]			= downcast(JSONSubtypes.jsonArray)		map JSONBijections.jsonArray.write
+	def objectSeq:Option[ISeq[(String,JSONValue)]]	= downcast(JSONSubtypes.jsonObject)		map JSONBijections.jsonObject.write
 	def objectMap:Option[Map[String,JSONValue]]		= objectSeq map { _.toMap }
 }
