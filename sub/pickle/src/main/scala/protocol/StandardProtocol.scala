@@ -1,13 +1,13 @@
 package scjson.pickle.protocol
 
-object FullProtocol extends FullProtocol
+object StandardProtocol extends StandardProtocol
 
-trait FullProtocol
+trait StandardProtocol
 		extends	NativeProtocol
 		with	ViaProtocol
 		with	ISeqProtocol
 		with	CollectionProtocol
-		with	OptionProtocol
+		with	NullOptionProtocol
 		with	EitherProtocol
 		with	TriedProtocol
 		with	SumProtocol

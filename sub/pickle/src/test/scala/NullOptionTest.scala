@@ -6,8 +6,7 @@ import scjson.ast._
 import scjson.pickle.protocol._
 
 class NullOptionTest extends Specification {
-	object TestProtocoll extends NativeProtocol with NullOptionProtocol
-	import TestProtocoll._
+	import StandardProtocol._
 	
 	"plain option" should {
 		"serialize None as null" in {

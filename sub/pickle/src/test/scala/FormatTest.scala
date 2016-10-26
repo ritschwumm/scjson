@@ -23,7 +23,7 @@ class FormatTest extends Specification {
 	case class TestADT1(a:Int)			extends TestADT
 	case class TestADT2(a:Int, b:Int)	extends TestADT
 	
-	object MyProtocol extends FullProtocol {
+	object MyProtocol extends StandardProtocol {
 		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq(
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,

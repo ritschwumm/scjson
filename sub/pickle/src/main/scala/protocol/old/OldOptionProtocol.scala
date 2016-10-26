@@ -1,13 +1,13 @@
-package scjson.pickle.protocol
+package scjson.pickle.protocol.old
 
 import scjson.ast._
 import scjson.pickle._
 
 import JSONPickleUtil._
 
-object OptionProtocol extends OptionProtocol
+object OldOptionProtocol extends OldOptionProtocol
 
-trait OptionProtocol {
+trait OldOptionProtocol {
 	private val someTag	= "some"
 	private val noneTag	= "none"
 		

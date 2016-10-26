@@ -10,7 +10,7 @@ class RoundtripTest extends Specification {
 	case object SimpleObject											extends SimpleBase
 	case class	SimpleClass(ok:Boolean, x:Option[Int], y:Set[String])	extends SimpleBase
 	
-	object MyProtocol extends FullProtocol {
+	object MyProtocol extends StandardProtocol {
 		implicit lazy val SimpleSumFormat:Format[Any]					= objectSumFormat[Any](IntFormat, StringFormat)
 		
 		implicit lazy val SimpleBaseFormat:Format[SimpleBase]			= objectSumFormat(SimpleObjectFormat, SimpleClassFormat)
