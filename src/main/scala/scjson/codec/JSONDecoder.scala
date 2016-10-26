@@ -105,33 +105,29 @@ private final class JSONDecoder(text:String) {
 			}
 		}
 		
-		val before	= offset
+		val before		= offset
 		
-		var numCommit	= false
-		numCommit	|= is('-')
-	
+		val numNeg		= is('-')
 		val beforeBody	= offset
-		val numHead	= digits()
-		if (numHead > 1 && (text charAt beforeBody) == '0') {
-			offset	= beforeBody
-			throw expected("number without leading zero")
-		}
-		val numDot	= is('.')
-		val numTail	= digits()
-		val numBody	= numHead != 0 || numTail != 0
-		if (numCommit && !numBody) {
-			offset	= beforeBody
-			throw expected("valid number")
-		}
-		numCommit	= numBody
-		
-		if (numCommit) {
+		val numInt		= digits()
+		if (numNeg || numInt != 0) {
+			if (numInt == 0) {
+				// TODO [.eE+-n] could issue special errors
+				// offset	= beforeBody
+				throw expected("number digits")
+			}
+			if (numInt > 1 && (text charAt beforeBody) == '0') {
+				offset	= beforeBody
+				throw expected("number digits without leading zero")
+			}
+			if (is('.')) {
+				val numTail	= digits()
+				if (numTail == 0)	throw expected("fraction digits after dot")
+			}
 			if (is('e') || is('E')) {
 				is('+') || is('-')
 				val countExpo	= digits()
-				if (countExpo == 0) {
-					throw expected("at least 1 digit in the exponent")
-				}
+				if (countExpo == 0)	throw expected("at least one digit in the exponent")
 			}
 			try {
 				return JSONNumber(BigDecimal(from(before)))
@@ -142,10 +138,10 @@ private final class JSONDecoder(text:String) {
 					throw expected("valid number")
 			}
 		}
-		else {
-			offset	= before
-			throw expected("unexpected character %04x" format (text charAt offset).toInt)
-		}
+		
+		// no recognized token at all
+		offset	= before
+		throw expected("unexpected character %04x" format (text charAt offset).toInt)
 	}
 	
 	private def expected(what:String)	=

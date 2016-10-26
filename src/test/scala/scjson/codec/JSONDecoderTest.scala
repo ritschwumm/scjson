@@ -27,33 +27,45 @@ class JSONDecoderTest extends Specification {
 		"decode int 1" in {
 			(JSONCodec decode "1") mustEqual Win(JSONNumber(1))
 		}
-		"decode int 0." in {
-			(JSONCodec decode "0.") mustEqual Win(JSONNumber(0))
+		
+		"fail with a single dot" in {
+			(JSONCodec decode ".").toEither must beLeft
 		}
-		"decode int .0" in {
-			(JSONCodec decode ".0") mustEqual Win(JSONNumber(0))
+		"fail without fraction after dot" in {
+			(JSONCodec decode "0.").toEither must beLeft
 		}
-		"decode int 0.0" in {
-			(JSONCodec decode "0.0") mustEqual Win(JSONNumber(0))
+		"fail without int before fraction" in {
+			(JSONCodec decode ".0").toEither must beLeft
 		}
-		"not decode 1e" in {
+		"fail with a single dot before exp" in {
+			(JSONCodec decode ".e1").toEither must beLeft
+		}
+		"fail without int before exp" in {
+			(JSONCodec decode "e1").toEither must beLeft
+		}
+		"fail without digits after exp" in {
 			(JSONCodec decode "1e").toEither must beLeft
 		}
-		"decode 1e1" in {
+		
+		"decode float 0.0" in {
+			(JSONCodec decode "0.0") mustEqual Win(JSONNumber(0))
+		}
+		"decode float 1e1" in {
 			(JSONCodec decode "1e1") mustEqual Win(JSONNumber(10))
 		}
-		"decode 2e+3" in {
+		"decode float 2e+3" in {
 			(JSONCodec decode "2e+3") mustEqual Win(JSONNumber(2000))
 		}
-		"decode 10e-1" in {
+		"decode float 10e-1" in {
 			(JSONCodec decode "10e-1") mustEqual Win(JSONNumber(1))
 		}
-		"decode 47.11" in {
+		"decode float 47.11" in {
 			(JSONCodec decode "47.11") mustEqual Win(JSONNumber(47.11))
 		}
 		
 		"fail with a leading zero in the body" in {
-			(JSONCodec decode "00") must beLike { case Fail(_) => ok }
+			// (JSONCodec decode "00") must beLike { case Fail(_) => ok }
+			(JSONCodec decode "00").toEither must beLeft
 		}
 		"allow a leading zero in the exponent" in {
 			(JSONCodec decode "0E00") mustEqual Win(JSONNumber(0))
@@ -96,7 +108,7 @@ class JSONDecoderTest extends Specification {
 			(JSONCodec decode "[ ]") mustEqual Win(JSONArray(ISeq()))
 		}
 		"disallow illegal whitespace in arrays" in {
-			(JSONCodec decode "[ ]") must beLike { case Fail(_) => ok }
+			(JSONCodec decode "[\u00a0]").toEither must beLeft
 		}
 		
 		"decode objects with 0 elements" in {

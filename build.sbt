@@ -1,6 +1,6 @@
 name			:= "scjson"
 organization	:= "de.djini"
-version			:= "0.89.0"
+version			:= "0.90.0"
 
 scalaVersion	:= "2.11.8"
 scalacOptions	++= Seq(
@@ -26,10 +26,6 @@ libraryDependencies	++= Seq(
 	"de.djini"			%%	"scutil-core"	% "0.84.0"				% "compile",
 	"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
 	"org.specs2"		%%	"specs2-core"	% "3.8.4"				% "test"
-)
-dependencyOverrides	++= Set(
-	"org.scala-lang"	% "scala-library"	% scalaVersion.value,
-	"org.scala-lang"	% "scala-reflect"	% scalaVersion.value
 )
 
 wartremoverErrors ++= Seq(
