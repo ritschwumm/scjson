@@ -1,6 +1,6 @@
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.98.0",
+	version			:= "0.99.0",
 	
 	scalaVersion	:= "2.11.8",
 	scalacOptions	++= Seq(
@@ -34,27 +34,27 @@ lazy val warts	=
 		)
 
 lazy val `scjson` =
-	(project in file("."))
-	.aggregate(
-		`scjson-ast-jvm`,
-		`scjson-ast-js`,
-		`scjson-codec-jvm`,
-		`scjson-codec-js`,
-		`scjson-pickle`,
-		`scjson-io`
-	)
-	.settings(
-		publishArtifact := false
-		//publish		:= {},
-		//publishLocal	:= {}
-	)
+		(project in file("."))
+		.aggregate(
+			`scjson-ast-jvm`,
+			`scjson-ast-js`,
+			`scjson-codec-jvm`,
+			`scjson-codec-js`,
+			`scjson-pickle`,
+			`scjson-io`
+		)
+		.settings(
+			publishArtifact := false
+			//publish		:= {},
+			//publishLocal	:= {}
+		)
 	
 lazy val `scjson-ast`	=
 		(crossProject crossType CrossType.Pure	in	file("sub/ast"))
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.89.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.90.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
@@ -71,7 +71,7 @@ lazy val `scjson-codec`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.89.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.90.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.4"				% "test"
 			),
 			wartremoverErrors	++= warts
@@ -90,11 +90,14 @@ lazy val `scjson-pickle`	=
 		.settings(
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.89.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.90.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.4"				% "test"
 			),
 			wartremoverErrors	++= warts,
-			(sourceGenerators in Compile)	<+= (sourceManaged in Compile) map Boilerplate.generate
+			(sourceGenerators in Compile)	+=
+					(Def.task {
+						Boilerplate generate (sourceManaged in Compile).value
+					}).taskValue
 		)
 		
 lazy val `scjson-io`	=
@@ -107,7 +110,7 @@ lazy val `scjson-io`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.89.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.90.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
