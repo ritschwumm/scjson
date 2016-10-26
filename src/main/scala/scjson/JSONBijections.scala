@@ -8,5 +8,5 @@ object JSONBijections {
 	val jsonNumber		= Bijection[JSONNumber,BigDecimal]					(_.value,	JSONNumber(_))
 	val jsonString		= Bijection[JSONString,String]						(_.value,	JSONString(_))
 	val jsonArray		= Bijection[JSONArray,ISeq[JSONValue]]				(_.value,	JSONArray(_))
-	val jsonObject		= Bijection[JSONObject,ISeq[(String,JSONValue)]]		(_.value,	JSONObject(_))
+	val jsonObject		= Bijection[JSONObject,ISeq[(String,JSONValue)]]	(_.value,	JSONObject(_))
 }

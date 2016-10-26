@@ -44,6 +44,4 @@ trait CollectionProtocol {
 				}
 			)
 	*/
-	
-	
 }

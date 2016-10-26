@@ -32,8 +32,8 @@ private final class JSONDecoder(text:String) {
 		ws()
 		if (finished)		throw expected("any char")
 			
-		if (is("null"))	return JSONNull
-		if (is("true"))	return JSONTrue
+		if (is("null"))		return JSONNull
+		if (is("true"))		return JSONTrue
 		if (is("false"))	return JSONFalse
 		if (is('[')) {
 			val	out	= new immutable.VectorBuilder[JSONValue]

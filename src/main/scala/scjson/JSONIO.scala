@@ -4,7 +4,7 @@ import java.io._
 
 import scutil.lang._
 import scutil.implicits._
-import scutil.io.Charsets
+import scutil.codec.Charsets
 
 import scjson.codec._
 import scjson.serialization._
