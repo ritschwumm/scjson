@@ -1,3 +1,3 @@
 package scjson.pickle
 
-final class JSONUnpickleException(val failure:JSONUnpickleFailure) extends Exception
+private final class JSONUnpickleException(val failure:JSONUnpickleFailure) extends Exception
