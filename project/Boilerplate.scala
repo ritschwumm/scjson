@@ -21,10 +21,11 @@ object Boilerplate {
 	
 	def genTupleTrait:String	= {
 		"""
-		|package scjson.serialization
+		|package scjson.pickle.protocol
 		|
-		|import scjson._
-		|import JSONSerializationUtil._
+		|import scjson.ast._
+		|import scjson.pickle._
+		|import JSONPickleUtil._
 		|
 		|trait TupleProtocolGenerated {
 		""".stripMargin		+
@@ -46,7 +47,7 @@ object Boilerplate {
 		|				},
 		|				(in:JSONValue)	=> {
 		|					val	arr	= arrayValue(in)
-		|					("""+ awc("doRead[T$](arr($-1))") +	""")
+		|					("""+ awc("doReadUnsafe[T$](arr($-1))") +	""")
 		|				}
 		|			)
 		""").stripMargin
@@ -63,13 +64,14 @@ object Boilerplate {
 	
 	def genCaseClassTrait:String	= {
 		"""
-		|package scjson.serialization
+		|package scjson.pickle.protocol
 		|
 		|import scutil.lang.Fielder
 		|import scutil.lang.Fielding
 		|import scutil.lang.ISeq
-		|import scjson._
-		|import JSONSerializationUtil._
+		|import scjson.ast._
+		|import scjson.pickle._
+		|import JSONPickleUtil._
 		|
 		|trait CaseClassProtocolGenerated {
 		""".stripMargin		+
@@ -94,7 +96,7 @@ object Boilerplate {
 		|			},
 		|			(in:JSONValue)	=> {
 		|				val map	= objectMap(in)
-		|				apply(""" + awc("doRead[S$](map(k$))") + """)
+		|				apply(""" + awc("doReadUnsafe[S$](map(k$))") + """)
 		|			}
 		|		)
 		|	}
