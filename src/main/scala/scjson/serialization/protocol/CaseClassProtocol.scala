@@ -2,8 +2,8 @@ package scjson.serialization
 
 import reflect.runtime.universe._
 
+import scutil.base.implicits._
 import scutil.lang._
-import scutil.implicits._
 
 import scjson._
 
