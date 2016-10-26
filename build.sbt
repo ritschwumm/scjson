@@ -1,6 +1,6 @@
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.95.0",
+	version			:= "0.96.0",
 	
 	scalaVersion	:= "2.11.8",
 	scalacOptions	++= Seq(
@@ -36,8 +36,10 @@ lazy val warts	=
 lazy val `scjson` =
 	(project in file("."))
 	.aggregate(
-		`scjson-ast`,
-		`scjson-codec`,
+		`scjson-ast-jvm`,
+		`scjson-ast-js`,
+		`scjson-codec-jvm`,
+		`scjson-codec-js`,
 		`scjson-pickle`,
 		`scjson-io`
 	)
@@ -48,34 +50,42 @@ lazy val `scjson` =
 	)
 	
 lazy val `scjson-ast`	=
-		(project in file("sub/ast"))
+		(crossProject crossType CrossType.Pure	in	file("sub/ast"))
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-base"	% "0.87.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.87.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
+		.jvmSettings()
+		.jsSettings()
+lazy val `scjson-ast-jvm`	= `scjson-ast`.jvm
+lazy val `scjson-ast-js`	= `scjson-ast`.js
 
 lazy val `scjson-codec`	=
-		(project in file("sub/codec"))
+		(crossProject crossType CrossType.Pure	in	file("sub/codec"))
 		.enablePlugins()
 		.dependsOn(
 			`scjson-ast`
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-base"	% "0.87.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.87.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.4"				% "test"
 			),
 			wartremoverErrors	++= warts
 		)
-		
+		.jvmSettings()
+		.jsSettings()
+lazy val `scjson-codec-jvm`	= `scjson-codec`.jvm
+lazy val `scjson-codec-js`	= `scjson-codec`.js
+
 lazy val `scjson-pickle`	=
 		(project in file("sub/pickle"))
 		.enablePlugins()
 		.dependsOn(
-			`scjson-ast`
+			`scjson-ast-jvm`
 		)
 		.settings(
 			libraryDependencies	++= Seq(      
@@ -91,8 +101,8 @@ lazy val `scjson-io`	=
 		(project in file("sub/io"))
 		.enablePlugins()
 		.dependsOn(
-			`scjson-ast`,
-			`scjson-codec`,
+			`scjson-ast-jvm`,
+			`scjson-codec-jvm`,
 			`scjson-pickle`
 		)
 		.settings(
