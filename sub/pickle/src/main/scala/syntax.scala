@@ -16,8 +16,6 @@ package object syntax {
 		
 	//------------------------------------------------------------------------------
 	
-	final case class JSONWrapper(unwrap:JSONValue)
-	
 	implicit def toJSONWrapper[T:Format](it:T):JSONWrapper	=
 			new JSONWrapper(format[T] write it)
 }
