@@ -19,16 +19,15 @@ object JSONIO {
 			}
 			yield out
 							
-	def saveFile[T:Format](file:File, value:T):Unit	=
-			value			|>
-			writeString[T]	|>
+	def saveFile[T:Format](file:File, value:T, pretty:Boolean):Unit	=
+			writeString[T](value, pretty)	|>
 			writeFileString(file)
 			
 	//------------------------------------------------------------------------------
 			
-	private val charset	= Charsets.utf_8
+	val charset	= Charsets.utf_8
 	
-	private def readFileString(file:File):Tried[IOException,String]	=
+	def readFileString(file:File):Tried[IOException,String]	=
 			try {
 				Win(file readString charset)
 			}
@@ -37,7 +36,7 @@ object JSONIO {
 			}
 			
 	// TODO this throws exceptions, too
-	private def writeFileString(file:File)(content:String):Unit	=
+	def writeFileString(file:File)(content:String):Unit	=
 			file writeString (charset, content)
 			
 	//------------------------------------------------------------------------------
@@ -49,10 +48,9 @@ object JSONIO {
 			}
 			yield out
 			
-	def writeString[T:Format](value:T):String	=
-			value		|>
-			doWrite[T]	|>
-			JSONCodec.encode
+	def writeString[T:Format](value:T, pretty:Boolean):String	=
+			doWrite[T](value)	|>
+			(JSONCodec encode (_, pretty))
 			
 	//------------------------------------------------------------------------------
 	

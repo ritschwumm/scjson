@@ -148,7 +148,7 @@ private final class JSONDecoder(text:String) {
 			new JSONDecodeException(JSONDecodeFailure(text, offset, what))
 	
 	private def expectedClass(charClass:String)	=
-			new JSONDecodeException(JSONDecodeFailure(text, offset, "one of " + (JSONCodec encode JSONString(charClass))))
+			new JSONDecodeException(JSONDecodeFailure(text, offset, "one of " + (JSONCodec encodeShort JSONString(charClass))))
 
 	//-------------------------------------------------------------------------
 	//## tokens

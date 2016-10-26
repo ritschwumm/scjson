@@ -15,10 +15,11 @@ object JSONBoolean {
 	def unapply(value:JSONBoolean):Option[Boolean]	= Some(value.value)
 }
 sealed abstract class JSONBoolean extends JSONValue {
-	def value:Boolean	= this match {
-		case JSONTrue	=> true
-		case JSONFalse	=> false
-	}
+	def value:Boolean	=
+			this match {
+				case JSONTrue	=> true
+				case JSONFalse	=> false
+			}
 }
 case object JSONTrue	extends JSONBoolean
 case object JSONFalse	extends JSONBoolean
