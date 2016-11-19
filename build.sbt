@@ -1,8 +1,8 @@
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.100.0",
+	version			:= "0.101.0",
 	
-	scalaVersion	:= "2.11.8",
+	scalaVersion	:= "2.12.0",
 	scalacOptions	++= Seq(
 		"-deprecation",
 		"-unchecked",
@@ -18,6 +18,7 @@ inThisBuild(Seq(
 		"-Xfatal-warnings",
 		"-Xlint"
 	),
+	scalaJSUseRhino	:= true,
 	conflictManager	:= ConflictManager.strict,
 	resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 ))
@@ -55,7 +56,7 @@ lazy val `scjson-ast`	=
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.91.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.92.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
@@ -72,8 +73,8 @@ lazy val `scjson-codec`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.91.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "3.8.5"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.92.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "3.8.6"				% "test"
 			),
 			wartremoverErrors	++= warts
 		)
@@ -91,8 +92,8 @@ lazy val `scjson-pickle`	=
 		.settings(
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.91.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "3.8.5"				% "test"
+				"de.djini"			%%	"scutil-base"	% "0.92.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "3.8.6"				% "test"
 			),
 			wartremoverErrors	++= warts,
 			(sourceGenerators in Compile)	+=
@@ -111,7 +112,7 @@ lazy val `scjson-io`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.91.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.92.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
