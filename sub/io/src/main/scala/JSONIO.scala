@@ -18,10 +18,16 @@ object JSONIO {
 				out	<- readAST[T](ast)		mapFail JSONIOUnpickleFailure.apply
 			}
 			yield out
-							
+			
+	@deprecated("use saveFile1 instead", "0.102.0")
 	def saveFile[T:Format](file:File, value:T, pretty:Boolean):Unit	=
 			writeString[T](value, pretty)	|>
 			writeFileString(file)
+			
+	// TODO return a custom failure
+	def saveFile1[T:Format](file:File, value:T, pretty:Boolean):Option[IOException]	=
+			writeString[T](value, pretty)	|>
+			writeFileString1(file)
 			
 	//------------------------------------------------------------------------------
 			
@@ -35,9 +41,18 @@ object JSONIO {
 				Fail(e)
 			}
 			
-	// TODO this throws exceptions, too
+	@deprecated("use writeFileString1 instead", "0.102.0")
 	def writeFileString(file:File)(content:String):Unit	=
 			file writeString (charset, content)
+		
+	def writeFileString1(file:File)(content:String):Option[IOException]	=
+			try {
+				file writeString (charset, content)
+				None
+			}
+			catch { case e:IOException =>
+				Some(e)
+			}
 			
 	//------------------------------------------------------------------------------
 	

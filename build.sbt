@@ -1,8 +1,8 @@
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.101.0",
+	version			:= "0.102.0",
 	
-	scalaVersion	:= "2.12.0",
+	scalaVersion	:= "2.12.1",
 	scalacOptions	++= Seq(
 		"-deprecation",
 		"-unchecked",
@@ -25,7 +25,7 @@ inThisBuild(Seq(
 
 lazy val warts	=
 		Seq(
-			Wart.Any2StringAdd,
+			Wart.StringPlusAny,
 			Wart.EitherProjectionPartial,
 			Wart.OptionPartial,
 			Wart.Enumeration,
@@ -56,7 +56,7 @@ lazy val `scjson-ast`	=
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.92.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.93.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
@@ -73,7 +73,7 @@ lazy val `scjson-codec`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.92.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.93.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.6"				% "test"
 			),
 			wartremoverErrors	++= warts
@@ -92,7 +92,7 @@ lazy val `scjson-pickle`	=
 		.settings(
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.92.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.93.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.6"				% "test"
 			),
 			wartremoverErrors	++= warts,
@@ -112,7 +112,7 @@ lazy val `scjson-io`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.92.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.93.0"				% "compile"
 			),
 			wartremoverErrors	++= warts
 		)
