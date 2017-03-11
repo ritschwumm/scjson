@@ -19,11 +19,6 @@ object JSONIO {
 			}
 			yield out
 			
-	@deprecated("use saveFile1 instead", "0.102.0")
-	def saveFile[T:Format](file:File, value:T, pretty:Boolean):Unit	=
-			writeString[T](value, pretty)	|>
-			writeFileString(file)
-			
 	// TODO return a custom failure
 	def saveFile1[T:Format](file:File, value:T, pretty:Boolean):Option[IOException]	=
 			writeString[T](value, pretty)	|>
@@ -41,10 +36,6 @@ object JSONIO {
 				Fail(e)
 			}
 			
-	@deprecated("use writeFileString1 instead", "0.102.0")
-	def writeFileString(file:File)(content:String):Unit	=
-			file writeString (charset, content)
-		
 	def writeFileString1(file:File)(content:String):Option[IOException]	=
 			try {
 				file writeString (charset, content)
