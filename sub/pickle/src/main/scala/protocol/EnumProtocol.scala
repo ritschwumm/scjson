@@ -1,5 +1,6 @@
 package scjson.pickle.protocol
 
+import scutil.base.implicits._
 import scutil.lang.ISeq
 
 import scjson.ast._
@@ -10,7 +11,7 @@ object EnumProtocol extends EnumProtocol
 trait EnumProtocol {
 	def enumFormat[T](values:ISeq[(String,T)]):Format[T]	=
 			Format[T](
-				(values map { case (k,v) => (v, JSONString(k)) }).toMap,
-				(values map { case (k,v) => (JSONString(k), v) }).toMap
+				values mapToMap { case (k,v) => (v, JSONString(k)) },
+				values mapToMap { case (k,v) => (JSONString(k), v) }
 			)
 }

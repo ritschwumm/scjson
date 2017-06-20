@@ -38,10 +38,9 @@ trait CollectionProtocol {
 				},
 				(in:JSONValue)	=> {
 					objectValue(in)
-					.map {
+					.mapToMap {
 						case (k,v) => (k, doRead[T](v))
 					}
-					.toMap
 				}
 			)
 	*/
