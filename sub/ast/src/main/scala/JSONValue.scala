@@ -4,6 +4,7 @@ import scutil.base.implicits._
 import scutil.lang.ISeq
 
 object JSONValue {
+	val theNull:JSONValue								= JSONNull
 	def mkNull(it:Unit):JSONValue						= JSONNull
 	def mkBoolean(it:Boolean):JSONValue					= JSONBoolean(it)
 	def mkNumber(it:BigDecimal):JSONValue				= JSONNumber(it)
