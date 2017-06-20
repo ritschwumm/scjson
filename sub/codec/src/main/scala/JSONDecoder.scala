@@ -4,7 +4,8 @@ import scala.collection.immutable
 
 import scjson.ast._
 
-private object JSONDecoder {
+// TODO unused should be private
+protected object JSONDecoder {
 	/** parse a JSON formatted String into a JSONValue */
 	def decode(s:String):Either[JSONDecodeFailure,JSONValue]	=
 			try {
@@ -215,10 +216,12 @@ private final class JSONDecoder(text:String) {
 			if (finished)	NO_CHAR
 			else  			text charAt offset
 	
+	/*
 	private def previous:Int	=
 			if (offset == 0)	NO_CHAR
 			else				text charAt offset-1
-			
+	*/
+	
 	private def from(before:Int):String	=
 			text substring (before, offset)
 	
