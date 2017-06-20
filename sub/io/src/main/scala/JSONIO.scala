@@ -11,11 +11,11 @@ import scjson.codec._
 import scjson.pickle._
 
 object JSONIO {
-	def loadFile[T:Format](file:File):Tried[JSONIOFileFailure,T]	=
+	def loadFile[T:Format](file:File):Either[JSONIOFileFailure,T]	=
 			for {
-				str	<- readFileString(file)	mapFail JSONIOExceptionFailure.apply
-				ast	<- JSONCodec decode str	mapFail JSONIODecodeFailure.apply
-				out	<- readAST[T](ast)		mapFail JSONIOUnpickleFailure.apply
+				str	<- readFileString(file)	mapLeft JSONIOExceptionFailure.apply
+				ast	<- JSONCodec decode str	mapLeft JSONIODecodeFailure.apply
+				out	<- readAST[T](ast)		mapLeft JSONIOUnpickleFailure.apply
 			}
 			yield out
 			
@@ -28,12 +28,12 @@ object JSONIO {
 			
 	val charset	= Charsets.utf_8
 	
-	def readFileString(file:File):Tried[IOException,String]	=
+	def readFileString(file:File):Either[IOException,String]	=
 			try {
-				Win(file readString charset)
+				Right(file readString charset)
 			}
 			catch { case e:IOException =>
-				Fail(e)
+				Left(e)
 			}
 			
 	def writeFileString1(file:File)(content:String):Option[IOException]	=
@@ -47,10 +47,10 @@ object JSONIO {
 			
 	//------------------------------------------------------------------------------
 	
-	def readString[T:Format](json:String):Tried[JSONIOStringFailure,T]	=
+	def readString[T:Format](json:String):Either[JSONIOStringFailure,T]	=
 			for {
-				ast	<- JSONCodec decode json	mapFail JSONIODecodeFailure.apply
-				out	<- readAST[T](ast)			mapFail JSONIOUnpickleFailure.apply
+				ast	<- JSONCodec decode json	mapLeft JSONIODecodeFailure.apply
+				out	<- readAST[T](ast)			mapLeft JSONIOUnpickleFailure.apply
 			}
 			yield out
 			
@@ -60,7 +60,7 @@ object JSONIO {
 			
 	//------------------------------------------------------------------------------
 	
-	def readAST[T:Format](json:JSONValue):Tried[JSONUnpickleFailure,T]	=
+	def readAST[T:Format](json:JSONValue):Either[JSONUnpickleFailure,T]	=
 			doRead[T](json)
 		
 	def writeAST[T:Format](value:T):JSONValue	=

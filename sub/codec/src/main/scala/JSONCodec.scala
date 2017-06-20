@@ -16,7 +16,7 @@ object JSONCodec {
 			JSONEncoder encode (it, pretty)
 		
 	/** parse a JSON formatted String into a JSONValue */
-	def decode(it:String):Tried[JSONDecodeFailure,JSONValue]	=
+	def decode(it:String):Either[JSONDecodeFailure,JSONValue]	=
 			JSONDecoder decode it
 		
 	/** small-style */

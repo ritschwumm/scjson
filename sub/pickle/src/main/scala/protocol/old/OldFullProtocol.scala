@@ -15,7 +15,6 @@ trait OldFullProtocol
 		with	CollectionProtocol
 		with	OldOptionProtocol
 		with	EitherProtocol
-		with	TriedProtocol
 		with	SumProtocol
 		with	ObjectSumProtocol
 		with	EnumProtocol

@@ -2,18 +2,16 @@ package scjson.codec
 
 import scala.collection.immutable
 
-import scutil.lang._
-
 import scjson.ast._
 
 private object JSONDecoder {
 	/** parse a JSON formatted String into a JSONValue */
-	def decode(s:String):Tried[JSONDecodeFailure,JSONValue]	=
+	def decode(s:String):Either[JSONDecodeFailure,JSONValue]	=
 			try {
-				Win(new JSONDecoder(s).decode())
+				Right(new JSONDecoder(s).decode())
 			}
 			catch { case e:JSONDecodeException =>
-				Fail(e.failure)
+				Left(e.failure)
 			}
 }
 

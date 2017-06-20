@@ -34,11 +34,11 @@ package object pickle {
 	def doReadUnsafe[T:Format](in:JSONValue):T	= format[T] read	in
 	
 	/** decode a value from its JSON representation using an implicitly provided Format */
-	def doRead[T:Format](in:JSONValue):Tried[JSONUnpickleFailure,T]	=
+	def doRead[T:Format](in:JSONValue):Either[JSONUnpickleFailure,T]	=
 			try {
-				Win(doReadUnsafe[T](in))
+				Right(doReadUnsafe[T](in))
 			}
 			catch { case e:JSONUnpickleException =>
-				Fail(e.failure)
+				Left(e.failure)
 			}
 }
