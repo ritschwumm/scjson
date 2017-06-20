@@ -1,6 +1,8 @@
+import org.scalajs.sbtplugin.cross.CrossProject
+
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.111.0",
+	version			:= "0.112.0",
 	
 	scalaVersion	:= "2.12.1",
 	scalacOptions	++= Seq(
@@ -18,13 +20,18 @@ inThisBuild(Seq(
 		"-Xfatal-warnings",
 		"-Xlint"
 	),
-	scalaJSUseRhino	:= true,
 	conflictManager	:= ConflictManager.strict,
 	resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 ))
 
-lazy val warts	=
+lazy val noTestSettings	=
 		Seq(
+			test		:= {},
+			testQuick	:= {}
+		)
+		
+lazy val wartRemoverSetting	=
+		wartremoverErrors	++= Seq(
 			Wart.StringPlusAny,
 			Wart.EitherProjectionPartial,
 			Wart.OptionPartial,
@@ -34,6 +41,10 @@ lazy val warts	=
 			Wart.Option2Iterable,
 			Wart.TryPartial
 		)
+		
+// (crossProject crossType CrossType.Pure in base)
+def myCrossProject(id:String, base:File):CrossProject	=
+		CrossProject(id + "-jvm", id + "-js", base, CrossType.Pure).settings(name := id)
 
 lazy val `scjson` =
 		(project in file("."))
@@ -51,35 +62,41 @@ lazy val `scjson` =
 			//publishLocal	:= {}
 		)
 	
+//------------------------------------------------------------------------------
+		
 lazy val `scjson-ast`	=
-		(crossProject crossType CrossType.Pure	in	file("sub/ast"))
+		myCrossProject("scjson-ast", file("sub/ast"))
 		.enablePlugins()
 		.settings(
+			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.101.0"				% "compile"
-			),
-			wartremoverErrors	++= warts
+				"de.djini"			%%%	"scutil-base"	% "0.102.0"				% "compile"
+			)
 		)
 		.jvmSettings()
-		.jsSettings()
+		.jsSettings(
+			noTestSettings
+		)
 lazy val `scjson-ast-jvm`	= `scjson-ast`.jvm
 lazy val `scjson-ast-js`	= `scjson-ast`.js
 
 lazy val `scjson-codec`	=
-		(crossProject crossType CrossType.Pure	in	file("sub/codec"))
+		myCrossProject("scjson-codec", file("sub/codec"))
 		.enablePlugins()
 		.dependsOn(
 			`scjson-ast`
 		)
 		.settings(
+			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.101.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.102.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.9"				% "test"
-			),
-			wartremoverErrors	++= warts
+			)
 		)
 		.jvmSettings()
-		.jsSettings()
+		.jsSettings(
+			noTestSettings
+		)
 lazy val `scjson-codec-jvm`	= `scjson-codec`.jvm
 lazy val `scjson-codec-js`	= `scjson-codec`.js
 
@@ -90,12 +107,12 @@ lazy val `scjson-pickle`	=
 			`scjson-ast-jvm`
 		)
 		.settings(
+			wartRemoverSetting,
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.101.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.102.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "3.8.9"				% "test"
 			),
-			wartremoverErrors	++= warts,
 			(sourceGenerators in Compile)	+=
 					(Def.task {
 						Boilerplate generate (sourceManaged in Compile).value
@@ -111,9 +128,9 @@ lazy val `scjson-io`	=
 			`scjson-pickle`
 		)
 		.settings(
+			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.101.0"				% "compile"
-			),
-			wartremoverErrors	++= warts
+				"de.djini"			%%	"scutil-core"	% "0.102.0"				% "compile"
+			)
 		)
 		
