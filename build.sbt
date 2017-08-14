@@ -2,7 +2,7 @@ import org.scalajs.sbtplugin.cross.CrossProject
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.124.0",
+	version			:= "0.125.0",
 	
 	scalaVersion	:= "2.12.2",
 	scalacOptions	++= Seq(
@@ -69,7 +69,7 @@ lazy val `scjson-ast`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.113.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.114.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -88,8 +88,8 @@ lazy val `scjson-codec`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.113.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "3.9.1"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.114.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "3.9.2"				% "test"
 			)
 		)
 		.jvmSettings()
@@ -109,8 +109,8 @@ lazy val `scjson-pickle`	=
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.113.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "3.9.1"				% "test"
+				"de.djini"			%%	"scutil-base"	% "0.114.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "3.9.2"				% "test"
 			),
 			(sourceGenerators in Compile)	+=
 					(Def.task {
@@ -129,7 +129,7 @@ lazy val `scjson-io`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.113.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.114.0"				% "compile"
 			)
 		)
 		
