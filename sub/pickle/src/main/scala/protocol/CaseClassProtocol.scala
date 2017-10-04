@@ -74,7 +74,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		def read(json:JSONValue):Option[T]	=
 				objectValue(json)
 				.exists	{ _ == ((typeTag, JSONString(identifier))) }
-				.guard	{ format read json }
+				.option	{ format read json }
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)
 	}
