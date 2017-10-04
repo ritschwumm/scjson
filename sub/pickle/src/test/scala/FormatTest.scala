@@ -7,22 +7,22 @@ import scutil.lang._
 import scjson.ast._
 import scjson.pickle.protocol._
 
+sealed trait TestEnum
+case object TestEnum0	extends TestEnum
+case object TestEnum1	extends TestEnum
+case object TestEnum2	extends TestEnum
+
+sealed trait TestSum
+case object TestSum0					extends TestSum
+final case class TestSum1(a:Int)		extends TestSum
+final case class TestSum2(a:Int, b:Int)	extends TestSum
+
+sealed trait TestADT
+case object TestADT0					extends TestADT
+final case class TestADT1(a:Int)		extends TestADT
+final case class TestADT2(a:Int, b:Int)	extends TestADT
+	
 class FormatTest extends Specification {
-	sealed trait TestEnum
-	case object TestEnum0	extends TestEnum
-	case object TestEnum1	extends TestEnum
-	case object TestEnum2	extends TestEnum
-	
-	sealed trait TestSum
-	case object TestSum0				extends TestSum
-	case class TestSum1(a:Int)			extends TestSum
-	case class TestSum2(a:Int, b:Int)	extends TestSum
-	
-	sealed trait TestADT
-	case object TestADT0				extends TestADT
-	case class TestADT1(a:Int)			extends TestADT
-	case class TestADT2(a:Int, b:Int)	extends TestADT
-	
 	object MyProtocol extends StandardProtocol {
 		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq(
 				"0"	-> TestEnum0,

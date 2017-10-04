@@ -5,11 +5,11 @@ import org.specs2.mutable._
 import scjson.ast._
 import scjson.pickle.protocol._
 
-class RoundtripTest extends Specification {
-	sealed trait SimpleBase
-	case object SimpleObject											extends SimpleBase
-	case class	SimpleClass(ok:Boolean, x:Option[Int], y:Set[String])	extends SimpleBase
+sealed trait SimpleBase
+case object SimpleObject													extends SimpleBase
+final case class	SimpleClass(ok:Boolean, x:Option[Int], y:Set[String])	extends SimpleBase
 	
+class RoundtripTest extends Specification {
 	object MyProtocol extends StandardProtocol {
 		implicit lazy val SimpleSumFormat:Format[Any]					= objectSumFormat[Any](IntFormat, StringFormat)
 		
