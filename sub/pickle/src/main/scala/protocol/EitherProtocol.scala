@@ -15,10 +15,10 @@ trait EitherProtocol {
 	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	=
 			Format[Either[L,R]](
 				_ match {
-					case Right(value)	=> JSONVarObject(
+					case Right(value)	=> JSONObject.Var(
 						rightTag	-> doWrite[R](value)
 					)
-					case Left(value)	=> JSONVarObject(
+					case Left(value)	=> JSONObject.Var(
 						leftTag		-> doWrite[L](value)
 					)
 				},

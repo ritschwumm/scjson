@@ -28,8 +28,8 @@ trait OldOptionProtocol {
 	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
 			Format[Option[T]](
 				_ match {
-					case Some(value)	=> JSONVarObject(someTag -> doWrite(value))
-					case None			=> JSONVarObject(noneTag -> JSONTrue)
+					case Some(value)	=> JSONObject.Var(someTag -> doWrite(value))
+					case None			=> JSONObject.Var(noneTag -> JSONTrue)
 				},
 				(in:JSONValue)	=> {
 					val map	= objectMap(in)

@@ -5,7 +5,7 @@ import scutil.lang.ISeq
 
 object JSONValue {
 	val theNull:JSONValue								= JSONNull
-	def mkNull(it:Unit):JSONValue						= JSONNull
+	def mkNull(it:Unit):JSONValue						= theNull
 	def mkBoolean(it:Boolean):JSONValue					= JSONBoolean(it)
 	def mkNumber(it:BigDecimal):JSONValue				= JSONNumber(it)
 	def mkString(it:String):JSONValue					= JSONString(it)
@@ -75,7 +75,12 @@ final case class JSONString(value:String)		extends JSONValue {
 }
 
 object JSONArray {
-	val empty	= JSONVarArray()
+	val empty	= JSONArray(Vector.empty)
+	
+	object Var {
+		def apply(values:JSONValue*):JSONArray					= JSONArray(values.toVector)
+		def unapplySeq(array:JSONArray):Option[ISeq[JSONValue]]	= Some(array.value)
+	}
 }
 final case class JSONArray(value:ISeq[JSONValue])	extends JSONValue {
 	require(value ne null)
@@ -84,7 +89,12 @@ final case class JSONArray(value:ISeq[JSONValue])	extends JSONValue {
 }
 
 object JSONObject {
-	val empty	= JSONObject(ISeq.empty)
+	val empty	= JSONObject(Vector.empty)
+	
+	object Var {
+		def apply(it:(String,JSONValue)*):JSONObject					= JSONObject(it.toVector)
+		def unapplySeq(it:JSONObject):Option[ISeq[(String,JSONValue)]]	= Some(it.value)
+	}
 }
 final case class JSONObject(value:ISeq[(String,JSONValue)])	extends JSONValue {
 	require(value ne null)

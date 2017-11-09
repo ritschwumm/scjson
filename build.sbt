@@ -1,8 +1,9 @@
 import org.scalajs.sbtplugin.cross.CrossProject
+import spray.boilerplate.BoilerplatePlugin
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.133.0",
+	version			:= "0.134.0",
 	
 	scalaVersion	:= "2.12.3",
 	scalacOptions	++= Seq(
@@ -99,7 +100,7 @@ lazy val `scjson-codec`	=
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
 				"de.djini"			%%%	"scutil-base"	% "0.121.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "3.9.5"				% "test"
+				"org.specs2"		%%	"specs2-core"	% "4.0.0"				% "test"
 			)
 		)
 		.jvmSettings()
@@ -111,7 +112,9 @@ lazy val `scjson-codec-js`	= `scjson-codec`.js
 
 lazy val `scjson-pickle`	=
 		(project in file("sub/pickle"))
-		.enablePlugins()
+		.enablePlugins(
+			BoilerplatePlugin
+		)
 		.dependsOn(
 			`scjson-ast-jvm`
 		)
@@ -120,12 +123,9 @@ lazy val `scjson-pickle`	=
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
 				"de.djini"			%%	"scutil-base"	% "0.121.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "3.9.5"				% "test"
+				"org.specs2"		%%	"specs2-core"	% "4.0.0"				% "test"
 			),
-			(sourceGenerators in Compile)	+=
-					(Def.task {
-						Boilerplate generate (sourceManaged in Compile).value
-					}).taskValue
+			boilerplateSource in Compile := baseDirectory.value / "src" / "main" / "boilerplate"
 		)
 		
 lazy val `scjson-io`	=

@@ -19,28 +19,28 @@ class NullOptionTest extends Specification {
 	
 	"nested option" should {
 		"serialize None as {none:true}" in {
-			doWrite(None:Option[Option[String]]) mustEqual JSONVarObject("none" -> JSONTrue)
+			doWrite(None:Option[Option[String]]) mustEqual JSONObject.Var("none" -> JSONTrue)
 		}
 		"serialize Some(None) as {some:null}" in {
-			doWrite(Some(None):Option[Option[String]]) mustEqual JSONVarObject("some" -> JSONNull)
+			doWrite(Some(None):Option[Option[String]]) mustEqual JSONObject.Var("some" -> JSONNull)
 		}
 		"serialize Some(Some) as {some:value}" in {
-			doWrite(Some(Some("hallo")):Option[Option[String]]) mustEqual JSONVarObject("some" -> JSONString("hallo"))
+			doWrite(Some(Some("hallo")):Option[Option[String]]) mustEqual JSONObject.Var("some" -> JSONString("hallo"))
 		}
 	}
 	
 	"double nested option" should {
 		"serialize None as {none:true}" in {
-			doWrite(None:Option[Option[Option[String]]]) mustEqual JSONVarObject("none" -> JSONTrue)
+			doWrite(None:Option[Option[Option[String]]]) mustEqual JSONObject.Var("none" -> JSONTrue)
 		}
 		"serialize Some(None) as {some:{none:true}}" in {
-			doWrite(Some(None):Option[Option[Option[String]]]) mustEqual JSONVarObject("some" -> JSONVarObject("none" -> JSONTrue))
+			doWrite(Some(None):Option[Option[Option[String]]]) mustEqual JSONObject.Var("some" -> JSONObject.Var("none" -> JSONTrue))
 		}
 		"serialize Some(Some(None)) as {some:{some:null}}" in {
-			doWrite(Some(Some(None)):Option[Option[Option[String]]]) mustEqual JSONVarObject("some" -> JSONVarObject("some" -> JSONNull))
+			doWrite(Some(Some(None)):Option[Option[Option[String]]]) mustEqual JSONObject.Var("some" -> JSONObject.Var("some" -> JSONNull))
 		}
 		"serialize Some(Some(Some)) as {some:{some:value}}" in {
-			doWrite(Some(Some(Some("hallo"))):Option[Option[Option[String]]]) mustEqual JSONVarObject("some" -> JSONVarObject("some" -> JSONString("hallo")))
+			doWrite(Some(Some(Some("hallo"))):Option[Option[Option[String]]]) mustEqual JSONObject.Var("some" -> JSONObject.Var("some" -> JSONString("hallo")))
 		}
 	}
 }

@@ -12,7 +12,7 @@ class SyntaxTest extends Specification {
 		}
 		"work with arrays" in {
 			jsonArray(1, "test", false) mustEqual
-			JSONVarArray(
+			JSONArray.Var(
 				JSONNumber(1),
 				JSONString("test"),
 				JSONFalse
@@ -20,7 +20,7 @@ class SyntaxTest extends Specification {
 		}
 		"work with objects" in {
 			jsonObject("a" -> 1, "b" -> "x", "c" -> JSONNull)	mustEqual
-			JSONVarObject(
+			JSONObject.Var(
 				"a"	-> JSONNumber(1),
 				"b"	-> JSONString("x"),
 				"c"	-> JSONNull

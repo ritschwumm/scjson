@@ -30,8 +30,8 @@ trait NullOptionProtocol extends LowPrioNullOptionProtocol {
 	implicit def OptionOptionFormat[T](implicit ev:Format[Option[T]]):Format[Option[Option[T]]]	=
 			Format[Option[Option[T]]](
 				_ match {
-					case Some(value)	=> JSONVarObject(someTag -> doWrite(value))
-					case None			=> JSONVarObject(noneTag -> JSONTrue)
+					case Some(value)	=> JSONObject.Var(someTag -> doWrite(value))
+					case None			=> JSONObject.Var(noneTag -> JSONTrue)
 				},
 				(in:JSONValue)	=> {
 					val map	= objectMap(in)

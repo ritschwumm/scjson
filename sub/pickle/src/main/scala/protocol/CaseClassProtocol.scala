@@ -21,7 +21,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapplyTotal(unapply, out)
-				JSONVarObject(
+				JSONObject.Var(
 					k1	-> doWrite[S1](fields)
 				)
 			},
@@ -68,7 +68,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		
 		def write(value:T):Option[JSONValue]	=
 				castValue(value) map { it =>
-					JSONVarObject(typeTag -> JSONString(identifier)) ++
+					JSONObject.Var(typeTag -> JSONString(identifier)) ++
 					downcast[JSONObject](format write it)
 				}
 		def read(json:JSONValue):Option[T]	=
