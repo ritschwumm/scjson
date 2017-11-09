@@ -5,7 +5,7 @@ import scutil.lang.Fielding
 import scutil.lang.ISeq
 import scjson.ast._
 import scjson.pickle._
-import JSONPickleUtil._
+import JsonPickleUtil._
 
 trait CaseClassProtocolGenerated {
 	[2..#implicit def caseClassFormat1[[#S1:Format#],T:Fielding](apply:([#S1#])=>T, unapply:T=>Option[([#S1#])]):Format[T]	= {
@@ -13,9 +13,9 @@ trait CaseClassProtocolGenerated {
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapplyTotal(unapply, out)
-				JSONObject.Var([#k1 -> doWrite[S1](fields._1)#])
+				JsonObject.Var([#k1 -> doWrite[S1](fields._1)#])
 			},
-			(in:JSONValue)	=> {
+			(in:JsonValue)	=> {
 				val map	= objectMap(in)
 				apply([#doReadUnsafe[S1](map(k1))#])
 			}

@@ -52,36 +52,36 @@ class FormatTest extends Specification {
 	
 	"serialization should" should {
 		"encode an enum as expected" in {
-			doWrite[TestEnum](TestEnum1)		mustEqual	JSONString("1")
+			doWrite[TestEnum](TestEnum1)		mustEqual	JsonString("1")
 		}
 		"decode an enum as expected" in {
-			doReadUnsafe[TestEnum](JSONString("1"))	mustEqual	TestEnum1
+			doReadUnsafe[TestEnum](JsonString("1"))	mustEqual	TestEnum1
 		}
 		
 		//------------------------------------------------------------------------------
 		
 		"encode a sum constructor with 0 parameters as expected" in {
 			val data	= TestSum0
-			val json	= JSONObject.Var(
-				"0"	-> JSONObject.Var()
+			val json	= JsonObject.Var(
+				"0"	-> JsonObject.Var()
 			)
 			doWrite[TestSum](data)	mustEqual	json
 		}
 		"encode a sum constructor with 1 parameter as expected" in {
 			val data	= TestSum1(4711)
-			val json	= JSONObject.Var(
-				"1"	-> JSONObject.Var(
-					"a"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				"1"	-> JsonObject.Var(
+					"a"	-> JsonNumber(4711)
 				)
 			)
 			doWrite[TestSum](data)	mustEqual	json
 		}
 		"encode a sum constructor with 2 parameters as expected" in {
 			val data	= TestSum2(1337,4711)
-			val json	= JSONObject.Var(
-				"2"	-> JSONObject.Var(
-					"a"	-> JSONNumber(1337),
-					"b"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				"2"	-> JsonObject.Var(
+					"a"	-> JsonNumber(1337),
+					"b"	-> JsonNumber(4711)
 				)
 			)
 			doWrite[TestSum](data)	mustEqual	json
@@ -89,26 +89,26 @@ class FormatTest extends Specification {
 		
 		"decode a sum constructor with 0 parameters as expected" in {
 			val data	= TestSum0
-			val json	= JSONObject.Var(
-				"0"	-> JSONObject.Var()
+			val json	= JsonObject.Var(
+				"0"	-> JsonObject.Var()
 			)
 			doReadUnsafe[TestSum](json)	mustEqual	data
 		}
 		"decode a sum constructor with 1 parameter as expected" in {
 			val data	= TestSum1(4711)
-			val json	= JSONObject.Var(
-				"1"	-> JSONObject.Var(
-					"a"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				"1"	-> JsonObject.Var(
+					"a"	-> JsonNumber(4711)
 				)
 			)
 			doReadUnsafe[TestSum](json)	mustEqual	data
 		}
 		"decode a sum constructor with 2 parameters as expected" in {
 			val data	= TestSum2(1337,4711)
-			val json	= JSONObject.Var(
-				"2"	-> JSONObject.Var(
-					"a"	-> JSONNumber(1337),
-					"b"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				"2"	-> JsonObject.Var(
+					"a"	-> JsonNumber(1337),
+					"b"	-> JsonNumber(4711)
 				)
 			)
 			doReadUnsafe[TestSum](json)	mustEqual	data
@@ -117,51 +117,51 @@ class FormatTest extends Specification {
 		
 		"encode an adt constructor with 0 parameters as expected" in {
 			val data	= TestADT0
-			val json	= JSONObject.Var(
-				"" -> JSONString("0")
+			val json	= JsonObject.Var(
+				"" -> JsonString("0")
 			)
 			doWrite[TestADT](data)	mustEqual	json
 		}
 		"encode an adt constructor with 1 parameter as expected" in {
 			val data	= TestADT1(4711)
-			val json	= JSONObject.Var(
-				""	-> JSONString("1"),
-				"a"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				""	-> JsonString("1"),
+				"a"	-> JsonNumber(4711)
 			)
 			doWrite[TestADT](data)	mustEqual	json
 			
 		}
 		"encode an adt constructor with 2 parameters as expected" in {
 			val data	= TestADT2(1337,4711)
-			val json	= JSONObject.Var(
-				""	-> JSONString("2"),
-				"a"	-> JSONNumber(1337),
-				"b"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				""	-> JsonString("2"),
+				"a"	-> JsonNumber(1337),
+				"b"	-> JsonNumber(4711)
 			)
 			doWrite[TestADT](data)	mustEqual	json
 		}
 		
 		"decode an adt constructor with 0 parameters as expected" in {
 			val data	= TestADT0
-			val json	= JSONObject.Var(
-				"" -> JSONString("0")
+			val json	= JsonObject.Var(
+				"" -> JsonString("0")
 			)
 			doReadUnsafe[TestADT](json)	mustEqual	data
 		}
 		"decode an adt constructor with 1 parameter as expected" in {
 			val data	= TestADT1(4711)
-			val json	= JSONObject.Var(
-				""	-> JSONString("1"),
-				"a"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				""	-> JsonString("1"),
+				"a"	-> JsonNumber(4711)
 			)
 			doReadUnsafe[TestADT](json)	mustEqual	data
 		}
 		"decode an adt constructor with 2 parameters as expected" in {
 			val data	= TestADT2(1337,4711)
-			val json	= JSONObject.Var(
-				""	-> JSONString("2"),
-				"a"	-> JSONNumber(1337),
-				"b"	-> JSONNumber(4711)
+			val json	= JsonObject.Var(
+				""	-> JsonString("2"),
+				"a"	-> JsonNumber(1337),
+				"b"	-> JsonNumber(4711)
 			)
 			doReadUnsafe[TestADT](json)	mustEqual	data
 		}

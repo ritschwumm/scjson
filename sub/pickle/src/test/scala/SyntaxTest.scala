@@ -8,22 +8,22 @@ import scjson.pickle.protocol.StandardProtocol._
 class SyntaxTest extends Specification {
 	"syntax should" should {
 		"work with simple values" in {
-			jsonSimple(1) mustEqual JSONNumber(1)
+			jsonSimple(1) mustEqual JsonNumber(1)
 		}
 		"work with arrays" in {
 			jsonArray(1, "test", false) mustEqual
-			JSONArray.Var(
-				JSONNumber(1),
-				JSONString("test"),
-				JSONFalse
+			JsonArray.Var(
+				JsonNumber(1),
+				JsonString("test"),
+				JsonFalse
 			)
 		}
 		"work with objects" in {
-			jsonObject("a" -> 1, "b" -> "x", "c" -> JSONNull)	mustEqual
-			JSONObject.Var(
-				"a"	-> JSONNumber(1),
-				"b"	-> JSONString("x"),
-				"c"	-> JSONNull
+			jsonObject("a" -> 1, "b" -> "x", "c" -> JsonNull)	mustEqual
+			JsonObject.Var(
+				"a"	-> JsonNumber(1),
+				"b"	-> JsonString("x"),
+				"c"	-> JsonNull
 			)
 		}
 	}

@@ -2,15 +2,15 @@ package scjson.pickle.protocol
 
 import scjson.ast._
 import scjson.pickle._
-import JSONPickleUtil._
+import JsonPickleUtil._
 
 trait TupleProtocolGenerated {
 	[2..#implicit def Tuple1Format[[#T1:Format#]]:Format[([#T1#])]	=
 			Format[([#T1#])](
 				(out:([#T1#])) => {
-					JSONArray.Var([#doWrite[T1](out._1)#])
+					JsonArray.Var([#doWrite[T1](out._1)#])
 				},
-				(in:JSONValue) => {
+				(in:JsonValue) => {
 					val	arr	= arrayValue(in)
 					([#doReadUnsafe[T1](arr(0))#])
 				}

@@ -2,10 +2,10 @@ package scjson.codec
 
 import scjson.ast._
 
-private object JSONEncoder {
-	/** unparse a JSONValue into a String */
-	def encode(v:JSONValue, pretty:Boolean):String	= {
-		val encoder	= new JSONEncoder(pretty)
+private object JsonEncoder {
+	/** unparse a JsonValue into a String */
+	def encode(v:JsonValue, pretty:Boolean):String	= {
+		val encoder	= new JsonEncoder(pretty)
 		encoder encode v
 		encoder.result
 	}
@@ -14,21 +14,21 @@ private object JSONEncoder {
 	private val hexTable	= "0123456789abcdef".toCharArray
 }
 
-private final class JSONEncoder(pretty:Boolean) {
+private final class JsonEncoder(pretty:Boolean) {
 	private val b		= new StringBuilder
 	private var level	= 0
 	
 	def result:String	= b.toString
 	
-	/** unparse a JSONValue into a String */
-	private def encode(v:JSONValue) {
+	/** unparse a JsonValue into a String */
+	private def encode(v:JsonValue) {
 		v match {
-			case JSONNull			=> b append "null"
-			case JSONTrue			=> b append "true"
-			case JSONFalse			=> b append "false"
-			case JSONNumber(data)	=> b append  data.toString
-			case JSONString(data)	=> encodeString(data)
-			case JSONArray(data)	=>
+			case JsonNull			=> b append "null"
+			case JsonTrue			=> b append "true"
+			case JsonFalse			=> b append "false"
+			case JsonNumber(data)	=> b append  data.toString
+			case JsonString(data)	=> encodeString(data)
+			case JsonArray(data)	=>
 				if (data.isEmpty) {
 					b	+= '['
 					b	+= ']'
@@ -57,7 +57,7 @@ private final class JSONEncoder(pretty:Boolean) {
 					}
 					b	+= ']'
 				}
-			case JSONObject(data)	=>
+			case JsonObject(data)	=>
 				if (data.isEmpty) {
 					b	+= '{'
 					b	+= '}'
@@ -72,7 +72,7 @@ private final class JSONEncoder(pretty:Boolean) {
 						b	+= '\n';	indent()
 						encodeString(key)
 						b	+= ':'
-						b	++= JSONEncoder.indention
+						b	++= JsonEncoder.indention
 						encode(value)
 					}
 					level	-= 1
@@ -108,10 +108,10 @@ private final class JSONEncoder(pretty:Boolean) {
 				case '\t'	=> b += '\\'; b += 't'
 				case c if c < 32	=>
 					b	+= '\\'; b	+= 'u'
-					b	+= JSONEncoder hexTable ((c >> 12) & 0xf)
-					b	+= JSONEncoder hexTable ((c >>  8) & 0xf)
-					b	+= JSONEncoder hexTable ((c >>  4) & 0xf)
-					b	+= JSONEncoder hexTable ((c >>  0) & 0xf)
+					b	+= JsonEncoder hexTable ((c >> 12) & 0xf)
+					b	+= JsonEncoder hexTable ((c >>  8) & 0xf)
+					b	+= JsonEncoder hexTable ((c >>  4) & 0xf)
+					b	+= JsonEncoder hexTable ((c >>  0) & 0xf)
 				case c 	=> b += c
 			}
 			i += 1
@@ -122,7 +122,7 @@ private final class JSONEncoder(pretty:Boolean) {
 	private def indent() {
 		var x	= 0
 		while (x < level) {
-			b	++= JSONEncoder.indention
+			b	++= JsonEncoder.indention
 			x	+= 1
 		}
 	}

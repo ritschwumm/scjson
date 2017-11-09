@@ -24,9 +24,9 @@ class RoundtripTest extends Specification {
 	
 	"roundtrips" should {
 		"work for a simple String" in {
-			val orig	= JSONString("hallo")
-			val json	= doWrite[JSONString](orig)
-			val back	= doReadUnsafe[JSONString](json)
+			val orig	= JsonString("hallo")
+			val json	= doWrite[JsonString](orig)
+			val back	= doReadUnsafe[JsonString](json)
 			orig mustEqual back
 		}
 		

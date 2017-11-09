@@ -4,55 +4,55 @@ import scala.collection.immutable
 
 import scjson.ast._
 
-// TODO unused should be private
-protected object JSONDecoder {
-	/** parse a JSON formatted String into a JSONValue */
-	def decode(s:String):Either[JSONDecodeFailure,JSONValue]	=
+// BETTER unused should be private
+protected object JsonDecoder {
+	/** parse a Json formatted String into a JsonValue */
+	def decode(s:String):Either[JsonDecodeFailure,JsonValue]	=
 			try {
-				Right(new JSONDecoder(s).decode())
+				Right(new JsonDecoder(s).decode())
 			}
-			catch { case e:JSONDecodeException =>
+			catch { case e:JsonDecodeException =>
 				Left(e.failure)
 			}
 }
 
-private final class JSONDecoder(text:String) {
+private final class JsonDecoder(text:String) {
 	val NO_CHAR	= -1
 	var	offset	= 0
 
-	private def decode():JSONValue	= {
+	private def decode():JsonValue	= {
 		val value	= decodeNext()
 		ws()
 		if (!finished)	throw expected("end of input")
 		value
 	}
 
-	private def decodeNext():JSONValue = {
+	private def decodeNext():JsonValue = {
 		ws()
 		if (finished)		throw expected("any char")
 			
-		if (is("null"))		return JSONNull
-		if (is("true"))		return JSONTrue
-		if (is("false"))	return JSONFalse
+		if (is("null"))		return JsonNull
+		if (is("true"))		return JsonTrue
+		if (is("false"))	return JsonFalse
 		if (is('[')) {
-			val	out	= new immutable.VectorBuilder[JSONValue]
+			val	out	= new immutable.VectorBuilder[JsonValue]
 			ws()
-			if (is(']'))	return JSONArray(out.result)
+			if (is(']'))	return JsonArray(out.result)
 			while (true) {
 				val value	= decodeNext()
 				out	+= value
 				ws()
-				if (is(']'))	return JSONArray(out.result)
+				if (is(']'))	return JsonArray(out.result)
 				if (!is(','))	throw expectedClass(",]")
 			}
 		}
 		if (is('{')) {
-			val out	= new immutable.VectorBuilder[(String,JSONValue)]
+			val out	= new immutable.VectorBuilder[(String,JsonValue)]
 			ws()
-			if (is('}'))	return JSONObject(out.result)
+			if (is('}'))	return JsonObject(out.result)
 			while (true) {
 				val key	= decodeNext() match {
-					case JSONString(s)	=> s
+					case JsonString(s)	=> s
 					case _				=> throw expected("string key")
 				}
 				ws();
@@ -60,7 +60,7 @@ private final class JSONDecoder(text:String) {
 				val value	= decodeNext()
 				out	+= (key -> value)
 				ws()
-				if (is('}'))	return JSONObject(out.result)
+				if (is('}'))	return JsonObject(out.result)
 				if (!is(','))	throw expectedClass(",}");
 			}
 		}
@@ -90,7 +90,7 @@ private final class JSONDecoder(text:String) {
 					else throw expectedClass("\"\\/trnfbu")
 				}
 				else if (is('"')) {
-					return JSONString(out.result)
+					return JsonString(out.result)
 				}
 				else if (rng('\u0000', '\u001f')) {
 					offset	-= 1
@@ -129,7 +129,7 @@ private final class JSONDecoder(text:String) {
 				if (countExpo == 0)	throw expected("at least one digit in the exponent")
 			}
 			try {
-				return JSONNumber(BigDecimal(from(before)))
+				return JsonNumber(BigDecimal(from(before)))
 			}
 			catch {
 				case e:NumberFormatException	=>
@@ -144,10 +144,10 @@ private final class JSONDecoder(text:String) {
 	}
 	
 	private def expected(what:String)	=
-			new JSONDecodeException(JSONDecodeFailure(text, offset, what))
+			new JsonDecodeException(JsonDecodeFailure(text, offset, what))
 	
 	private def expectedClass(charClass:String)	=
-			new JSONDecodeException(JSONDecodeFailure(text, offset, "one of " + (JSONCodec encodeShort JSONString(charClass))))
+			new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonString(charClass))))
 
 	//-------------------------------------------------------------------------
 	//## tokens

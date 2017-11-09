@@ -2,14 +2,14 @@ package scjson.ast
 
 import scutil.lang._
 
-object JSONNavigation {
-	implicit def extendJSONNavigation(value:JSONValue):JSONNavigation			= new JSONNavigation(Some(value))
-	implicit def extendJSONNavigation(value:Option[JSONValue]):JSONNavigation	= new JSONNavigation(value)
+object JsonNavigation {
+	implicit def extendJsonNavigation(value:JsonValue):JsonNavigation			= new JsonNavigation(Some(value))
+	implicit def extendJsonNavigation(value:Option[JsonValue]):JsonNavigation	= new JsonNavigation(value)
 }
 
-final class JSONNavigation(peer:Option[JSONValue]) {
-	def /(name:String):Option[JSONValue]	= toMap		flatMap { _ get		name	}
-	def /(index:Int):Option[JSONValue]		= arraySeq  flatMap { _ lift	index	}
+final class JsonNavigation(peer:Option[JsonValue]) {
+	def /(name:String):Option[JsonValue]	= toMap		flatMap { _ get		name	}
+	def /(index:Int):Option[JsonValue]		= arraySeq  flatMap { _ lift	index	}
 	
 	//------------------------------------------------------------------------------
 			
@@ -17,8 +17,8 @@ final class JSONNavigation(peer:Option[JSONValue]) {
 	def string:Option[String]						= peer	flatMap { _.asString	}
 	def boolean:Option[Boolean]						= peer	flatMap { _.asBoolean	}
 	def number:Option[BigDecimal]					= peer	flatMap { _.asNumber	}
-	def arraySeq:Option[ISeq[JSONValue]]			= peer	flatMap { _.asArray		}
-	def objectSeq:Option[ISeq[(String,JSONValue)]]	= peer	flatMap { _.asObject	}
+	def arraySeq:Option[ISeq[JsonValue]]			= peer	flatMap { _.asArray		}
+	def objectSeq:Option[ISeq[(String,JsonValue)]]	= peer	flatMap { _.asObject	}
 	
 	//------------------------------------------------------------------------------
 	
@@ -26,5 +26,5 @@ final class JSONNavigation(peer:Option[JSONValue]) {
 	def toInt:Option[Int]							= number	map { _.intValue	}
 	def toDouble:Option[Double]						= number	map { _.doubleValue	}
 	def toFloat:Option[Float]						= number	map { _.floatValue	}
-	def toMap:Option[Map[String,JSONValue]]			= objectSeq map { _.toMap		}
+	def toMap:Option[Map[String,JsonValue]]			= objectSeq map { _.toMap		}
 }

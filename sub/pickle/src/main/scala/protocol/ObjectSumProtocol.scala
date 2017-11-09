@@ -15,13 +15,13 @@ trait ObjectSumProtocol extends SumProtocol {
 	/** uses an object with a single field where the identifier is the key */
 	private class ObjectPartialFormat[T,C<:T](summand:Summand[T,C]) {
 		import summand._
-		def write(value:T):Option[JSONValue]	=
+		def write(value:T):Option[JsonValue]	=
 				castValue(value) map { it =>
-					JSONObject.Var(identifier	-> (format write it))
+					JsonObject.Var(identifier	-> (format write it))
 				}
-		def read(json:JSONValue):Option[T]	=
+		def read(json:JsonValue):Option[T]	=
 				json matchOption {
-					case JSONObject.Var((`identifier`, data))	=> format read data
+					case JsonObject.Var((`identifier`, data))	=> format read data
 				}
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)

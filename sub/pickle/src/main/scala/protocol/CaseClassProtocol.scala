@@ -8,24 +8,24 @@ import scutil.lang._
 import scjson.ast._
 import scjson.pickle._
 
-import JSONPickleUtil._
+import JsonPickleUtil._
 
 object CaseClassProtocol extends CaseClassProtocol
 
 trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
-			Format[T](constant(JSONObject.empty), constant(singleton))
+			Format[T](constant(JsonObject.empty), constant(singleton))
 	
 	def caseClassFormat1[S1:Format,T:Fielding](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
 		val ISeq(k1)	= Fielder[T]
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapplyTotal(unapply, out)
-				JSONObject.Var(
+				JsonObject.Var(
 					k1	-> doWrite[S1](fields)
 				)
 			},
-			(in:JSONValue)	=> {
+			(in:JsonValue)	=> {
 				val map	= objectMap(in)
 				apply(
 					doReadUnsafe[S1](map(k1))
@@ -40,12 +40,12 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
-				JSONVarDocument(
+				JsonVarDocument(
 					k1	-> doWrite[S1](fields._1),
 					k2	-> doWrite[S2](fields._2)
 				)
 			},
-			(in:JSONValue)	=> {
+			(in:JsonValue)	=> {
 				val map	= objectMap(in)
 				apply(
 					doRead[S1](map(k1)),
@@ -66,14 +66,14 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	private class InlinePartialFormat[T,C<:T](summand:Summand[T,C]) {
 		import summand._
 		
-		def write(value:T):Option[JSONValue]	=
+		def write(value:T):Option[JsonValue]	=
 				castValue(value) map { it =>
-					JSONObject.Var(typeTag -> JSONString(identifier)) ++
-					downcast[JSONObject](format write it)
+					JsonObject.Var(typeTag -> JsonString(identifier)) ++
+					downcast[JsonObject](format write it)
 				}
-		def read(json:JSONValue):Option[T]	=
+		def read(json:JsonValue):Option[T]	=
 				objectValue(json)
-				.exists	{ _ == ((typeTag, JSONString(identifier))) }
+				.exists	{ _ == ((typeTag, JsonString(identifier))) }
 				.option	{ format read json }
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)

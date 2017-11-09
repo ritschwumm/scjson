@@ -5,17 +5,17 @@ import scjson.ast._
 package object syntax {
 	// NOTE must not be passed null values
 	
-	def jsonArray(values:JSONWrapper*):JSONArray	=
-			JSONArray(values.toVector map { _.unwrap })
+	def jsonArray(values:JsonWrapper*):JsonArray	=
+			JsonArray(values.toVector map { _.unwrap })
 		
-	def jsonObject(values:(String,JSONWrapper)*):JSONObject	=
-			JSONObject(values.toVector map { case (k, v) => (k, v.unwrap) })
+	def jsonObject(values:(String,JsonWrapper)*):JsonObject	=
+			JsonObject(values.toVector map { case (k, v) => (k, v.unwrap) })
 		
-	def jsonSimple(value:JSONWrapper):JSONValue	=
+	def jsonSimple(value:JsonWrapper):JsonValue	=
 			value.unwrap
 		
 	//------------------------------------------------------------------------------
 	
-	implicit def toJSONWrapper[T:Format](it:T):JSONWrapper	=
-			new JSONWrapper(format[T] write it)
+	implicit def toJsonWrapper[T:Format](it:T):JsonWrapper	=
+			new JsonWrapper(format[T] write it)
 }

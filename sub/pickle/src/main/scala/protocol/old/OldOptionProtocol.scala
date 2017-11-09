@@ -3,7 +3,7 @@ package scjson.pickle.protocol.old
 import scjson.ast._
 import scjson.pickle._
 
-import JSONPickleUtil._
+import JsonPickleUtil._
 
 object OldOptionProtocol extends OldOptionProtocol
 
@@ -16,7 +16,7 @@ trait OldOptionProtocol {
 	implicit def OptionFormat1[T:Format]:Format[Option[T]]	=
 			Format[Option[T]](
 				(out:Option[T])	=> doWrite[ISeq[T]](out.toSeq),
-				(in:JSONValue)	=> doRead[ISeq[T]](in) match {
+				(in:JsonValue)	=> doRead[ISeq[T]](in) match {
 					case ISeq(t)	=> Some(t)
 					case ISeq()		=> None
 					case _			=> fail("expected 0 or 1 elements for an Option")
@@ -28,10 +28,10 @@ trait OldOptionProtocol {
 	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
 			Format[Option[T]](
 				_ match {
-					case Some(value)	=> JSONObject.Var(someTag -> doWrite(value))
-					case None			=> JSONObject.Var(noneTag -> JSONTrue)
+					case Some(value)	=> JsonObject.Var(someTag -> doWrite(value))
+					case None			=> JsonObject.Var(noneTag -> JsonTrue)
 				},
-				(in:JSONValue)	=> {
+				(in:JsonValue)	=> {
 					val map	= objectMap(in)
 					(map get someTag, map get noneTag) match {
 						case (Some(js), None)	=> Some(doReadUnsafe[T](js))

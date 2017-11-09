@@ -3,7 +3,7 @@ package scjson.pickle.protocol
 import scjson.ast._
 import scjson.pickle._
 
-import JSONPickleUtil._
+import JsonPickleUtil._
 
 object EitherProtocol extends EitherProtocol
 
@@ -15,14 +15,14 @@ trait EitherProtocol {
 	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	=
 			Format[Either[L,R]](
 				_ match {
-					case Right(value)	=> JSONObject.Var(
+					case Right(value)	=> JsonObject.Var(
 						rightTag	-> doWrite[R](value)
 					)
-					case Left(value)	=> JSONObject.Var(
+					case Left(value)	=> JsonObject.Var(
 						leftTag		-> doWrite[L](value)
 					)
 				},
-				(in:JSONValue)	=> {
+				(in:JsonValue)	=> {
 					val	map	= objectMap(in)
 					(map get leftTag, map get rightTag) match {
 						case (None, Some(js))	=> Right(doReadUnsafe[R](js))

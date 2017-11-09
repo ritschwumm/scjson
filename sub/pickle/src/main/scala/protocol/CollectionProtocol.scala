@@ -18,7 +18,7 @@ trait CollectionProtocol {
 	implicit def MapViaSetFormat[K:Format,V:Format](implicit ev:Format[Set[(K,V)]]):Format[Map[K,V]]	= {
 		Format[Map[K,V]](
 			(out:Map[K,V])	=> ev write out.toSet,
-			(in:JSONValue)	=> (ev read in).toMap
+			(in:JsonValue)	=> (ev read in).toMap
 		)
 	}
 	
@@ -32,11 +32,11 @@ trait CollectionProtocol {
 	implicit def StringMapFormat[T:Format]:Format[Map[String,T]]	=
 			Format[Map[String,T]](
 				(out:Map[String,T])	=> {
-					JSONObject(out.toVector map {
+					JsonObject(out.toVector map {
 						case (k,v) => (k, doWrite[T](v))
 					})
 				},
-				(in:JSONValue)	=> {
+				(in:JsonValue)	=> {
 					objectValue(in)
 					.mapToMap {
 						case (k,v) => (k, doRead[T](v))

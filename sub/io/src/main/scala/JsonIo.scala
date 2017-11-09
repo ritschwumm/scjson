@@ -10,12 +10,12 @@ import scjson.ast._
 import scjson.codec._
 import scjson.pickle._
 
-object JSONIO {
-	def loadFile[T:Format](file:File):Either[JSONIOFileFailure,T]	=
+object JsonIo {
+	def loadFile[T:Format](file:File):Either[JsonIoFileFailure,T]	=
 			for {
-				str	<- readFileString(file)	mapLeft JSONIOExceptionFailure.apply
-				ast	<- JSONCodec decode str	mapLeft JSONIODecodeFailure.apply
-				out	<- readAST[T](ast)		mapLeft JSONIOUnpickleFailure.apply
+				str	<- readFileString(file)	mapLeft JsonIoExceptionFailure.apply
+				ast	<- JsonCodec decode str	mapLeft JsonIoDecodeFailure.apply
+				out	<- readAST[T](ast)		mapLeft JsonIoUnpickleFailure.apply
 			}
 			yield out
 			
@@ -47,22 +47,22 @@ object JSONIO {
 			
 	//------------------------------------------------------------------------------
 	
-	def readString[T:Format](json:String):Either[JSONIOStringFailure,T]	=
+	def readString[T:Format](json:String):Either[JsonIoStringFailure,T]	=
 			for {
-				ast	<- JSONCodec decode json	mapLeft JSONIODecodeFailure.apply
-				out	<- readAST[T](ast)			mapLeft JSONIOUnpickleFailure.apply
+				ast	<- JsonCodec decode json	mapLeft JsonIoDecodeFailure.apply
+				out	<- readAST[T](ast)			mapLeft JsonIoUnpickleFailure.apply
 			}
 			yield out
 			
 	def writeString[T:Format](value:T, pretty:Boolean):String	=
 			doWrite[T](value)	|>
-			(JSONCodec encode (_, pretty))
+			(JsonCodec encode (_, pretty))
 			
 	//------------------------------------------------------------------------------
 	
-	def readAST[T:Format](json:JSONValue):Either[JSONUnpickleFailure,T]	=
+	def readAST[T:Format](json:JsonValue):Either[JsonUnpickleFailure,T]	=
 			doRead[T](json)
 		
-	def writeAST[T:Format](value:T):JSONValue	=
+	def writeAST[T:Format](value:T):JsonValue	=
 			doWrite[T](value)
 }

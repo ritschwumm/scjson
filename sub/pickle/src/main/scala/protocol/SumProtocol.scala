@@ -8,17 +8,17 @@ import scutil.lang._
 import scjson.ast._
 import scjson.pickle._
 
-import JSONPickleUtil._
+import JsonPickleUtil._
 
 object SumProtocol extends SumProtocol
 
 trait SumProtocol {
-	type PartialFormat[T]	= PBijection[T,JSONValue]
+	type PartialFormat[T]	= PBijection[T,JsonValue]
 
 	def sumFormat[T](partials:ISeq[PartialFormat[T]]):Format[T]	=
 			Format[T](
 				(it:T)			=> partials collapseMapFirst { _ write it } getOrElse fail("no matching constructor found"),
-				(it:JSONValue)	=> partials collapseMapFirst { _ read  it } getOrElse fail("no matching constructor found")
+				(it:JsonValue)	=> partials collapseMapFirst { _ read  it } getOrElse fail("no matching constructor found")
 			)
 			
 	//------------------------------------------------------------------------------

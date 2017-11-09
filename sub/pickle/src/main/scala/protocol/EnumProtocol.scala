@@ -11,7 +11,7 @@ object EnumProtocol extends EnumProtocol
 trait EnumProtocol {
 	def enumFormat[T](values:ISeq[(String,T)]):Format[T]	=
 			Format[T](
-				values mapToMap { case (k,v) => (v, JSONString(k)) },
-				values mapToMap { case (k,v) => (JSONString(k), v) }
+				values mapToMap { case (k,v) => (v, JsonString(k)) },
+				values mapToMap { case (k,v) => (JsonString(k), v) }
 			)
 }
