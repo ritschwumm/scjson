@@ -1,9 +1,11 @@
 package scjson.codec
 
+import scutil.lang.implicits._
+
 /** the input is invalid */
 final case class JsonDecodeFailure(input:String, offset:Int, expectation:String) {
 	def message:String	=
-			s"expected $expectation at $offset"
+			show"expected $expectation at $offset"
 		
 	def lookingAt:String	= {
 		val width	= 80
