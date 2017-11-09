@@ -1,15 +1,13 @@
 package scjson.pickle.protocol
 
-import scutil.lang.Fielder
-import scutil.lang.Fielding
-import scutil.lang.ISeq
+import scutil.lang.FieldNames
 import scjson.ast._
 import scjson.pickle._
 import JsonPickleUtil._
 
 trait CaseClassProtocolGenerated {
-	[2..#implicit def caseClassFormat1[[#S1:Format#],T:Fielding](apply:([#S1#])=>T, unapply:T=>Option[([#S1#])]):Format[T]	= {
-		val ISeq([#k1#])	= Fielder[T]
+	[2..#implicit def caseClassFormat1[[#S1:Format#],T](apply:([#S1#])=>T, unapply:T=>Option[([#S1#])])(implicit FN:FieldNames[T]):Format[T]	= {
+		val Vector([#k1#])	= FN.names
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapplyTotal(unapply, out)

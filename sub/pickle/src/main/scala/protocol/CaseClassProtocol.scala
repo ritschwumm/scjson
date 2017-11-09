@@ -16,8 +16,8 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
 			Format[T](constant(JsonObject.empty), constant(singleton))
 	
-	def caseClassFormat1[S1:Format,T:Fielding](apply:S1=>T, unapply:T=>Option[S1]):Format[T]	= {
-		val ISeq(k1)	= Fielder[T]
+	def caseClassFormat1[S1:Format,T](apply:S1=>T, unapply:T=>Option[S1])(implicit FN:FieldNames[T]):Format[T]	= {
+		val Vector(k1)	= FN.names
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapplyTotal(unapply, out)
