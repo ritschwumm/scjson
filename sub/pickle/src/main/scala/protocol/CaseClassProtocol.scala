@@ -69,12 +69,12 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 		def write(value:T):Option[JsonValue]	=
 				castValue(value) map { it =>
 					JsonObject.Var(typeTag -> JsonString(identifier)) ++
-					downcast[JsonObject](format write it)
+					downcast[JsonObject](format get it)
 				}
 		def read(json:JsonValue):Option[T]	=
 				objectValue(json)
 				.exists	{ _ == ((typeTag, JsonString(identifier))) }
-				.option	{ format read json }
+				.option	{ format put json }
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)
 	}

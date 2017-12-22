@@ -17,8 +17,8 @@ trait CollectionProtocol {
 	// TODO careful, should sort it's keys maybe
 	implicit def MapViaSetFormat[K:Format,V:Format](implicit ev:Format[Set[(K,V)]]):Format[Map[K,V]]	= {
 		Format[Map[K,V]](
-			(out:Map[K,V])	=> ev write out.toSet,
-			(in:JsonValue)	=> (ev read in).toMap
+			(out:Map[K,V])	=> ev get out.toSet,
+			(in:JsonValue)	=> (ev put in).toMap
 		)
 	}
 	

@@ -17,5 +17,5 @@ package object syntax {
 	//------------------------------------------------------------------------------
 	
 	implicit def toJsonWrapper[T:Format](it:T):JsonWrapper	=
-			new JsonWrapper(format[T] write it)
+			new JsonWrapper(format[T] get it)
 }

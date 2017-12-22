@@ -21,7 +21,7 @@ package object pickle {
 		
 	/** delay the construction of an actual Format until it's used */
 	def LazyFormat[T](sub: =>Format[T]):Format[T]	=
-			Format(it => sub write it, it => sub read it)
+			Format(it => sub get it, it => sub put it)
 	
 	//------------------------------------------------------------------------------
 	
@@ -29,9 +29,9 @@ package object pickle {
 	def format[T:Format]	= implicitly[Format[T]]
 	
 	/** encode a value into its Json representation using an implicitly provided Format */
-	def doWrite[T:Format](out:T):JsonValue	= format[T] write	out
+	def doWrite[T:Format](out:T):JsonValue	= format[T] get	out
 	/** decode a value from its Json representation using an implicitly provided Format */
-	def doReadUnsafe[T:Format](in:JsonValue):T	= format[T] read	in
+	def doReadUnsafe[T:Format](in:JsonValue):T	= format[T] put	in
 	
 	/** decode a value from its Json representation using an implicitly provided Format */
 	def doRead[T:Format](in:JsonValue):Either[JsonUnpickleFailure,T]	=

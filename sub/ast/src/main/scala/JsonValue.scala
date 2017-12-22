@@ -70,6 +70,9 @@ final case class JsonNumber(value:BigDecimal)	extends JsonValue {
 	require(value ne null)
 }
 
+object JsonString {
+	val empty	= JsonString("")
+}
 final case class JsonString(value:String)		extends JsonValue {
 	require(value ne null)
 }

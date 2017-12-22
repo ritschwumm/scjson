@@ -32,17 +32,17 @@ class RoundtripTest extends Specification {
 		
 		"work with primitive types in simple sums" in {
 			val orig1	= 1
-			val json1	= SimpleSumFormat write orig1
+			val json1	= SimpleSumFormat get orig1
 			// println("json1=" + json1)
-			val back1	= SimpleSumFormat read  json1
+			val back1	= SimpleSumFormat put  json1
 			orig1 mustEqual back1
 		}
 		
 		"work with AnyRef in simple sums" in {
 			val orig2	= "2"
-			val json2	= SimpleSumFormat write orig2
+			val json2	= SimpleSumFormat get orig2
 			// println("json2=" + json2)
-			val back2	= SimpleSumFormat read  json2
+			val back2	= SimpleSumFormat put  json2
 			orig2 mustEqual back2
 		}
 		
