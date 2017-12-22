@@ -34,7 +34,7 @@ class RoundtripTest extends Specification {
 			val orig1	= 1
 			val json1	= SimpleSumFormat get orig1
 			// println("json1=" + json1)
-			val back1	= SimpleSumFormat put  json1
+			val back1	= SimpleSumFormat set  json1
 			orig1 mustEqual back1
 		}
 		
@@ -42,7 +42,7 @@ class RoundtripTest extends Specification {
 			val orig2	= "2"
 			val json2	= SimpleSumFormat get orig2
 			// println("json2=" + json2)
-			val back2	= SimpleSumFormat put  json2
+			val back2	= SimpleSumFormat set  json2
 			orig2 mustEqual back2
 		}
 		

@@ -21,7 +21,7 @@ trait ObjectSumProtocol extends SumProtocol {
 				}
 		def read(json:JsonValue):Option[T]	=
 				json matchOption {
-					case JsonObject.Var((`identifier`, data))	=> format put data
+					case JsonObject.Var((`identifier`, data))	=> format set data
 				}
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)
