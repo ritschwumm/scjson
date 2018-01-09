@@ -13,9 +13,9 @@ import scjson.pickle._
 object JsonIo {
 	def loadFile[T:Format](file:File):Either[JsonIoFileFailure,T]	=
 			for {
-				str	<- readFileString(file)	mapLeft JsonIoExceptionFailure.apply
-				ast	<- JsonCodec decode str	mapLeft JsonIoDecodeFailure.apply
-				out	<- readAST[T](ast)		mapLeft JsonIoUnpickleFailure.apply
+				str	<- readFileString(file)	leftMap JsonIoExceptionFailure.apply
+				ast	<- JsonCodec decode str	leftMap JsonIoDecodeFailure.apply
+				out	<- readAST[T](ast)		leftMap JsonIoUnpickleFailure.apply
 			}
 			yield out
 			
@@ -49,8 +49,8 @@ object JsonIo {
 	
 	def readString[T:Format](json:String):Either[JsonIoStringFailure,T]	=
 			for {
-				ast	<- JsonCodec decode json	mapLeft JsonIoDecodeFailure.apply
-				out	<- readAST[T](ast)			mapLeft JsonIoUnpickleFailure.apply
+				ast	<- JsonCodec decode json	leftMap JsonIoDecodeFailure.apply
+				out	<- readAST[T](ast)			leftMap JsonIoUnpickleFailure.apply
 			}
 			yield out
 			
