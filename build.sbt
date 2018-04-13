@@ -3,7 +3,7 @@ import spray.boilerplate.BoilerplatePlugin
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.149.0",
+	version			:= "0.150.0",
 	
 	scalaVersion	:= "2.12.4",
 	scalacOptions	++= Seq(
@@ -80,7 +80,7 @@ lazy val `scjson-ast`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.136.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.137.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -99,7 +99,7 @@ lazy val `scjson-codec`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.136.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.137.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.0.3"				% "test"
 			)
 		)
@@ -122,7 +122,7 @@ lazy val `scjson-pickle`	=
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(      
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.136.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.137.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.0.3"				% "test"
 			),
 			boilerplateSource in Compile := baseDirectory.value / "src" / "main" / "boilerplate"
@@ -139,7 +139,7 @@ lazy val `scjson-io`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.136.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.137.0"				% "compile"
 			)
 		)
 		
