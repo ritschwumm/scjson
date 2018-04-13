@@ -5,7 +5,7 @@ import scala.collection.immutable
 import scjson.ast._
 
 // BETTER unused should be private
-protected object JsonDecoder {
+ object JsonDecoder {
 	/** parse a Json formatted String into a JsonValue */
 	def decode(s:String):Either[JsonDecodeFailure,JsonValue]	=
 			try {
