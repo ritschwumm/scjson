@@ -11,7 +11,8 @@ object CollectionProtocol extends CollectionProtocol
 
 trait CollectionProtocol {
 	implicit def SetFormat[T](implicit ev:Format[ISeq[T]]):Format[Set[T]]				= ev compose Bijection(_.toVector,	_.toSet)
-	implicit def ListFormat[T](implicit ev:Format[ISeq[T]]):Format[List[T]]				= ev compose Bijection(_.toVector,	_.toList)
+	implicit def ListFormat[T](implicit ev:Format[ISeq[T]]):Format[List[T]]				= ev compose Bijection(identity,	_.toList)
+	implicit def VectorFormat[T](implicit ev:Format[ISeq[T]]):Format[Vector[T]]			= ev compose Bijection(identity,	_.toVector)
 	implicit def ArrayFormat[T:ClassTag](implicit ev:Format[ISeq[T]]):Format[Array[T]]	= ev compose Bijection(_.toVector,	_.toArray)
 	
 	// TODO careful, should sort it's keys maybe
