@@ -109,16 +109,6 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 		/** DSL for name -> format construction */
 		implicit def namedSummand[T,C<:T:ClassTag](pair:(String, Format[C])):CaseSummand[T,C]	=
 				CaseSummand(pair._1, pair._2)
-			
-		/** identified by runtime class */
-		@deprecated("0.153.0", "use namedSummand")
-		implicit def classTagSummand[T,C<:T:ClassTag](format:Format[C]):CaseSummand[T,C]	=
-				CaseSummand(classTag[C].runtimeClass.getName, format)
-	
-		/** identified by runtime class */
-		@deprecated("0.153.0", "use namedSummand")
-		implicit def classSummand[T,C<:T:ClassTag:Format](clazz:Class[C]):CaseSummand[T,C]	=
-				CaseSummand(clazz.getName, implicitly[Format[C]])
 	}
 	
 	/** NOTE this is not erasure-safe */

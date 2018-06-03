@@ -55,6 +55,14 @@ object JsonPickleUtil {
 			
 	//------------------------------------------------------------------------------
 	
+	def requireField(map:Map[String,JsonValue], key:String):JsonValue	=
+			map get key match {
+				case Some(x)	=> x
+				case None		=> fail("expected a field " + key)
+			}
+			
+	//------------------------------------------------------------------------------
+	
 	def unapplyTotal[S,T](unapply:S=>Option[T], value:S):T	=
 			unapply(value) match {
 				case Some(x)	=> x
