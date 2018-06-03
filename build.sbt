@@ -1,9 +1,9 @@
-import org.scalajs.sbtplugin.cross.CrossProject
 import spray.boilerplate.BoilerplatePlugin
+import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.155.0",
+	version			:= "0.156.0",
 	
 	scalaVersion	:= "2.12.6",
 	scalacOptions	++= Seq(
@@ -54,7 +54,19 @@ lazy val wartRemoverSetting	=
 		
 // (crossProject crossType CrossType.Pure in base)
 def myCrossProject(id:String, base:File):CrossProject	=
-		CrossProject(id + "-jvm", id + "-js", base, CrossType.Pure).settings(name := id)
+		CrossProject(
+			id		= id,
+			base	= base,
+		)(
+			JVMPlatform,
+			JSPlatform
+		)
+		.crossType(CrossType.Pure)
+		.settings(
+			name := id
+		)
+		.configurePlatform(JVMPlatform)	(_ withId (id + "-jvm"))
+		.configurePlatform(JSPlatform)	(_ withId (id + "-js"))
 
 lazy val `scjson` =
 		(project in file("."))
@@ -80,7 +92,7 @@ lazy val `scjson-ast`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.141.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.142.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -99,7 +111,7 @@ lazy val `scjson-codec`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.141.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.142.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.2.0"				% "test"
 			)
 		)
@@ -122,7 +134,7 @@ lazy val `scjson-pickle`	=
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.141.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.142.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.2.0"				% "test"
 			),
 			boilerplateSource in Compile := baseDirectory.value / "src" / "main" / "boilerplate"
@@ -139,7 +151,7 @@ lazy val `scjson-io`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.141.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.142.0"				% "compile"
 			)
 		)
 		
