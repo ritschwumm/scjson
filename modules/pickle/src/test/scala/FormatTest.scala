@@ -23,20 +23,12 @@ final case class TestADT1(a:Int)		extends TestADT
 final case class TestADT2(a:Int, b:Int)	extends TestADT
 	
 class FormatTest extends Specification {
-	object MyProtocol extends StandardProtocol {
+	object MyProtocol extends StandardProtocol2 {
 		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq(
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
 				"2"	-> TestEnum2))
 				
-		implicit val TestSum_F:Format[TestSum]	= objectSumFormat[TestSum](
-				"0"	-> TestSum0_F,
-				"1"	-> TestSum1_F,
-				"2"	-> TestSum2_F)
-		implicit lazy val TestSum0_F	= caseObjectFormat(TestSum0)
-		implicit lazy val TestSum1_F	= caseClassFormat1(TestSum1.apply, TestSum1.unapply)
-		implicit lazy val TestSum2_F	= caseClassFormat2(TestSum2.apply, TestSum2.unapply)
-		
 		implicit val TestADT_F:Format[TestADT]	= caseClassSumFormat(
 				"0"	-> TestADT0_F,
 				"1"	-> TestADT1_F,
@@ -58,61 +50,6 @@ class FormatTest extends Specification {
 			doReadUnsafe[TestEnum](JsonString("1"))	mustEqual	TestEnum1
 		}
 		
-		//------------------------------------------------------------------------------
-		
-		"encode a sum constructor with 0 parameters as expected" in {
-			val data	= TestSum0
-			val json	= JsonObject.Var(
-				"0"	-> JsonObject.Var()
-			)
-			doWrite[TestSum](data)	mustEqual	json
-		}
-		"encode a sum constructor with 1 parameter as expected" in {
-			val data	= TestSum1(4711)
-			val json	= JsonObject.Var(
-				"1"	-> JsonObject.Var(
-					"a"	-> JsonNumber(4711)
-				)
-			)
-			doWrite[TestSum](data)	mustEqual	json
-		}
-		"encode a sum constructor with 2 parameters as expected" in {
-			val data	= TestSum2(1337,4711)
-			val json	= JsonObject.Var(
-				"2"	-> JsonObject.Var(
-					"a"	-> JsonNumber(1337),
-					"b"	-> JsonNumber(4711)
-				)
-			)
-			doWrite[TestSum](data)	mustEqual	json
-		}
-		
-		"decode a sum constructor with 0 parameters as expected" in {
-			val data	= TestSum0
-			val json	= JsonObject.Var(
-				"0"	-> JsonObject.Var()
-			)
-			doReadUnsafe[TestSum](json)	mustEqual	data
-		}
-		"decode a sum constructor with 1 parameter as expected" in {
-			val data	= TestSum1(4711)
-			val json	= JsonObject.Var(
-				"1"	-> JsonObject.Var(
-					"a"	-> JsonNumber(4711)
-				)
-			)
-			doReadUnsafe[TestSum](json)	mustEqual	data
-		}
-		"decode a sum constructor with 2 parameters as expected" in {
-			val data	= TestSum2(1337,4711)
-			val json	= JsonObject.Var(
-				"2"	-> JsonObject.Var(
-					"a"	-> JsonNumber(1337),
-					"b"	-> JsonNumber(4711)
-				)
-			)
-			doReadUnsafe[TestSum](json)	mustEqual	data
-		}
 		//------------------------------------------------------------------------------
 		
 		"encode an adt constructor with 0 parameters as expected" in {

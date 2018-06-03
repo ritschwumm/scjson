@@ -12,7 +12,7 @@ import JsonPickleUtil._
 
 object CaseClassProtocol extends CaseClassProtocol
 
-trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
+trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
 			Format[T](constant(JsonObject.empty), constant(singleton))
 	
@@ -67,14 +67,21 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 	}
 	*/
 	
-	/** uses a field with an empty name for the specific constructor */
-	def caseClassSumFormat[T](summands:Summand[T,_<:T]*):Format[T]	=
-			sumFormat(summands.toVector map (new InlinePartialFormat(_).pf))
-		
+	//------------------------------------------------------------------------------
+	
+	// TODO simplify - get rid of the ClassTag
+	
+	import scala.reflect._
+	
 	private val typeTag	= ""
 	
+	/** uses a field with an empty name for the specific constructor */
+	def caseClassSumFormat[T](summands:CaseSummand[T,_<:T]*):Format[T]	=
+			sumFormat(summands.toVector map (new InlinePartialFormat(_).pf))
+		
+	
 	/** injects the type tag as a field with an empty name into an existing object */
-	private class InlinePartialFormat[T,C<:T](summand:Summand[T,C]) {
+	private class InlinePartialFormat[T,C<:T](summand:CaseSummand[T,C]) {
 		import summand._
 		
 		def write(value:T):Option[JsonValue]	=
@@ -88,5 +95,42 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated with SumProtocol {
 				.option	{ format set json }
 				
 		def pf:PartialFormat[T]	= PBijection(write, read)
+	}
+	
+	private type PartialFormat[T]	= PBijection[T,JsonValue]
+
+	private def sumFormat[T](partials:ISeq[PartialFormat[T]]):Format[T]	=
+			Format[T](
+				(it:T)			=> partials collapseMapFirst { _ get it } getOrElse fail("no matching constructor found"),
+				(it:JsonValue)	=> partials collapseMapFirst { _ set it } getOrElse fail("no matching constructor found")
+			)
+			
+	object CaseSummand {
+		/** DSL for name -> format construction */
+		implicit def namedSummand[T,C<:T:ClassTag](pair:(String, Format[C])):CaseSummand[T,C]	=
+				CaseSummand(pair._1, pair._2)
+			
+		/** identified by runtime class */
+		@deprecated("0.153.0", "use namedSummand")
+		implicit def classTagSummand[T,C<:T:ClassTag](format:Format[C]):CaseSummand[T,C]	=
+				CaseSummand(classTag[C].runtimeClass.getName, format)
+	
+		/** identified by runtime class */
+		@deprecated("0.153.0", "use namedSummand")
+		implicit def classSummand[T,C<:T:ClassTag:Format](clazz:Class[C]):CaseSummand[T,C]	=
+				CaseSummand(clazz.getName, implicitly[Format[C]])
+	}
+	
+	/** NOTE this is not erasure-safe */
+	case class CaseSummand[T,C<:T:ClassTag](identifier:String, format:Format[C]) {
+		private val tag		= {
+			val origTag	= classTag[C]
+			val	rtClass	= origTag.runtimeClass
+			if (rtClass.isPrimitive)	ClassTag(rtClass.boxed)
+			else						origTag
+		}
+		
+		def castValue(value:T):Option[C]	=
+				tag unapply value
 	}
 }
