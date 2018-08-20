@@ -3,7 +3,7 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.158.0",
+	version			:= "0.159.0",
 	
 	scalaVersion	:= "2.12.6",
 	scalacOptions	++= Seq(
@@ -21,35 +21,34 @@ inThisBuild(Seq(
 		"-Xlint"
 	),
 	conflictManager	:= ConflictManager.strict,
-	resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
+	resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+	
+	wartremoverErrors	++= Seq(
+		Wart.StringPlusAny,
+		Wart.EitherProjectionPartial,
+		Wart.OptionPartial,
+		Wart.Enumeration,
+		Wart.FinalCaseClass,
+		Wart.JavaConversions,
+		Wart.Option2Iterable,
+		Wart.TryPartial,
+		Wart.JavaSerializable,
+		//Wart.Any,
+		Wart.AnyVal,
+		//Wart.Nothing,
+		Wart.ArrayEquals,
+		Wart.ExplicitImplicitTypes,
+		Wart.LeakingSealed
+		//Wart.Overloading
+		//Wart.PublicInference,
+		//Wart.TraversableOps
+	)
 ))
 
 lazy val noTestSettings	=
 		Seq(
 			test		:= {},
 			testQuick	:= {}
-		)
-		
-lazy val wartRemoverSetting	=
-		wartremoverErrors	++= Seq(
-			Wart.StringPlusAny,
-			Wart.EitherProjectionPartial,
-			Wart.OptionPartial,
-			Wart.Enumeration,
-			Wart.FinalCaseClass,
-			Wart.JavaConversions,
-			Wart.Option2Iterable,
-			Wart.TryPartial,
-			Wart.JavaSerializable,
-			//Wart.Any,
-			Wart.AnyVal,
-			//Wart.Nothing,
-			Wart.ArrayEquals,
-			Wart.ExplicitImplicitTypes,
-			Wart.LeakingSealed
-			//Wart.Overloading
-			//Wart.PublicInference,
-			//Wart.TraversableOps
 		)
 		
 // (crossProject crossType CrossType.Pure in base)
@@ -90,9 +89,8 @@ lazy val `scjson-ast`	=
 		myCrossProject("scjson-ast", file("modules/ast"))
 		.enablePlugins()
 		.settings(
-			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.144.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.145.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -109,10 +107,9 @@ lazy val `scjson-codec`	=
 			`scjson-ast`
 		)
 		.settings(
-			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.144.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.2.0"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.145.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.3.3"				% "test"
 			)
 		)
 		.jvmSettings()
@@ -131,11 +128,10 @@ lazy val `scjson-pickle`	=
 			`scjson-ast-jvm`
 		)
 		.settings(
-			wartRemoverSetting,
 			libraryDependencies	++= Seq(
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.144.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.2.0"				% "test"
+				"de.djini"			%%	"scutil-base"	% "0.145.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.3.3"				% "test"
 			),
 			boilerplateSource in Compile := baseDirectory.value / "src" / "main" / "boilerplate"
 		)
@@ -149,9 +145,8 @@ lazy val `scjson-io`	=
 			`scjson-pickle`
 		)
 		.settings(
-			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.144.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.145.0"				% "compile"
 			)
 		)
 		
