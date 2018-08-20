@@ -3,7 +3,7 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.157.0",
+	version			:= "0.158.0",
 	
 	scalaVersion	:= "2.12.6",
 	scalacOptions	++= Seq(
@@ -92,7 +92,7 @@ lazy val `scjson-ast`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.143.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.144.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -111,7 +111,7 @@ lazy val `scjson-codec`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.143.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.144.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.2.0"				% "test"
 			)
 		)
@@ -134,7 +134,7 @@ lazy val `scjson-pickle`	=
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.143.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.144.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.2.0"				% "test"
 			),
 			boilerplateSource in Compile := baseDirectory.value / "src" / "main" / "boilerplate"
@@ -151,7 +151,7 @@ lazy val `scjson-io`	=
 		.settings(
 			wartRemoverSetting,
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.143.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.144.0"				% "compile"
 			)
 		)
 		
