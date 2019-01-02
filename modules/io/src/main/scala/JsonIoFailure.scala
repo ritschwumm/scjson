@@ -9,5 +9,5 @@ sealed trait JsonIoStringFailure
 sealed trait JsonIoFileFailure
 
 final case class JsonIoExceptionFailure(cause:IOException)			extends JsonIoFileFailure
-final case class JsonIoDecodeFailure(base:JsonDecodeFailure)		extends JsonIoFileFailure with JsonIoStringFailure 
+final case class JsonIoDecodeFailure(base:JsonDecodeFailure)		extends JsonIoFileFailure with JsonIoStringFailure
 final case class JsonIoUnpickleFailure(base:JsonUnpickleFailure)	extends JsonIoFileFailure with JsonIoStringFailure

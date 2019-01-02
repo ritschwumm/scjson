@@ -79,7 +79,7 @@ final case class JsonString(value:String)		extends JsonValue {
 
 object JsonArray {
 	val empty	= JsonArray(Vector.empty)
-	
+
 	object Var {
 		def apply(values:JsonValue*):JsonArray					= JsonArray(values.toVector)
 		def unapplySeq(array:JsonArray):Option[ISeq[JsonValue]]	= Some(array.value)
@@ -93,7 +93,7 @@ final case class JsonArray(value:ISeq[JsonValue])	extends JsonValue {
 
 object JsonObject {
 	val empty	= JsonObject(Vector.empty)
-	
+
 	object Var {
 		def apply(it:(String,JsonValue)*):JsonObject					= JsonObject(it.toVector)
 		def unapplySeq(it:JsonObject):Option[ISeq[(String,JsonValue)]]	= Some(it.value)

@@ -10,7 +10,7 @@ object OldOptionProtocol extends OldOptionProtocol
 trait OldOptionProtocol {
 	private val someTag	= "some"
 	private val noneTag	= "none"
-		
+
 	/*
 	// alternative 0/1-sized array
 	implicit def OptionFormat1[T:Format]:Format[Option[T]]	=
@@ -23,7 +23,7 @@ trait OldOptionProtocol {
 				}
 			)
 	*/
-	
+
 	// alternative {some} or {none}
 	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
 			Format[Option[T]](

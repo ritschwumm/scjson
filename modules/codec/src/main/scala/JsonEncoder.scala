@@ -9,7 +9,7 @@ private object JsonEncoder {
 		encoder encode v
 		encoder.result
 	}
-	
+
 	private val indention	= "\t"
 	private val hexTable	= "0123456789abcdef".toCharArray
 }
@@ -17,9 +17,9 @@ private object JsonEncoder {
 private final class JsonEncoder(pretty:Boolean) {
 	private val b		= new StringBuilder
 	private var level	= 0
-	
+
 	def result:String	= b.toString
-	
+
 	/** unparse a JsonValue into a String */
 	private def encode(v:JsonValue) {
 		v match {
@@ -93,7 +93,7 @@ private final class JsonEncoder(pretty:Boolean) {
 				}
 		}
 	}
-	
+
 	private def encodeString(data:String) {
 		b += '"'
 		var i	= 0
@@ -118,7 +118,7 @@ private final class JsonEncoder(pretty:Boolean) {
 		}
 		b += '"'
 	}
-	
+
 	private def indent() {
 		var x	= 0
 		while (x < level) {

@@ -30,7 +30,7 @@ private final class JsonDecoder(text:String) {
 	private def decodeNext():JsonValue = {
 		ws()
 		if (finished)		throw expected("any char")
-			
+
 		if (is("null"))		return JsonNull
 		if (is("true"))		return JsonTrue
 		if (is("false"))	return JsonFalse
@@ -79,12 +79,12 @@ private final class JsonDecoder(text:String) {
 					else if (is('b'))	out	+= '\b'
 					else if (is('u')) {
 						if (offset+4 > text.length)	throw expected("4 hex digits")
-						
+
 						val h1	= hexDigit()
 						val h2	= hexDigit()
 						val h3	= hexDigit()
 						val h4	= hexDigit()
-						
+
 						out	+= ((h1 << 12) | (h2 << 8) | (h3 << 4) | (h4 << 0)).toChar
 					}
 					else throw expectedClass("\"\\/trnfbu")
@@ -103,9 +103,9 @@ private final class JsonDecoder(text:String) {
 				}
 			}
 		}
-		
+
 		val before		= offset
-		
+
 		val numNeg		= is('-')
 		val beforeBody	= offset
 		val numInt		= digits()
@@ -137,21 +137,21 @@ private final class JsonDecoder(text:String) {
 					throw expected("valid number")
 			}
 		}
-		
+
 		// no recognized token at all
 		offset	= before
 		throw expected("unexpected character %04x" format (text charAt offset).toInt)
 	}
-	
+
 	private def expected(what:String)	=
 			new JsonDecodeException(JsonDecodeFailure(text, offset, what))
-	
+
 	private def expectedClass(charClass:String)	=
 			new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonString(charClass))))
 
 	//-------------------------------------------------------------------------
 	//## tokens
-	
+
 	private def hexDigit():Int	= {
 		val	c	= text charAt offset
 		val h	=
@@ -162,7 +162,7 @@ private final class JsonDecoder(text:String) {
 		offset	+= 1
 		h
 	}
-	
+
 	private def digits():Int	= {
 		val before	= offset
 		var keepOn	= true
@@ -173,7 +173,7 @@ private final class JsonDecoder(text:String) {
 		}
 		offset - before
 	}
-	
+
 	private def ws() {
 		var keepOn	= true
 		while (!finished && keepOn) {
@@ -185,46 +185,46 @@ private final class JsonDecoder(text:String) {
 			else			keepOn	= false
 		}
 	}
-	
+
 	private def rng(start:Char, end:Char):Boolean	= {
 		val c	= next
 			 if (c == NO_CHAR)			false
 		else if (c < start || c > end)	false
 		else							{ consume(); true }
 	}
-	
+
 	private def is(c:Char):Boolean	= {
 			 if (finished)	false
 		else if (next != c)	false
 		else				{ consume(); true }
 	}
-	
+
 	private def is(s:String):Boolean	= {
 		val end	= offset + s.length
 			 if (end > text.length)						false
 		else if ((text substring (offset, end)) != s)	false
 		else											{ offset	= end; true }
 	}
-	
+
 	//-------------------------------------------------------------------------
 	//## chars
-	
+
 	private def finished:Boolean	=
 			offset == text.length
-	
+
 	private def next:Int	=
 			if (finished)	NO_CHAR
 			else  			text charAt offset
-	
+
 	/*
 	private def previous:Int	=
 			if (offset == 0)	NO_CHAR
 			else				text charAt offset-1
 	*/
-	
+
 	private def from(before:Int):String	=
 			text substring (before, offset)
-	
+
 	private def consume() {
 		if (finished)	sys error "already finished"
 		offset	+= 1

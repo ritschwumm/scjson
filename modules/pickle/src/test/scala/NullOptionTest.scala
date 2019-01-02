@@ -7,7 +7,7 @@ import scjson.pickle.protocol._
 
 class NullOptionTest extends Specification {
 	import StandardProtocol2._
-	
+
 	"plain option" should {
 		"serialize None as null" in {
 			doWrite(None:Option[String]) mustEqual JsonNull
@@ -16,7 +16,7 @@ class NullOptionTest extends Specification {
 			doWrite(Some("hallo"):Option[String]) mustEqual JsonString("hallo")
 		}
 	}
-	
+
 	"nested option" should {
 		"serialize None as {none:true}" in {
 			doWrite(None:Option[Option[String]]) mustEqual JsonObject.Var("none" -> JsonTrue)
@@ -28,7 +28,7 @@ class NullOptionTest extends Specification {
 			doWrite(Some(Some("hallo")):Option[Option[String]]) mustEqual JsonObject.Var("some" -> JsonString("hallo"))
 		}
 	}
-	
+
 	"double nested option" should {
 		"serialize None as {none:true}" in {
 			doWrite(None:Option[Option[Option[String]]]) mustEqual JsonObject.Var("none" -> JsonTrue)

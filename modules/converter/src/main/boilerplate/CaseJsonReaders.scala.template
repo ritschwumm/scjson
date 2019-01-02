@@ -1,0 +1,41 @@
+package scjson.converter
+
+import scutil.lang._
+import scutil.lang.assoc._
+import scjson.ast._
+
+import scjson.converter.{
+	TupleConverters	=> TC,
+	JsonConverters	=> JC,
+	ApplyUnapplyConverters	=> AU
+}
+
+trait CaseJsonReaders extends UnitJsonReaders {
+	def coReader[T](value:T):JsonReader[T]	=
+			JsonReader[Unit] map constant(value)
+
+	//--------------------------------------------------------------------------------
+
+	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
+			JC.expectObjectMap	>=>
+			Converter { map =>
+				if (map.isEmpty)	Validated good apply()
+				else				Validated bad JsonError(s"expected zero elements, got ${map.size}")
+			}
+
+	[#def cc1Reader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S, [#k1:String#]):JsonReader[S]	=
+			JC.expectObjectMap							>=>
+			TC.mapToTuple1[String,JsonValue]([#k1#])	>=>
+			// TODO scutil use mapN
+			([#JsonReader[T1]# pair ]) 					>=>
+			(AU apply1 apply contraMap unarrow1)#
+	]
+
+	//--------------------------------------------------------------------------------
+
+	[#def cc1AutoReader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S)(implicit FN:FieldNames[S]):JsonReader[S]	= {
+		val Vector([#k1#,]) = FN.names
+		cc1Reader(apply, [#k1#, ])
+	}#
+	]
+}

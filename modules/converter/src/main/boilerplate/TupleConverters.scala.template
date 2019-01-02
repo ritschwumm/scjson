@@ -1,0 +1,27 @@
+package scjson.converter
+
+import scutil.lang._
+import scutil.lang.assoc._
+import scutil.lang.pimp.OptionImplicits._
+
+object TupleConverters {
+	[#def tuple1ToMap[E,K,V]([#k1:K#]):Converter[E,Arrowed1[[#V#,]],Map[K,V]]	=
+			Converter total { case ([#t1# -> ])	=>
+				Map([#k1 -> t1#])
+			}#
+	]
+
+	//------------------------------------------------------------------------------
+
+	[#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],Arrowed1[[#V#,]]]	=
+			Converter { (it:Map[K,V]) =>
+				if (it.size == 1) {
+					[#(it get k1 toGood JsonError(s"missing element $k1"))# zip
+					]
+				}
+				else {
+					Validated bad JsonError(s"expected 1, not ${it.size} value(s)")
+				}
+			}#
+	]
+}

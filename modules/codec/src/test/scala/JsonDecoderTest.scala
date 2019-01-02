@@ -17,7 +17,7 @@ class JsonDecoderTest extends Specification {
 		"decode false" in {
 			(JsonCodec decode "false") mustEqual Right(JsonFalse)
 		}
-		
+
 		"decode int 0" in {
 			(JsonCodec decode "0") mustEqual Right(JsonNumber(0))
 		}
@@ -27,7 +27,7 @@ class JsonDecoderTest extends Specification {
 		"decode int 1" in {
 			(JsonCodec decode "1") mustEqual Right(JsonNumber(1))
 		}
-		
+
 		"fail with a single dot" in {
 			JsonCodec decode "." must beLeft
 		}
@@ -46,7 +46,7 @@ class JsonDecoderTest extends Specification {
 		"fail without digits after exp" in {
 			JsonCodec decode "1e" must beLeft
 		}
-		
+
 		"decode float 0.0" in {
 			(JsonCodec decode "0.0") mustEqual Right(JsonNumber(0))
 		}
@@ -62,7 +62,7 @@ class JsonDecoderTest extends Specification {
 		"decode float 47.11" in {
 			(JsonCodec decode "47.11") mustEqual Right(JsonNumber(47.11))
 		}
-		
+
 		"fail with a leading zero in the body" in {
 			// (JsonCodec decode "00") must beLike { case Fail(_) => ok }
 			JsonCodec decode "00" must beLeft
@@ -70,7 +70,7 @@ class JsonDecoderTest extends Specification {
 		"allow a leading zero in the exponent" in {
 			(JsonCodec decode "0E00") mustEqual Right(JsonNumber(0))
 		}
-	
+
 		"decode simple strings" in {
 			(JsonCodec decode "\"hallo, welt!\"") mustEqual Right(JsonString("hallo, welt!"))
 		}
@@ -93,7 +93,7 @@ class JsonDecoderTest extends Specification {
 			val cs	= new java.lang.StringBuilder appendCodePoint 0x1D11E toString;
 			(JsonCodec decode "\"\\uD834\\uDD1E\"") mustEqual Right(JsonString(cs))
 		}
-		
+
 		"decode arrays with 0 elements" in {
 			(JsonCodec decode "[]") mustEqual Right(JsonArray(ISeq()))
 		}
@@ -103,14 +103,14 @@ class JsonDecoderTest extends Specification {
 		"decode arrays with 2 elements" in {
 			(JsonCodec decode "[1,2]") mustEqual Right(JsonArray(ISeq(JsonNumber(1),JsonNumber(2))))
 		}
-		
+
 		"allow legal whitespace in arrays" in {
 			(JsonCodec decode "[ ]") mustEqual Right(JsonArray(ISeq()))
 		}
 		"disallow illegal whitespace in arrays" in {
 			JsonCodec decode "[\u00a0]" must beLeft
 		}
-		
+
 		"decode objects with 0 elements" in {
 			(JsonCodec decode "{}") mustEqual Right(JsonObject.empty)
 		}

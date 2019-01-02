@@ -25,7 +25,7 @@ trait LowPrioNullOptionProtocol {
 trait NullOptionProtocol extends LowPrioNullOptionProtocol {
 	private val someTag	= "some"
 	private val noneTag	= "none"
-	
+
 	// alternative {some} or {none}
 	implicit def OptionOptionFormat[T](implicit ev:Format[Option[T]]):Format[Option[Option[T]]]	=
 			Format[Option[Option[T]]](

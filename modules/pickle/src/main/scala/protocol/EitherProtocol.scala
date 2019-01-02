@@ -10,7 +10,7 @@ object EitherProtocol extends EitherProtocol
 trait EitherProtocol {
 	private val rightTag	= "right"
 	private val leftTag		= "left"
-		
+
 	// alternative {left} or {right}
 	implicit def EitherFormat[L:Format,R:Format]:Format[Either[L,R]]	=
 			Format[Either[L,R]](

@@ -21,14 +21,14 @@ sealed trait TestADT
 case object TestADT0					extends TestADT
 final case class TestADT1(a:Int)		extends TestADT
 final case class TestADT2(a:Int, b:Int)	extends TestADT
-	
+
 class FormatTest extends Specification {
 	object MyProtocol extends StandardProtocol2 {
 		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq(
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
 				"2"	-> TestEnum2))
-				
+
 		implicit val TestADT_F:Format[TestADT]	= caseClassSumFormat(
 				"0"	-> TestADT0_F,
 				"1"	-> TestADT1_F,
@@ -37,11 +37,11 @@ class FormatTest extends Specification {
 		implicit lazy val TestADT1_F	= caseClassFormat1(TestADT1.apply, TestADT1.unapply)
 		implicit lazy val TestADT2_F	= caseClassFormat2(TestADT2.apply, TestADT2.unapply)
 	}
-	
+
 	import MyProtocol._
-	
+
 	//------------------------------------------------------------------------------
-	
+
 	"serialization should" should {
 		"encode an enum as expected" in {
 			doWrite[TestEnum](TestEnum1)		mustEqual	JsonString("1")
@@ -49,9 +49,9 @@ class FormatTest extends Specification {
 		"decode an enum as expected" in {
 			doReadUnsafe[TestEnum](JsonString("1"))	mustEqual	TestEnum1
 		}
-		
+
 		//------------------------------------------------------------------------------
-		
+
 		"encode an adt constructor with 0 parameters as expected" in {
 			val data	= TestADT0
 			val json	= JsonObject.Var(
@@ -66,7 +66,7 @@ class FormatTest extends Specification {
 				"a"	-> JsonNumber(4711)
 			)
 			doWrite[TestADT](data)	mustEqual	json
-			
+
 		}
 		"encode an adt constructor with 2 parameters as expected" in {
 			val data	= TestADT2(1337,4711)
@@ -77,7 +77,7 @@ class FormatTest extends Specification {
 			)
 			doWrite[TestADT](data)	mustEqual	json
 		}
-		
+
 		"decode an adt constructor with 0 parameters as expected" in {
 			val data	= TestADT0
 			val json	= JsonObject.Var(
