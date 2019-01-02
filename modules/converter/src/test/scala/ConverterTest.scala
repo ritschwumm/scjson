@@ -230,6 +230,24 @@ class ConverterTest extends Specification {
 			Good(JsonObject.Var("4" -> JsonNumber(5)))
 		}
 	}
+	"tuples should" should {
+		"serialize 2-tuples" in {
+			JsonWriter[(String,Int)] convert (("a", 1)) mustEqual
+			Good(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1)))
+		}
+		"serialize 3-tuples" in {
+			JsonWriter[(String,Int,Boolean)] convert (("a", 1, true)) mustEqual
+			Good(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1), "3" -> JsonBoolean(true)))
+		}
+		"parse 2-tuples" in {
+			JsonReader[(String,Int)] convert JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1)) mustEqual
+			Good(("a", 1))
+		}
+		"parse 3-tuples" in {
+			JsonReader[(String,Int,Boolean)] convert JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1), "3" -> JsonBoolean(true)) mustEqual
+			Good(("a", 1, true))
+		}
+	}
 
 	//------------------------------------------------------------------------------
 
