@@ -5,7 +5,7 @@ import scutil.lang.assoc._
 import scjson.ast._
 
 import scjson.converter.{
-	TupleConverters			=> TC,
+	ArrowedConverters		=> AC,
 	JsonConverters			=> JC,
 	ApplyUnapplyConverters	=> AU
 }
@@ -24,7 +24,7 @@ trait CaseJsonWriters extends UnitJsonWriters {
 	[#def cc1Writer[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])], [#k1:String#]):JsonWriter[S]	=
 			(AU unapply1 unapply map arrow1)					>=>
 			([#JsonWriter[T1]# pair ])							>=>
-			TC.tuple1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
+			AC.arrowed1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
 			JC.makeObjectMap#
 	]
 

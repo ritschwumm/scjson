@@ -1,8 +1,8 @@
 package scjson.converter
 
 import scjson.converter.{
-	CollectionConverters => CC,
-	JsonConverters		=> JC
+	CollectionConverters	=> CC,
+	JsonConverters			=> JC
 }
 
 object AltSeqConverters {
@@ -20,7 +20,6 @@ object AltSeqConverters {
 			JC.expectObjectMap			>=>
 			CC.mapToEither(left, right)	>=>
 			(JsonReader[T1] either JsonReader[T2])
-
 
 	def altWriter[T1:JsonWriter,T2:JsonWriter](left:String, right:String):JsonWriter[Either[T1,T2]]	=
 			(JsonWriter[T1] either JsonWriter[T2])	>=>

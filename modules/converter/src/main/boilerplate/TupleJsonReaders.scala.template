@@ -1,18 +1,33 @@
 package scjson.converter
 
+import scutil.lang._
 import scutil.lang.assoc._
 
 import scjson.converter.{
-	JsonConverters		=> JC,
-	TupleConverters		=> TC
+	JsonConverters		=> JC
 }
 
-trait TupleJsonReaders  {
-	[#implicit def Tuple1Reader[[#T1:JsonReader#,]]:JsonReader[([#T1#,])]	=
-			JC.expectObjectMap			>=>
-			TC.mapToTuple1([#"1"#])		>=>
-			// TODO scutil use mapN
+trait TupleJsonReaders {
+	[2..#implicit def Tuple1Reader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
+			JC.expectArray	>=>
+			Converter {
+				case ISeq([#t1#])	=>
+					[#(JsonReader[T1] convert t1)# zip
+					] map
+					unarrow1
+				case x	=>
+					Validated bad JsonError(s"expected 2 elements, got ${x.size}")
+			}#
+
+	]
+
+	/*
+	[#def NewerTupleReader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
+			JC.expectArray	>=>
+			(TC.seqToTuple1 map arrow1)	>=>
 			([#JsonReader[T1]# pair ])	map
 			unarrow1#
+
 	]
+	*/
 }

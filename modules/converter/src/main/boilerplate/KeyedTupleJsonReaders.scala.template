@@ -1,0 +1,19 @@
+package scjson.converter
+
+import scutil.lang.assoc._
+
+import scjson.converter.{
+	JsonConverters		=> JC,
+	ArrowedConverters	=> AC
+}
+
+// NOTE not a standard format
+trait KeyedTupleJsonReaders {
+	[#implicit def KeyedTuple1Reader[[#T1:JsonReader#,]]:JsonReader[([#T1#,])]	=
+			JC.expectObjectMap			>=>
+			AC.mapToArrowed1([#"1"#])	>=>
+			// TODO scutil use mapN
+			([#JsonReader[T1]# pair ])	map
+			unarrow1#
+	]
+}

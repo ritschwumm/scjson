@@ -4,18 +4,18 @@ import scutil.lang._
 import scutil.lang.assoc._
 import scutil.lang.pimp.OptionImplicits._
 
-object TupleConverters {
-	[#def tuple1ToSeq[T]:JsonConverter[([#T#]),ISeq[T]]	=
-			Converter total { case ([#t1#]) => Vector([#t1#]) }#
+object ArrowedConverters {
+	[#def arrowed1ToSeq[T]:JsonConverter[Arrowed1[[#T#]],ISeq[T]]	=
+			Converter total { case ([#t1# -> ]) => Vector([#t1#]) }#
 
 	]
 
 	//--------------------------------------------------------------------------------
 
-	[#def seqToTuple1[T]:JsonConverter[ISeq[T],([#T#])]	=
+	[#def seqToArrowed1[T]:JsonConverter[ISeq[T],Arrowed1[[#T#]]]	=
 		Converter {
 			case ISeq([#t1#]) =>
-				Validated good	(([#t1#]))
+				Validated good	(([#t1# -> ]))
 			case x	=>
 				Validated bad	JsonError(s"expected 1, not ${x.size} value(s)")
 		}#
@@ -24,26 +24,23 @@ object TupleConverters {
 
 	//--------------------------------------------------------------------------------
 
-	[#def tuple1ToMap[E,K,V]([#k1:K#]):Converter[E,([#V#]),Map[K,V]]	=
-			Converter total { case ([#t1#])	=>
+	[#def arrowed1ToMap[E,K,V]([#k1:K#]):Converter[E,Arrowed1[[#V#]],Map[K,V]]	=
+			Converter total { case ([#t1# -> ])	=>
 				Map([#k1 -> t1#])
 			}#
-
 	]
 
-	//--------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------
 
-	[#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],([#V#])]	=
+	[#def mapToArrowed1[K,V]([#k1:K#]):JsonConverter[Map[K,V],Arrowed1[[#V#]]]	=
 			Converter { (it:Map[K,V]) =>
 				if (it.size == 1) {
 					[#(it get k1 toGood JsonError(s"missing element $k1"))# zip
-					] map
-					unarrow1
+					]
 				}
 				else {
 					Validated bad JsonError(s"expected 1, not ${it.size} value(s)")
 				}
 			}#
 	]
-
 }

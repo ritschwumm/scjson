@@ -230,7 +230,41 @@ class ConverterTest extends Specification {
 			Good(JsonObject.Var("4" -> JsonNumber(5)))
 		}
 	}
+	"keyless maps" should {
+		case object X
+		implicit val XReader:JsonReader[X.type]	= Converter.total(_ => X)
+		implicit val XWriter:JsonWriter[X.type]	= Converter.total(_ => JsonValue.theNull)
+
+		"serialize without having a key writer" in {
+			JsonWriter[Map[X.type,String]] convert Map(X -> "1") mustEqual
+			Good(JsonArray.Var(JsonArray.Var(JsonValue.theNull, JsonString("1"))))
+		}
+
+		"deserialize without having a key reader" in {
+			JsonReader[Map[X.type,String]] convert JsonArray.Var(JsonArray.Var(JsonValue.theNull, JsonString("1"))) mustEqual
+			Good(Map(X -> "1"))
+		}
+	}
 	"tuples should" should {
+		"serialize 2-tuples" in {
+			JsonWriter[(String,Int)] convert (("a", 1)) mustEqual
+			Good(JsonArray.Var(JsonString("a"), JsonNumber(1)))
+		}
+		"serialize 3-tuples" in {
+			JsonWriter[(String,Int,Boolean)] convert (("a", 1, true)) mustEqual
+			Good(JsonArray.Var(JsonString("a"), JsonNumber(1), JsonBoolean(true)))
+		}
+		"parse 2-tuples" in {
+			JsonReader[(String,Int)] convert JsonArray.Var(JsonString("a"), JsonNumber(1)) mustEqual
+			Good(("a", 1))
+		}
+		"parse 3-tuples" in {
+			JsonReader[(String,Int,Boolean)] convert JsonArray.Var(JsonString("a"), JsonNumber(1), JsonBoolean(true)) mustEqual
+			Good(("a", 1, true))
+		}
+	}
+	/*
+	"keyed tuples should" should {
 		"serialize 2-tuples" in {
 			JsonWriter[(String,Int)] convert (("a", 1)) mustEqual
 			Good(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1)))
@@ -248,6 +282,7 @@ class ConverterTest extends Specification {
 			Good(("a", 1, true))
 		}
 	}
+	*/
 
 	//------------------------------------------------------------------------------
 

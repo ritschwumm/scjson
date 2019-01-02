@@ -1,6 +1,9 @@
 package scjson.converter
 
 import scutil.lang.assoc._
+import scutil.lang._
+
+import scjson.ast._
 
 import scjson.converter.{
 	JsonConverters		=> JC,
@@ -8,10 +11,14 @@ import scjson.converter.{
 }
 
 trait TupleJsonWriters {
-	[#implicit def Tuple1Writer[[#T1:JsonWriter#,]]:JsonWriter[([#T1#,])]	=
-			([#JsonWriter[T1]# pair ])	>=>
-			TC.tuple1ToMap([#"1"#])		>=>
-			JC.makeObjectMap			contraMap
-			arrow1#
+	[#implicit def Tuple1Writer[[#T1:JsonWriter#]]:JsonWriter[([#T1#])]	=
+			Converter[JsonError,([#T1#]),([#JsonValue#])] { case ([#t1#]) =>
+				[#(JsonWriter[T1] convert t1)#	zip
+				]	map
+				unarrow1
+			} >=>
+			TC.tuple1ToSeq >=>
+			JC.makeArray#
+
 	]
 }
