@@ -30,7 +30,7 @@ object NumberBigDecimalConverters {
 				}
 				catch { case e:ArithmeticException =>
 					// fractional or not fitting
-					Validated bad JsonError(show"${it} is not an Int")
+					Validated bad JsonError(show"${it} is not a Long")
 				}
 			}
 

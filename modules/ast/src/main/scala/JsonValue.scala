@@ -6,11 +6,20 @@ import scutil.lang.ISeq
 object JsonValue {
 	val theNull:JsonValue								= JsonNull
 	def mkNull(it:Unit):JsonValue						= theNull
+	val theTrue:JsonValue								= JsonBoolean(true)
+	val theFalse:JsonValue								= JsonBoolean(false)
 	def mkBoolean(it:Boolean):JsonValue					= JsonBoolean(it)
 	def mkNumber(it:BigDecimal):JsonValue				= JsonNumber(it)
 	def mkString(it:String):JsonValue					= JsonString(it)
 	def mkArray(it:ISeq[JsonValue]):JsonValue			= JsonArray(it)
 	def mkObject(it:ISeq[(String,JsonValue)]):JsonValue	= JsonObject(it)
+
+	val emptyString:JsonValue	= JsonString("")
+	val emptyArray:JsonValue	= JsonArray(List.empty)
+	val emptyObject:JsonValue	= JsonObject(List.empty)
+
+	def varArray(values:JsonValue*):JsonValue			= JsonArray(values.toVector)
+	def varObject(values:(String,JsonValue)*):JsonValue	= JsonObject(values.toVector)
 }
 
 sealed abstract class JsonValue {
@@ -22,7 +31,11 @@ sealed abstract class JsonValue {
 	def asObject:Option[ISeq[(String,JsonValue)]]	= this matchOption { case JsonObject(x)		=> x }
 }
 
+//------------------------------------------------------------------------------
+
 case object JsonNull extends JsonValue
+
+//------------------------------------------------------------------------------
 
 object JsonBoolean {
 	def apply(value:Boolean):JsonBoolean			= if (value) JsonTrue else JsonFalse
@@ -37,6 +50,8 @@ sealed abstract class JsonBoolean extends JsonValue {
 }
 case object JsonTrue	extends JsonBoolean
 case object JsonFalse	extends JsonBoolean
+
+//------------------------------------------------------------------------------
 
 object JsonNumber {
 	def fromByte(value:Byte):JsonNumber	= {
@@ -70,15 +85,27 @@ final case class JsonNumber(value:BigDecimal)	extends JsonValue {
 	require(value ne null)
 }
 
+//------------------------------------------------------------------------------
+
 object JsonString {
-	val empty	= JsonString("")
+	val empty	= new JsonString("")
+
+	def apply(value:String):JsonString	=
+			if (value == "")	empty
+			else				new JsonString(value)
 }
 final case class JsonString(value:String)		extends JsonValue {
 	require(value ne null)
 }
 
+//------------------------------------------------------------------------------
+
 object JsonArray {
-	val empty	= JsonArray(Vector.empty)
+	val empty	= new JsonArray(Vector.empty)
+
+	def apply(value:ISeq[JsonValue]):JsonArray	=
+			if (value.isEmpty)	empty
+			else				new JsonArray(value)
 
 	object Var {
 		def apply(values:JsonValue*):JsonArray					= JsonArray(values.toVector)
@@ -91,8 +118,14 @@ final case class JsonArray(value:ISeq[JsonValue])	extends JsonValue {
 	def ++ (that:JsonArray):JsonArray		= JsonArray(this.value ++ that.value)
 }
 
+//------------------------------------------------------------------------------
+
 object JsonObject {
-	val empty	= JsonObject(Vector.empty)
+	val empty	= new JsonObject(Vector.empty)
+
+	def apply(value:ISeq[(String,JsonValue)]):JsonObject	=
+			if (value.isEmpty)	empty
+			else				new JsonObject(value)
 
 	object Var {
 		def apply(it:(String,JsonValue)*):JsonObject					= JsonObject(it.toVector)
