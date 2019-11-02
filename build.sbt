@@ -3,9 +3,9 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.177.0",
+	version			:= "0.178.0",
 
-	scalaVersion	:= "2.12.8",
+	scalaVersion	:= "2.12.10",
 	scalacOptions	++= Seq(
 		"-deprecation",
 		"-unchecked",
@@ -14,14 +14,12 @@ inThisBuild(Seq(
 		// "-language:higherKinds",
 		// "-language:reflectiveCalls",
 		// "-language:dynamics",
-		// "-language:postfixOps",
 		// "-language:experimental.macros"
 		"-feature",
 		"-Xfatal-warnings",
 		"-Xlint"
 	),
-	conflictManager	:= ConflictManager.strict,
-	resolvers		+= "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
+	conflictManager	:= ConflictManager.strict withOrganization "^(?!(org\\.scala-lang|org\\.scala-js)(\\..*)?)$",
 
 	wartremoverErrors	++= Seq(
 		Wart.AsInstanceOf,
@@ -97,7 +95,7 @@ lazy val `scjson-ast`	=
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.159.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.160.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -115,8 +113,8 @@ lazy val `scjson-codec`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.159.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.6.0"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.160.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.8.0"				% "test"
 			)
 		)
 		.jvmSettings()
@@ -138,8 +136,8 @@ lazy val `scjson-converter`	=
 		.settings(
 			libraryDependencies	++= Seq(
 				//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-				"de.djini"			%%%	"scutil-base"	% "0.159.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.6.0"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.160.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.8.0"				% "test"
 			),
 			// getParentFile because we are actually in .jvm or .js due to cross compilation
 			Compile / boilerplateSource	:= baseDirectory.value.getParentFile / "src" / "main" / "boilerplate"
@@ -164,8 +162,8 @@ lazy val `scjson-pickle`	=
 				// TODO could this be a provided dependency?
 				// TODO is this dependency necessary at all?
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.159.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.6.0"				% "test"
+				"de.djini"			%%	"scutil-base"	% "0.160.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.8.0"				% "test"
 			),
 			Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
 		)
@@ -180,7 +178,7 @@ lazy val `scjson-io`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.159.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.160.0"				% "compile"
 			)
 		)
 
