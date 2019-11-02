@@ -21,7 +21,7 @@ private final class JsonEncoder(pretty:Boolean) {
 	def result:String	= b.toString
 
 	/** unparse a JsonValue into a String */
-	private def encode(v:JsonValue) {
+	private def encode(v:JsonValue):Unit	= {
 		v match {
 			case JsonNull			=> b append "null"
 			case JsonTrue			=> b append "true"
@@ -94,7 +94,7 @@ private final class JsonEncoder(pretty:Boolean) {
 		}
 	}
 
-	private def encodeString(data:String) {
+	private def encodeString(data:String):Unit	= {
 		b += '"'
 		var i	= 0
 		while (i < data.length) {
@@ -119,7 +119,7 @@ private final class JsonEncoder(pretty:Boolean) {
 		b += '"'
 	}
 
-	private def indent() {
+	private def indent():Unit	= {
 		var x	= 0
 		while (x < level) {
 			b	++= JsonEncoder.indention

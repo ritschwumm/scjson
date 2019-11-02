@@ -68,13 +68,13 @@ object JsonNumber {
 		JsonNumber(BigDecimal(value))
 	}
 	def fromFloat(value:Float):JsonNumber	= {
-		require(!value.isInfinity,	s"unexpected infinite value: $value")
-		require(!value.isNaN,		s"unexpected NaN value: $value")
+		require(!value.isInfinity,	s"unexpected infinite value: ${value.toString}")
+		require(!value.isNaN,		s"unexpected NaN value: ${value.toString}")
 		JsonNumber(BigDecimal(value.toDouble))
 	}
 	def fromDouble(value:Double):JsonNumber	= {
-		require(!value.isInfinity,	s"unexpected infinite value: $value")
-		require(!value.isNaN,		s"unexpected NaN value: $value")
+		require(!value.isInfinity,	s"unexpected infinite value: ${value.toString}")
+		require(!value.isNaN,		s"unexpected NaN value: ${value.toString}")
 		JsonNumber(BigDecimal(value.toDouble))
 	}
 	def fromBigInt(value:BigInt):JsonNumber	= {

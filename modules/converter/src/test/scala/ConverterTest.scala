@@ -55,13 +55,13 @@ class ConverterTest extends Specification {
 			out mustEqual in
 		}
 		"roundtrip an array" in {
-			val in:JsonValue	= JsonArray(Vector(JsonString("b"), JsonNumber(1)))
+			val in:JsonValue	= JsonArray(Vector[JsonValue](JsonString("b"), JsonNumber(1)))
 			val str:String		= pickle(in)	getOrError "oops"
 			val out:JsonValue	= unpickle(str)	getOrError "oops"
 			out mustEqual in
 		}
 		"roundtrip an object" in {
-			val in:JsonValue	= JsonObject(Vector("a" -> JsonString("b"), "c" -> JsonNumber(1)))
+			val in:JsonValue	= JsonObject(Vector[(String,JsonValue)]("a" -> JsonString("b"), "c" -> JsonNumber(1)))
 			val str:String		= pickle(in)	getOrError "oops"
 			val out:JsonValue	= unpickle(str)	getOrError "oops"
 			out mustEqual in

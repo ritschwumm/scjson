@@ -24,7 +24,7 @@ final case class TestADT2(a:Int, b:Int)	extends TestADT
 
 class FormatTest extends Specification {
 	object MyProtocol extends StandardProtocol2 {
-		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq(
+		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq[(String,TestEnum)](
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
 				"2"	-> TestEnum2))

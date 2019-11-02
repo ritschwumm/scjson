@@ -4,6 +4,7 @@ import scutil.lang._
 import scutil.lang.assoc._
 import scutil.lang.pimp.OptionImplicits._
 
+@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object ArrowedConverters {
 	[#def arrowed1ToSeq[T]:JsonConverter[Arrowed1[[#T#]],ISeq[T]]	=
 			Converter total { case ([#t1# -> ]) => Vector([#t1#]) }#
@@ -17,7 +18,7 @@ object ArrowedConverters {
 			case ISeq([#t1#]) =>
 				Validated good	(([#t1# -> ]))
 			case x	=>
-				Validated bad	JsonError(s"expected 1, not ${x.size} value(s)")
+				Validated bad	JsonError(s"expected 1, not ${x.size.toString} value(s)")
 		}#
 
 	]
@@ -35,11 +36,11 @@ object ArrowedConverters {
 	[#def mapToArrowed1[K,V]([#k1:K#]):JsonConverter[Map[K,V],Arrowed1[[#V#]]]	=
 			Converter { (it:Map[K,V]) =>
 				if (it.size == 1) {
-					[#(it get k1 toGood JsonError(s"missing element $k1"))# zip
+					[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# zip
 					]
 				}
 				else {
-					Validated bad JsonError(s"expected 1, not ${it.size} value(s)")
+					Validated bad JsonError(s"expected 1, not ${it.size.toString} value(s)")
 				}
 			}#
 	]

@@ -179,7 +179,7 @@ private final class JsonDecoder(text:String) {
 		offset - before
 	}
 
-	private def ws() {
+	private def ws():Unit	= {
 		var keepOn	= true
 		while (!finished && keepOn) {
 			val c	= next
@@ -230,7 +230,7 @@ private final class JsonDecoder(text:String) {
 	private def from(before:Int):String	=
 			text substring (before, offset)
 
-	private def consume() {
+	private def consume():Unit	= {
 		if (finished)	sys error "already finished"
 		offset	+= 1
 	}

@@ -34,7 +34,7 @@ trait SumJsonReaders extends SumJsonReadersLow with UnitJsonReaders {
 	//------------------------------------------------------------------------------
 
 	private def eitherToOption[E,T]:Converter[E,Either[Unit,T],Option[T]]	=
-			Converter total (_.right.toOption)
+			Converter total (_.toOption)
 }
 
 trait SumJsonReadersLow {
