@@ -41,6 +41,7 @@ object JsonBoolean {
 	def apply(value:Boolean):JsonBoolean			= if (value) JsonTrue else JsonFalse
 	def unapply(value:JsonBoolean):Option[Boolean]	= Some(value.value)
 }
+
 sealed abstract class JsonBoolean extends JsonValue {
 	def value:Boolean	=
 			this match {
@@ -67,22 +68,23 @@ object JsonNumber {
 		JsonNumber(BigDecimal(value))
 	}
 	def fromFloat(value:Float):JsonNumber	= {
-		require(!value.isInfinity)
-		require(!value.isNaN)
+		require(!value.isInfinity,	s"unexpected infinite value: $value")
+		require(!value.isNaN,		s"unexpected NaN value: $value")
 		JsonNumber(BigDecimal(value.toDouble))
 	}
 	def fromDouble(value:Double):JsonNumber	= {
-		require(!value.isInfinity)
-		require(!value.isNaN)
+		require(!value.isInfinity,	s"unexpected infinite value: $value")
+		require(!value.isNaN,		s"unexpected NaN value: $value")
 		JsonNumber(BigDecimal(value.toDouble))
 	}
 	def fromBigInt(value:BigInt):JsonNumber	= {
-		require(value ne null)
+		require(value ne null,		s"unexpected null value")
 		JsonNumber(BigDecimal(value))
 	}
 }
+
 final case class JsonNumber(value:BigDecimal)	extends JsonValue {
-	require(value ne null)
+	require(value ne null,	s"unexpected null value")
 }
 
 //------------------------------------------------------------------------------
@@ -94,8 +96,9 @@ object JsonString {
 			if (value == "")	empty
 			else				new JsonString(value)
 }
+
 final case class JsonString(value:String)		extends JsonValue {
-	require(value ne null)
+	require(value ne null,	s"unexpected null value")
 }
 
 //------------------------------------------------------------------------------
@@ -112,8 +115,9 @@ object JsonArray {
 		def unapplySeq(array:JsonArray):Option[ISeq[JsonValue]]	= Some(array.value)
 	}
 }
+
 final case class JsonArray(value:ISeq[JsonValue])	extends JsonValue {
-	require(value ne null)
+	require(value ne null,	s"unexpected null value")
 	def get(index:Int):Option[JsonValue]	= value lift index
 	def ++ (that:JsonArray):JsonArray		= JsonArray(this.value ++ that.value)
 }
@@ -132,8 +136,9 @@ object JsonObject {
 		def unapplySeq(it:JsonObject):Option[ISeq[(String,JsonValue)]]	= Some(it.value)
 	}
 }
+
 final case class JsonObject(value:ISeq[(String,JsonValue)])	extends JsonValue {
-	require(value ne null)
+	require(value ne null,	s"unexpected null value")
 	def get(key:String):Option[JsonValue]	= value collectFirst { case (k,v) if (k == key) => v }
 	def ++ (that:JsonObject):JsonObject		= JsonObject(this.value ++ that.value)
 	def valueMap:Map[String,JsonValue]		= value.toMap

@@ -107,7 +107,7 @@ private final class JsonDecoder(text:String) {
 		val before		= offset
 
 		val numNeg		= isChar('-')
-		val beforeBody	= offset
+		val beforeInt	= offset
 		val numInt		= digits()
 		if (numNeg || numInt != 0) {
 			if (numInt == 0) {
@@ -115,15 +115,21 @@ private final class JsonDecoder(text:String) {
 				// offset	= beforeBody
 				throw expected("number digits")
 			}
-			if (numInt > 1 && (text charAt beforeBody) == '0') {
-				offset	= beforeBody
+			if (numInt > 1 && (text charAt beforeInt) == '0') {
+				offset	= beforeInt
 				throw expected("number digits without leading zero")
 			}
 			if (isChar('.')) {
-				val numTail	= digits()
-				if (numTail == 0)	throw expected("fraction digits after dot")
+				val numFrac	= digits()
+				if (numFrac == 0)	throw expected("fraction digits after dot")
 			}
 			if (isChar('e') || isChar('E')) {
+				/*
+				val signExpo	=
+							 if (isChar('+'))	true
+						else if (isChar('-'))	false
+						else					true
+				*/
 				isChar('+') || isChar('-')
 				val countExpo	= digits()
 				if (countExpo == 0)	throw expected("at least one digit in the exponent")
