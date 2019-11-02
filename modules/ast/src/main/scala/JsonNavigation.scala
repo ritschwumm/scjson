@@ -3,10 +3,11 @@ package scjson.ast
 import scutil.lang._
 
 object JsonNavigation {
-	implicit def extendJsonNavigation(value:JsonValue):JsonNavigation			= new JsonNavigation(Some(value))
-	implicit def extendJsonNavigation(value:Option[JsonValue]):JsonNavigation	= new JsonNavigation(value)
+	implicit def extendJsonNavigation(value:JsonValue):JsonNavigation				= new JsonNavigation(Some(value))
+	implicit def extendJsonNavigationOption(value:Option[JsonValue]):JsonNavigation	= new JsonNavigation(value)
 }
 
+@SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 final class JsonNavigation(peer:Option[JsonValue]) {
 	def /(name:String):Option[JsonValue]	= toMap		flatMap { _ get		name	}
 	def /(index:Int):Option[JsonValue]		= arraySeq  flatMap { _ lift	index	}

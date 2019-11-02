@@ -20,6 +20,7 @@ object CollectionConverters {
 				)
 			}
 
+	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def mapToPair[K,V](k1:K, k2:K):JsonConverter[Map[K,V],(V,V)]	=
 			Converter { (it:Map[K,V]) =>
 				if (it.size == 2) {
@@ -39,6 +40,7 @@ object CollectionConverters {
 				case Right(x)	=> Map(k2 -> x)
 			}
 
+	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def mapToEither[K,V](k1:K, k2:K):JsonConverter[Map[K,V],Either[V,V]]	=
 			Converter { (it:Map[K,V]) =>
 				if (it.size == 1) {

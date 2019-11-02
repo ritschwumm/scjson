@@ -3,7 +3,7 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.173.0",
+	version			:= "0.174.0",
 
 	scalaVersion	:= "2.12.8",
 	scalacOptions	++= Seq(
@@ -27,21 +27,24 @@ inThisBuild(Seq(
 		Wart.AsInstanceOf,
 		Wart.IsInstanceOf,
 		Wart.StringPlusAny,
+		Wart.ToString,
 		Wart.EitherProjectionPartial,
 		Wart.OptionPartial,
+		Wart.TryPartial,
 		Wart.Enumeration,
 		Wart.FinalCaseClass,
 		Wart.JavaConversions,
 		Wart.Option2Iterable,
-		Wart.TryPartial,
 		Wart.JavaSerializable,
 		//Wart.Any,
 		Wart.AnyVal,
 		//Wart.Nothing,
 		Wart.ArrayEquals,
+		Wart.ImplicitParameter,
 		Wart.ExplicitImplicitTypes,
 		Wart.LeakingSealed,
-		//Wart.Overloading
+		Wart.DefaultArguments,
+		Wart.Overloading,
 		//Wart.PublicInference,
 		Wart.TraversableOps
 	)
@@ -94,7 +97,7 @@ lazy val `scjson-ast`	=
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.155.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.156.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -112,7 +115,7 @@ lazy val `scjson-codec`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.155.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.156.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.5.1"				% "test"
 			)
 		)
@@ -135,7 +138,7 @@ lazy val `scjson-converter`	=
 		.settings(
 			libraryDependencies	++= Seq(
 				//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-				"de.djini"			%%%	"scutil-base"	% "0.155.0"				% "compile",
+				"de.djini"			%%%	"scutil-base"	% "0.156.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.5.1"				% "test"
 			),
 			// getParentFile because we are actually in .jvm or .js due to cross compilation
@@ -161,7 +164,7 @@ lazy val `scjson-pickle`	=
 				// TODO could this be a provided dependency?
 				// TODO is this dependency necessary at all?
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.155.0"				% "compile",
+				"de.djini"			%%	"scutil-base"	% "0.156.0"				% "compile",
 				"org.specs2"		%%	"specs2-core"	% "4.5.1"				% "test"
 			),
 			Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
@@ -177,7 +180,7 @@ lazy val `scjson-io`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.155.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.156.0"				% "compile"
 			)
 		)
 

@@ -29,55 +29,55 @@ private final class JsonDecoder(text:String) {
 
 	private def decodeNext():JsonValue = {
 		ws()
-		if (finished)		throw expected("any char")
+		if (finished)	throw expected("any char")
 
-		if (is("null"))		return JsonNull
-		if (is("true"))		return JsonTrue
-		if (is("false"))	return JsonFalse
-		if (is('[')) {
+		if (isString("null"))	return JsonNull
+		if (isString("true"))	return JsonTrue
+		if (isString("false"))	return JsonFalse
+		if (isChar('[')) {
 			val	out	= new immutable.VectorBuilder[JsonValue]
 			ws()
-			if (is(']'))	return JsonArray(out.result)
+			if (isChar(']'))	return JsonArray(out.result)
 			while (true) {
 				val value	= decodeNext()
 				out	+= value
 				ws()
-				if (is(']'))	return JsonArray(out.result)
-				if (!is(','))	throw expectedClass(",]")
+				if (isChar(']'))	return JsonArray(out.result)
+				if (!isChar(','))	throw expectedClass(",]")
 			}
 		}
-		if (is('{')) {
+		if (isChar('{')) {
 			val out	= new immutable.VectorBuilder[(String,JsonValue)]
 			ws()
-			if (is('}'))	return JsonObject(out.result)
+			if (isChar('}'))	return JsonObject(out.result)
 			while (true) {
 				val key	= decodeNext() match {
 					case JsonString(s)	=> s
 					case _				=> throw expected("string key")
 				}
 				ws();
-				if (!is(':'))	throw expectedClass(":")
+				if (!isChar(':'))	throw expectedClass(":")
 				val value	= decodeNext()
 				out	+= (key -> value)
 				ws()
-				if (is('}'))	return JsonObject(out.result)
-				if (!is(','))	throw expectedClass(",}");
+				if (isChar('}'))	return JsonObject(out.result)
+				if (!isChar(','))	throw expectedClass(",}");
 			}
 		}
-		if (is('"')) {
+		if (isChar('"')) {
 			val out	= new StringBuilder
 			while (true) {
-				if (is('\\')) {
+				if (isChar('\\')) {
 					if (finished)	throw expected("escape continuation")
-						 if (is('"'))	out	+= '"'
-					else if (is('\\'))	out	+= '\\'
-					else if (is('/'))	out	+= '/'
-					else if (is('t'))	out	+= '\t'
-					else if (is('r'))	out	+= '\r'
-					else if (is('n'))	out	+= '\n'
-					else if (is('f'))	out	+= '\f'
-					else if (is('b'))	out	+= '\b'
-					else if (is('u')) {
+						 if (isChar('"'))	out	+= '"'
+					else if (isChar('\\'))	out	+= '\\'
+					else if (isChar('/'))	out	+= '/'
+					else if (isChar('t'))	out	+= '\t'
+					else if (isChar('r'))	out	+= '\r'
+					else if (isChar('n'))	out	+= '\n'
+					else if (isChar('f'))	out	+= '\f'
+					else if (isChar('b'))	out	+= '\b'
+					else if (isChar('u')) {
 						if (offset+4 > text.length)	throw expected("4 hex digits")
 
 						val h1	= hexDigit()
@@ -89,7 +89,7 @@ private final class JsonDecoder(text:String) {
 					}
 					else throw expectedClass("\"\\/trnfbu")
 				}
-				else if (is('"')) {
+				else if (isChar('"')) {
 					return JsonString(out.result)
 				}
 				else if (rng('\u0000', '\u001f')) {
@@ -106,7 +106,7 @@ private final class JsonDecoder(text:String) {
 
 		val before		= offset
 
-		val numNeg		= is('-')
+		val numNeg		= isChar('-')
 		val beforeBody	= offset
 		val numInt		= digits()
 		if (numNeg || numInt != 0) {
@@ -119,12 +119,12 @@ private final class JsonDecoder(text:String) {
 				offset	= beforeBody
 				throw expected("number digits without leading zero")
 			}
-			if (is('.')) {
+			if (isChar('.')) {
 				val numTail	= digits()
 				if (numTail == 0)	throw expected("fraction digits after dot")
 			}
-			if (is('e') || is('E')) {
-				is('+') || is('-')
+			if (isChar('e') || isChar('E')) {
+				isChar('+') || isChar('-')
 				val countExpo	= digits()
 				if (countExpo == 0)	throw expected("at least one digit in the exponent")
 			}
@@ -192,13 +192,13 @@ private final class JsonDecoder(text:String) {
 		else							{ consume(); true }
 	}
 
-	private def is(c:Char):Boolean	= {
+	private def isChar(c:Char):Boolean	= {
 			 if (finished)	false
 		else if (next != c)	false
 		else				{ consume(); true }
 	}
 
-	private def is(s:String):Boolean	= {
+	private def isString(s:String):Boolean	= {
 		val end	= offset + s.length
 			 if (end > text.length)						false
 		else if ((text substring (offset, end)) != s)	false
