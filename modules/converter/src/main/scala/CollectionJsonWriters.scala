@@ -14,7 +14,7 @@ trait CollectionJsonWriters extends CollectionJsonWritersLow {
 			JC.makeArray.varyIn
 
 	implicit def SetWriter[T:JsonWriter]:JsonWriter[Set[T]]	=
-			JsonWriter[ISeq[T]] contraMap { _.toVector }
+			JsonWriter[Seq[T]] contraMap { _.toVector }
 
 	implicit def NesWriter[T:JsonWriter]:JsonWriter[Nes[T]]	=
 			(Converter total ((_:Nes[T]).toVector))	>=>
@@ -22,16 +22,16 @@ trait CollectionJsonWriters extends CollectionJsonWritersLow {
 
 	implicit def KeyMapWriter[K:JsonKeyWriter,V:JsonWriter]:JsonWriter[Map[K,V]]	=
 			CC.mapToPairs		>=>
-			(JsonKeyWriter[K] >=> KC.KeyToString pair JsonWriter[V]).liftISeq	>=>
+			(JsonKeyWriter[K] >=> KC.KeyToString pair JsonWriter[V]).liftSeq	>=>
 			JC.makeObject
 }
 
 trait CollectionJsonWritersLow {
-	implicit def ISeqWriter[T:JsonWriter]:JsonWriter[ISeq[T]]	=
-			JsonWriter[T].liftISeq	>=>
+	implicit def SeqWriter[T:JsonWriter]:JsonWriter[Seq[T]]	=
+			JsonWriter[T].liftSeq	>=>
 			JC.makeArray
 
 	private object MyTupleJsonWriters extends TupleJsonWriters
 	implicit def KeylessMapWriter[K:JsonWriter,V:JsonWriter]:JsonWriter[Map[K,V]]	=
-			ISeqWriter(MyTupleJsonWriters.Tuple2Writer[K,V]) contraMap (_.toVector)
+			SeqWriter(MyTupleJsonWriters.Tuple2Writer[K,V]) contraMap (_.toVector)
 }

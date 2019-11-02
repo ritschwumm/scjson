@@ -1,7 +1,6 @@
 package scjson.ast
 
 import scutil.base.implicits._
-import scutil.lang.ISeq
 
 object JsonValue {
 	val theNull:JsonValue								= JsonNull
@@ -11,8 +10,8 @@ object JsonValue {
 	def mkBoolean(it:Boolean):JsonValue					= JsonBoolean(it)
 	def mkNumber(it:BigDecimal):JsonValue				= JsonNumber(it)
 	def mkString(it:String):JsonValue					= JsonString(it)
-	def mkArray(it:ISeq[JsonValue]):JsonValue			= JsonArray(it)
-	def mkObject(it:ISeq[(String,JsonValue)]):JsonValue	= JsonObject(it)
+	def mkArray(it:Seq[JsonValue]):JsonValue			= JsonArray(it)
+	def mkObject(it:Seq[(String,JsonValue)]):JsonValue	= JsonObject(it)
 
 	val emptyString:JsonValue	= JsonString("")
 	val emptyArray:JsonValue	= JsonArray(List.empty)
@@ -27,8 +26,8 @@ sealed abstract class JsonValue {
 	def asBoolean:Option[Boolean]					= this matchOption { case JsonBoolean(x)	=> x }
 	def asNumber:Option[BigDecimal]					= this matchOption { case JsonNumber(x)		=> x }
 	def asString:Option[String]						= this matchOption { case JsonString(x)		=> x }
-	def asArray:Option[ISeq[JsonValue]]				= this matchOption { case JsonArray(x)		=> x }
-	def asObject:Option[ISeq[(String,JsonValue)]]	= this matchOption { case JsonObject(x)		=> x }
+	def asArray:Option[Seq[JsonValue]]				= this matchOption { case JsonArray(x)		=> x }
+	def asObject:Option[Seq[(String,JsonValue)]]	= this matchOption { case JsonObject(x)		=> x }
 }
 
 //------------------------------------------------------------------------------
@@ -106,17 +105,17 @@ final case class JsonString(value:String)		extends JsonValue {
 object JsonArray {
 	val empty	= new JsonArray(Vector.empty)
 
-	def apply(value:ISeq[JsonValue]):JsonArray	=
+	def apply(value:Seq[JsonValue]):JsonArray	=
 			if (value.isEmpty)	empty
 			else				new JsonArray(value)
 
 	object Var {
 		def apply(values:JsonValue*):JsonArray					= JsonArray(values.toVector)
-		def unapplySeq(array:JsonArray):Option[ISeq[JsonValue]]	= Some(array.value)
+		def unapplySeq(array:JsonArray):Option[Seq[JsonValue]]	= Some(array.value)
 	}
 }
 
-final case class JsonArray(value:ISeq[JsonValue])	extends JsonValue {
+final case class JsonArray(value:Seq[JsonValue])	extends JsonValue {
 	require(value ne null,	s"unexpected null value")
 	def get(index:Int):Option[JsonValue]	= value lift index
 	def ++ (that:JsonArray):JsonArray		= JsonArray(this.value ++ that.value)
@@ -127,17 +126,17 @@ final case class JsonArray(value:ISeq[JsonValue])	extends JsonValue {
 object JsonObject {
 	val empty	= new JsonObject(Vector.empty)
 
-	def apply(value:ISeq[(String,JsonValue)]):JsonObject	=
+	def apply(value:Seq[(String,JsonValue)]):JsonObject	=
 			if (value.isEmpty)	empty
 			else				new JsonObject(value)
 
 	object Var {
 		def apply(it:(String,JsonValue)*):JsonObject					= JsonObject(it.toVector)
-		def unapplySeq(it:JsonObject):Option[ISeq[(String,JsonValue)]]	= Some(it.value)
+		def unapplySeq(it:JsonObject):Option[Seq[(String,JsonValue)]]	= Some(it.value)
 	}
 }
 
-final case class JsonObject(value:ISeq[(String,JsonValue)])	extends JsonValue {
+final case class JsonObject(value:Seq[(String,JsonValue)])	extends JsonValue {
 	require(value ne null,	s"unexpected null value")
 	def get(key:String):Option[JsonValue]	= value collectFirst { case (k,v) if (k == key) => v }
 	def ++ (that:JsonObject):JsonObject		= JsonObject(this.value ++ that.value)

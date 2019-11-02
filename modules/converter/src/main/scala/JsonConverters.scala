@@ -17,10 +17,10 @@ object JsonConverters {
 	val expectString:JsonConverter[JsonValue,String]	=
 			Converter optional (_.asString, JsonError(show"expected JsonString"))
 
-	val expectArray:JsonConverter[JsonValue,ISeq[JsonValue]]	=
+	val expectArray:JsonConverter[JsonValue,Seq[JsonValue]]	=
 			Converter optional (_.asArray, JsonError(show"expected JsonArray"))
 
-	val expectObject:JsonConverter[JsonValue,ISeq[(String,JsonValue)]]	=
+	val expectObject:JsonConverter[JsonValue,Seq[(String,JsonValue)]]	=
 			Converter optional (_.asObject, JsonError(show"expected JsonObject"))
 
 	//------------------------------------------------------------------------------
@@ -42,10 +42,10 @@ object JsonConverters {
 	val makeString:JsonConverter[String,JsonValue]	=
 			Converter total JsonValue.mkString
 
-	val makeArray:JsonConverter[ISeq[JsonValue],JsonValue]	=
+	val makeArray:JsonConverter[Seq[JsonValue],JsonValue]	=
 			Converter total JsonValue.mkArray
 
-	val makeObject:JsonConverter[ISeq[(String,JsonValue)],JsonValue]	=
+	val makeObject:JsonConverter[Seq[(String,JsonValue)],JsonValue]	=
 			Converter total JsonValue.mkObject
 
 	//------------------------------------------------------------------------------
@@ -67,10 +67,10 @@ object JsonConverters {
 	def liftString(sub:JsonConverter[String,String]):JsonConverter[JsonValue,JsonValue]	=
 			expectString >=> sub >=> makeString
 
-	def liftArray(sub:JsonConverter[ISeq[JsonValue],ISeq[JsonValue]]):JsonConverter[JsonValue,JsonValue]	=
+	def liftArray(sub:JsonConverter[Seq[JsonValue],Seq[JsonValue]]):JsonConverter[JsonValue,JsonValue]	=
 			expectArray >=> sub >=> makeArray
 
-	def liftObject(sub:JsonConverter[ISeq[(String,JsonValue)],ISeq[(String,JsonValue)]]):JsonConverter[JsonValue,JsonValue]	=
+	def liftObject(sub:JsonConverter[Seq[(String,JsonValue)],Seq[(String,JsonValue)]]):JsonConverter[JsonValue,JsonValue]	=
 			expectObject >=> sub >=> makeObject
 
 	def liftObjectMap(sub:JsonConverter[Map[String,JsonValue],Map[String,JsonValue]]):JsonConverter[JsonValue,JsonValue]	=

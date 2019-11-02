@@ -1,7 +1,5 @@
 package scjson.pickle
 
-import scutil.lang.ISeq
-
 import scjson.ast._
 
 object JsonPickleUtil {
@@ -22,13 +20,13 @@ object JsonPickleUtil {
 				case _					=> fail("expected a JsonObject")
 			}
 
-	def objectValue(it:JsonValue):ISeq[(String,JsonValue)]	=
+	def objectValue(it:JsonValue):Seq[(String,JsonValue)]	=
 			it match {
 				case JsonObject(value)	=> value
 				case _					=> fail("expected a JsonObject")
 			}
 
-	def arrayValue(it:JsonValue):ISeq[JsonValue]	=
+	def arrayValue(it:JsonValue):Seq[JsonValue]	=
 			it match {
 				case JsonArray(value)	=> value
 				case _					=> fail("expected a JsonArray")

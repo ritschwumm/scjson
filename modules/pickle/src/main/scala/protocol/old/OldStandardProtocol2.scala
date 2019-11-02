@@ -11,7 +11,7 @@ for new development StandardProtocol is preferred
 trait OldStandardProtocol2
 		extends	NativeProtocol
 		with	ViaProtocol
-		with	ISeqProtocol
+		with	SeqProtocol
 		with	CollectionProtocol
 		with	OldOptionProtocol
 		with	EitherProtocol

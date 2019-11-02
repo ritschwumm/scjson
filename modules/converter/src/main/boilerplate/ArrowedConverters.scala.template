@@ -6,16 +6,16 @@ import scutil.lang.pimp.OptionImplicits._
 
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object ArrowedConverters {
-	[#def arrowed1ToSeq[T]:JsonConverter[Arrowed1[[#T#]],ISeq[T]]	=
+	[#def arrowed1ToSeq[T]:JsonConverter[Arrowed1[[#T#]],Seq[T]]	=
 			Converter total { case ([#t1# -> ]) => Vector([#t1#]) }#
 
 	]
 
 	//--------------------------------------------------------------------------------
 
-	[#def seqToArrowed1[T]:JsonConverter[ISeq[T],Arrowed1[[#T#]]]	=
+	[#def seqToArrowed1[T]:JsonConverter[Seq[T],Arrowed1[[#T#]]]	=
 		Converter {
-			case ISeq([#t1#]) =>
+			case Seq([#t1#]) =>
 				Validated good	(([#t1# -> ]))
 			case x	=>
 				Validated bad	JsonError(s"expected 1, not ${x.size.toString} value(s)")

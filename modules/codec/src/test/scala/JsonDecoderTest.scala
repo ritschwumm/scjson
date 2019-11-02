@@ -2,8 +2,6 @@ package scjson.codec
 
 import org.specs2.mutable._
 
-import scutil.lang._
-
 import scjson.ast._
 
 class JsonDecoderTest extends Specification {
@@ -95,17 +93,17 @@ class JsonDecoderTest extends Specification {
 		}
 
 		"decode arrays with 0 elements" in {
-			(JsonCodec decode "[]") mustEqual Right(JsonArray(ISeq()))
+			(JsonCodec decode "[]") mustEqual Right(JsonArray(Seq()))
 		}
 		"decode arrays with 1 elements" in {
-			(JsonCodec decode "[1]") mustEqual Right(JsonArray(ISeq(JsonNumber(1))))
+			(JsonCodec decode "[1]") mustEqual Right(JsonArray(Seq(JsonNumber(1))))
 		}
 		"decode arrays with 2 elements" in {
-			(JsonCodec decode "[1,2]") mustEqual Right(JsonArray(ISeq(JsonNumber(1),JsonNumber(2))))
+			(JsonCodec decode "[1,2]") mustEqual Right(JsonArray(Seq(JsonNumber(1),JsonNumber(2))))
 		}
 
 		"allow legal whitespace in arrays" in {
-			(JsonCodec decode "[ ]") mustEqual Right(JsonArray(ISeq()))
+			(JsonCodec decode "[ ]") mustEqual Right(JsonArray(Seq()))
 		}
 		"disallow illegal whitespace in arrays" in {
 			JsonCodec decode "[\u00a0]" must beLeft
@@ -115,10 +113,10 @@ class JsonDecoderTest extends Specification {
 			(JsonCodec decode "{}") mustEqual Right(JsonObject.empty)
 		}
 		"decode objects with 1 elements" in {
-			(JsonCodec decode "{\"a\":1}") mustEqual Right(JsonObject(ISeq("a"->JsonNumber(1))))
+			(JsonCodec decode "{\"a\":1}") mustEqual Right(JsonObject(Seq("a"->JsonNumber(1))))
 		}
 		"decode objects with 2 elements" in {
-			(JsonCodec decode "{\"a\":1,\"b\":2}") mustEqual Right(JsonObject(ISeq("a"->JsonNumber(1),"b"->JsonNumber(2))))
+			(JsonCodec decode "{\"a\":1,\"b\":2}") mustEqual Right(JsonObject(Seq("a"->JsonNumber(1),"b"->JsonNumber(2))))
 		}
 	}
 }

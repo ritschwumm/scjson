@@ -16,7 +16,7 @@ trait CollectionJsonReaders extends CollectionJsonReadersLow {
 			JsonReader[T].liftVector
 
 	implicit def SetReader[T:JsonReader]:JsonReader[Set[T]]	=
-			JsonReader[ISeq[T]] map { _.toSet }
+			JsonReader[Seq[T]] map { _.toSet }
 
 	implicit def NesReader[T:JsonReader]:JsonReader[Nes[T]]	=
 			VectorReader	>=>
@@ -24,16 +24,16 @@ trait CollectionJsonReaders extends CollectionJsonReadersLow {
 
 	implicit def KeyMapReader[K:JsonKeyReader,V:JsonReader]:JsonReader[Map[K,V]]	=
 			JC.expectObject		>=>
-			(KC.StringToKey >=> JsonKeyReader[K] pair JsonReader[V]).liftISeq	>=>
+			(KC.StringToKey >=> JsonKeyReader[K] pair JsonReader[V]).liftSeq	>=>
 			CC.pairsToMap
 }
 
 trait CollectionJsonReadersLow {
-	implicit def ISeqReader[T:JsonReader]:JsonReader[ISeq[T]]	=
+	implicit def SeqReader[T:JsonReader]:JsonReader[Seq[T]]	=
 			JC.expectArray >=>
-			JsonReader[T].liftISeq
+			JsonReader[T].liftSeq
 
 	private object MyTupleJsonReaders extends TupleJsonReaders
 	implicit def KeylessMapReader[K:JsonReader,V:JsonReader]:JsonReader[Map[K,V]]	=
-			ISeqReader(MyTupleJsonReaders.Tuple2Reader[K,V]) map (_.toMap)
+			SeqReader(MyTupleJsonReaders.Tuple2Reader[K,V]) map (_.toMap)
 }

@@ -5,7 +5,7 @@ object StandardProtocol2 extends StandardProtocol2
 trait StandardProtocol2
 		extends	NativeProtocol
 		with	ViaProtocol
-		with	ISeqProtocol
+		with	SeqProtocol
 		with	CollectionProtocol
 		with	NullOptionProtocol
 		with	EitherProtocol

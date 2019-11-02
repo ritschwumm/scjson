@@ -14,10 +14,10 @@ object SumConverters {
 			}
 
 	val makeTagged:JsonConverter[(String,JsonValue),JsonValue]	=
-			(Converter total { kv:(String,JsonValue) => ISeq(kv) })	>=>
+			(Converter total { kv:(String,JsonValue) => Seq(kv) })	>=>
 			JC.makeObject
 
-	def sumReader[T](partials:ISeq[(String,JsonReader[T])]):JsonReader[T]	=
+	def sumReader[T](partials:Seq[(String,JsonReader[T])]):JsonReader[T]	=
 			expectTagged >=>
 			Converter { case (k, v) =>
 				partials
@@ -25,14 +25,14 @@ object SumConverters {
 				.getOrElse		(Validated bad JsonError(show"unexpected key $k"))
 			}
 
-	def sumWriter[T](partials:ISeq[(String,JsonConverter[T,Option[JsonValue]])]):JsonWriter[T]	=
+	def sumWriter[T](partials:Seq[(String,JsonConverter[T,Option[JsonValue]])]):JsonWriter[T]	=
 			(Converter { (it:T) =>
-				val a:JsonResult[ISeq[Option[(String,JsonValue)]]]	=
+				val a:JsonResult[Seq[Option[(String,JsonValue)]]]	=
 						partials traverseValidated { case (k, conv) =>
 							conv convert it map { _ map ((k, _)) }
 						}
 
-				val b:JsonResult[ISeq[(String,JsonValue)]]	=
+				val b:JsonResult[Seq[(String,JsonValue)]]	=
 						a map { _.collapse }
 
 				val c:JsonResult[(String,JsonValue)]	=

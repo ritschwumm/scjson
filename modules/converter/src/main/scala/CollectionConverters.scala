@@ -4,10 +4,10 @@ import scutil.lang.implicits._
 import scutil.lang._
 
 object CollectionConverters {
-	def mapToPairs[E,K,V]:Converter[E,Map[K,V],ISeq[(K,V)]]	=
+	def mapToPairs[E,K,V]:Converter[E,Map[K,V],Seq[(K,V)]]	=
 			Converter total (_.toVector)
 
-	def pairsToMap[E,K,V]:Converter[E,ISeq[(K,V)],Map[K,V]]	=
+	def pairsToMap[E,K,V]:Converter[E,Seq[(K,V)],Map[K,V]]	=
 			Converter total (_.toMap)
 
 	//------------------------------------------------------------------------------

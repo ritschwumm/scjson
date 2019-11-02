@@ -47,7 +47,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 
 	/*
 	def caseClassFormat2[S1:Format,S2:Format,T:Fielding](apply:(S1,S2)=>T, unapply:T=>Option[(S1,S2)]):Format[T]	= {
-		val ISeq(k1,k2)	= Fielder[T]
+		val Seq(k1,k2)	= Fielder[T]
 		Format[T](
 			(out:T)	=> {
 				val fields	= unapply(out).get
@@ -99,7 +99,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 
 	private type PartialFormat[T]	= PBijection[T,JsonValue]
 
-	private def sumFormat[T](partials:ISeq[PartialFormat[T]]):Format[T]	=
+	private def sumFormat[T](partials:Seq[PartialFormat[T]]):Format[T]	=
 			Format[T](
 				(it:T)			=> partials collapseMapFirst { _ get it } getOrElse fail("no matching constructor found"),
 				(it:JsonValue)	=> partials collapseMapFirst { _ set it } getOrElse fail("no matching constructor found")

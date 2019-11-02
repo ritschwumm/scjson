@@ -1,7 +1,5 @@
 package scjson.ast
 
-import scutil.lang._
-
 object JsonNavigation {
 	implicit def extendJsonNavigation(value:JsonValue):JsonNavigation				= new JsonNavigation(Some(value))
 	implicit def extendJsonNavigationOption(value:Option[JsonValue]):JsonNavigation	= new JsonNavigation(value)
@@ -18,8 +16,8 @@ final class JsonNavigation(peer:Option[JsonValue]) {
 	def string:Option[String]						= peer	flatMap { _.asString	}
 	def boolean:Option[Boolean]						= peer	flatMap { _.asBoolean	}
 	def number:Option[BigDecimal]					= peer	flatMap { _.asNumber	}
-	def arraySeq:Option[ISeq[JsonValue]]			= peer	flatMap { _.asArray		}
-	def objectSeq:Option[ISeq[(String,JsonValue)]]	= peer	flatMap { _.asObject	}
+	def arraySeq:Option[Seq[JsonValue]]				= peer	flatMap { _.asArray		}
+	def objectSeq:Option[Seq[(String,JsonValue)]]	= peer	flatMap { _.asObject	}
 
 	//------------------------------------------------------------------------------
 

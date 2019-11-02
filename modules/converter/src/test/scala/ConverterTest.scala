@@ -110,8 +110,8 @@ class ConverterTest extends Specification {
 			val out:T		= unpickle[T](str)	getOrError "oops"
 			out mustEqual in
 		}
-		"roundtrip an ISeq" in {
-			type T	= ISeq[Int]
+		"roundtrip a Seq" in {
+			type T	= Seq[Int]
 			val in:T		= Vector(1)
 			val str:String	= pickle[T](in)		getOrError "oops"
 			val out:T		= unpickle[T](str)	getOrError "oops"

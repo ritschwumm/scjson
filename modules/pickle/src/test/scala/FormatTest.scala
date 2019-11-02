@@ -2,8 +2,6 @@ package scjson.pickle
 
 import org.specs2.mutable._
 
-import scutil.lang._
-
 import scjson.ast._
 import scjson.pickle.protocol._
 
@@ -24,7 +22,7 @@ final case class TestADT2(a:Int, b:Int)	extends TestADT
 
 class FormatTest extends Specification {
 	object MyProtocol extends StandardProtocol2 {
-		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(ISeq[(String,TestEnum)](
+		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(Seq[(String,TestEnum)](
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
 				"2"	-> TestEnum2))

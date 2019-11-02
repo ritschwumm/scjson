@@ -11,7 +11,7 @@ trait TupleJsonReaders {
 	[2..#implicit def Tuple1Reader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
 			JC.expectArray	>=>
 			Converter {
-				case ISeq([#t1#])	=>
+				case Seq([#t1#])	=>
 					[#(JsonReader[T1] convert t1)# zip
 					] map
 					unarrow1
