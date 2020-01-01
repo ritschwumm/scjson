@@ -3,7 +3,7 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.182.0",
+	version			:= "0.183.0",
 
 	scalaVersion	:= "2.13.1",
 	scalacOptions	++= Seq(
@@ -95,7 +95,7 @@ lazy val `scjson-ast`	=
 		.enablePlugins()
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.164.0"				% "compile"
+				"de.djini"			%%%	"scutil-base"	% "0.165.0"				% "compile"
 			)
 		)
 		.jvmSettings()
@@ -113,8 +113,8 @@ lazy val `scjson-codec`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%%	"scutil-base"	% "0.164.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.8.0"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.165.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.8.1"				% "test"
 			)
 		)
 		.jvmSettings()
@@ -136,8 +136,8 @@ lazy val `scjson-converter`	=
 		.settings(
 			libraryDependencies	++= Seq(
 				//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-				"de.djini"			%%%	"scutil-base"	% "0.164.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.8.0"				% "test"
+				"de.djini"			%%%	"scutil-base"	% "0.165.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.8.1"				% "test"
 			),
 			// getParentFile because we are actually in .jvm or .js due to cross compilation
 			Compile / boilerplateSource	:= baseDirectory.value.getParentFile / "src" / "main" / "boilerplate"
@@ -162,8 +162,8 @@ lazy val `scjson-pickle`	=
 				// TODO could this be a provided dependency?
 				// TODO is this dependency necessary at all?
 				"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-				"de.djini"			%%	"scutil-base"	% "0.164.0"				% "compile",
-				"org.specs2"		%%	"specs2-core"	% "4.8.0"				% "test"
+				"de.djini"			%%	"scutil-base"	% "0.165.0"				% "compile",
+				"org.specs2"		%%	"specs2-core"	% "4.8.1"				% "test"
 			),
 			Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
 		)
@@ -178,7 +178,7 @@ lazy val `scjson-io`	=
 		)
 		.settings(
 			libraryDependencies	++= Seq(
-				"de.djini"			%%	"scutil-core"	% "0.164.0"				% "compile"
+				"de.djini"			%%	"scutil-core"	% "0.165.0"				% "compile"
 			)
 		)
 
