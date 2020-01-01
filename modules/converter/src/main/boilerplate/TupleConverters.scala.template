@@ -7,7 +7,7 @@ import scutil.lang.pimp.OptionImplicits._
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object TupleConverters {
 	[#def tuple1ToSeq[T]:JsonConverter[([#T#]),Seq[T]]	=
-			Converter total { case ([#t1#]) => Vector([#t1#]) }#
+		Converter total { case ([#t1#]) => Vector([#t1#]) }#
 
 	]
 
@@ -26,25 +26,25 @@ object TupleConverters {
 	//--------------------------------------------------------------------------------
 
 	[#def tuple1ToMap[E,K,V]([#k1:K#]):Converter[E,([#V#]),Map[K,V]]	=
-			Converter total { case ([#t1#])	=>
-				Map([#k1 -> t1#])
-			}#
+		Converter total { case ([#t1#])	=>
+			Map([#k1 -> t1#])
+		}#
 
 	]
 
 	//--------------------------------------------------------------------------------
 
 	[#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],([#V#])]	=
-			Converter { (it:Map[K,V]) =>
-				if (it.size == 1) {
-					[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# zip
-					] map
-					unarrow1
-				}
-				else {
-					Validated bad JsonError(s"expected 1, not ${it.size.toString} value(s)")
-				}
-			}#
+		Converter { (it:Map[K,V]) =>
+			if (it.size == 1) {
+				[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# zip
+				] map
+				unarrow1
+			}
+			else {
+				Validated bad JsonError(s"expected 1, not ${it.size.toString} value(s)")
+			}
+		}#
 	]
 
 }

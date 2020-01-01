@@ -14,7 +14,7 @@ object CaseClassProtocol extends CaseClassProtocol
 
 trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
-			Format[T](constant(JsonObject.empty), constant(singleton))
+		Format[T](constant(JsonObject.empty), constant(singleton))
 
 	def caseClassFormat0[T](apply:()=>T, unapply:T=>Boolean):Format[T]	=
 		Format[T](
@@ -77,7 +77,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 
 	/** uses a field with an empty name for the specific constructor */
 	def caseClassSumFormat[T](summands:CaseSummand[T,_<:T]*):Format[T]	=
-			sumFormat(summands.toVector map (new InlinePartialFormat(_).pf))
+		sumFormat(summands.toVector map (new InlinePartialFormat(_).pf))
 
 
 	/** injects the type tag as a field with an empty name into an existing object */
@@ -100,15 +100,15 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	private type PartialFormat[T]	= PBijection[T,JsonValue]
 
 	private def sumFormat[T](partials:Seq[PartialFormat[T]]):Format[T]	=
-			Format[T](
-				(it:T)			=> partials collapseMapFirst { _ get it } getOrElse fail("no matching constructor found"),
-				(it:JsonValue)	=> partials collapseMapFirst { _ set it } getOrElse fail("no matching constructor found")
-			)
+		Format[T](
+			(it:T)			=> partials collapseMapFirst { _ get it } getOrElse fail("no matching constructor found"),
+			(it:JsonValue)	=> partials collapseMapFirst { _ set it } getOrElse fail("no matching constructor found")
+		)
 
 	object CaseSummand {
 		/** DSL for name -> format construction */
 		implicit def namedSummand[T,C<:T:ClassTag](pair:(String, Format[C])):CaseSummand[T,C]	=
-				CaseSummand(pair._1, pair._2)
+			CaseSummand(pair._1, pair._2)
 	}
 
 	/** NOTE this is not erasure-safe */
@@ -120,7 +120,6 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 			else						origTag
 		}
 
-		def castValue(value:T):Option[C]	=
-				tag unapply value
+		def castValue(value:T):Option[C]	= tag unapply value
 	}
 }

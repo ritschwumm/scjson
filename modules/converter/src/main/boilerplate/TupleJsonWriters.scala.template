@@ -12,13 +12,13 @@ import scjson.converter.{
 
 trait TupleJsonWriters {
 	[#implicit def Tuple1Writer[[#T1:JsonWriter#]]:JsonWriter[([#T1#])]	=
-			Converter[JsonError,([#T1#]),([#JsonValue#])] { case ([#t1#]) =>
-				[#(JsonWriter[T1] convert t1)#	zip
-				]	map
-				unarrow1
-			} >=>
-			TC.tuple1ToSeq >=>
-			JC.makeArray#
+		Converter[JsonError,([#T1#]),([#JsonValue#])] { case ([#t1#]) =>
+			[#(JsonWriter[T1] convert t1)#	zip
+			]	map
+			unarrow1
+		} >=>
+		TC.tuple1ToSeq >=>
+		JC.makeArray#
 
 	]
 }

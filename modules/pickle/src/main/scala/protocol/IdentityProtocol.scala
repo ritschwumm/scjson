@@ -10,8 +10,8 @@ object IdentityProtocol extends IdentityProtocol
 /** allows serialization and deserialization of JsonValue as JsonValue */
 trait IdentityProtocol {
 	implicit def PassThroughFormat[T<:JsonValue]:Format[T]	=
-			Format[T](
-				identity,
-				downcast[T]
-			)
+		Format[T](
+			identity,
+			downcast[T]
+		)
 }

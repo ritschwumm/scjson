@@ -6,5 +6,5 @@ import scjson.converter.{
 
 trait NewtypeJsonWriters {
 	def newtypeWriter[S,T1:JsonWriter](unapply:S=>Option[T1]):JsonWriter[S]	=
-			(AU unapply1 unapply)	>=> JsonWriter[T1]
+		(AU unapply1 unapply)	>=> JsonWriter[T1]
 }

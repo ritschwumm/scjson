@@ -9,8 +9,8 @@ object EnumProtocol extends EnumProtocol
 
 trait EnumProtocol {
 	def enumFormat[T](values:Seq[(String,T)]):Format[T]	=
-			Format[T](
-				values mapToMap { case (k,v) => (v, JsonString(k)) },
-				values mapToMap { case (k,v) => (JsonString(k), v) }
-			)
+		Format[T](
+			values mapToMap { case (k,v) => (v, JsonString(k)) },
+			values mapToMap { case (k,v) => (JsonString(k), v) }
+		)
 }

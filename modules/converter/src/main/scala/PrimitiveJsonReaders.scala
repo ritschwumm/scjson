@@ -7,26 +7,26 @@ import scjson.converter.{
 
 trait PrimitiveJsonReaders {
 	implicit val StringReader:JsonReader[String]	=
-			JC.expectString
+		JC.expectString
 
 	implicit val BooleanReader:JsonReader[Boolean]	=
-			JC.expectBoolean
+		JC.expectBoolean
 
 	implicit val IntReader:JsonReader[Int]	=
-			JC.expectNumber >=> NB.BigDecimalToInt
+		JC.expectNumber >=> NB.BigDecimalToInt
 
 	implicit val LongReader:JsonReader[Long]	=
-			JC.expectNumber >=> NB.BigDecimalToLong
+		JC.expectNumber >=> NB.BigDecimalToLong
 
 	implicit val BigIntReader:JsonReader[BigInt]	=
-			JC.expectNumber >=> NB.BigDecimalToBigInt
+		JC.expectNumber >=> NB.BigDecimalToBigInt
 
 	implicit val FloatReader:JsonReader[Float]	=
-			JC.expectNumber >=> NB.BigDecimalToFloat
+		JC.expectNumber >=> NB.BigDecimalToFloat
 
 	implicit val DoubleReader:JsonReader[Double]	=
-			JC.expectNumber >=> NB.BigDecimalToDouble
+		JC.expectNumber >=> NB.BigDecimalToDouble
 
 	implicit val BigDecimalReader:JsonReader[BigDecimal]	=
-			JC.expectNumber
+		JC.expectNumber
 }

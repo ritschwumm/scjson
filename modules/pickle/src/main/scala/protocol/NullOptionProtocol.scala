@@ -10,16 +10,16 @@ object NullOptionProtocol extends NullOptionProtocol
 trait LowPrioNullOptionProtocol {
 	// alternative value or null
 	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
-			Format[Option[T]](
-				_ match {
-					case None			=> JsonNull
-					case Some(value)	=> doWrite(value)
-				},
-				_ match {
-					case JsonNull	=> None
-					case js			=> Some(doReadUnsafe[T](js))
-				}
-			)
+		Format[Option[T]](
+			_ match {
+				case None			=> JsonNull
+				case Some(value)	=> doWrite(value)
+			},
+			_ match {
+				case JsonNull	=> None
+				case js			=> Some(doReadUnsafe[T](js))
+			}
+		)
 }
 
 trait NullOptionProtocol extends LowPrioNullOptionProtocol {
@@ -28,18 +28,18 @@ trait NullOptionProtocol extends LowPrioNullOptionProtocol {
 
 	// alternative {some} or {none}
 	implicit def OptionOptionFormat[T](implicit ev:Format[Option[T]]):Format[Option[Option[T]]]	=
-			Format[Option[Option[T]]](
-				_ match {
-					case Some(value)	=> JsonObject.Var(someTag -> doWrite(value))
-					case None			=> JsonObject.Var(noneTag -> JsonTrue)
-				},
-				(in:JsonValue)	=> {
-					val map	= objectMap(in)
-					(map get someTag, map get noneTag) match {
-						case (Some(js), None)	=> Some(doReadUnsafe[Option[T]](js))
-						case (None, Some(js))	=> None
-						case _					=> fail("unexpected option")
-					}
+		Format[Option[Option[T]]](
+			_ match {
+				case Some(value)	=> JsonObject.Var(someTag -> doWrite(value))
+				case None			=> JsonObject.Var(noneTag -> JsonTrue)
+			},
+			(in:JsonValue)	=> {
+				val map	= objectMap(in)
+				(map get someTag, map get noneTag) match {
+					case (Some(js), None)	=> Some(doReadUnsafe[Option[T]](js))
+					case (None, Some(js))	=> None
+					case _					=> fail("unexpected option")
 				}
-			)
+			}
+		)
 }

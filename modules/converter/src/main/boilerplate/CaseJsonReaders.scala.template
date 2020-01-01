@@ -12,23 +12,23 @@ import scjson.converter.{
 
 trait CaseJsonReaders extends UnitJsonReaders {
 	def coReader[T](value:T):JsonReader[T]	=
-			JsonReader[Unit] map constant(value)
+		JsonReader[Unit] map constant(value)
 
 	//--------------------------------------------------------------------------------
 
 	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
-			JC.expectObjectMap	>=>
-			Converter { map =>
-				if (map.isEmpty)	Validated good apply()
-				else				Validated bad JsonError(s"expected zero elements, got ${map.size.toString}")
-			}
+		JC.expectObjectMap	>=>
+		Converter { map =>
+			if (map.isEmpty)	Validated good apply()
+			else				Validated bad JsonError(s"expected zero elements, got ${map.size.toString}")
+		}
 
 	[#def cc1Reader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S, [#k1:String#]):JsonReader[S]	=
-			JC.expectObjectMap							>=>
-			AC.mapToArrowed1[String,JsonValue]([#k1#])	>=>
-			// TODO scutil use mapN
-			([#JsonReader[T1]# pair ]) 					>=>
-			(AU apply1 apply contraMap unarrow1)#
+		JC.expectObjectMap							>=>
+		AC.mapToArrowed1[String,JsonValue]([#k1#])	>=>
+		// TODO scutil use mapN
+		([#JsonReader[T1]# pair ]) 					>=>
+		(AU apply1 apply contraMap unarrow1)#
 	]
 
 	//--------------------------------------------------------------------------------

@@ -8,12 +8,12 @@ import scjson.ast._
  object JsonDecoder {
 	/** parse a Json formatted String into a JsonValue */
 	def decode(s:String):Either[JsonDecodeFailure,JsonValue]	=
-			try {
-				Right(new JsonDecoder(s).decode())
-			}
-			catch { case e:JsonDecodeException =>
-				Left(e.failure)
-			}
+		try {
+			Right(new JsonDecoder(s).decode())
+		}
+		catch { case e:JsonDecodeException =>
+			Left(e.failure)
+		}
 }
 
 private final class JsonDecoder(text:String) {
@@ -215,20 +215,20 @@ private final class JsonDecoder(text:String) {
 	//## chars
 
 	private def finished:Boolean	=
-			offset == text.length
+		offset == text.length
 
 	private def next:Int	=
-			if (finished)	NO_CHAR
-			else  			text charAt offset
+		if (finished)	NO_CHAR
+		else  			text charAt offset
 
 	/*
 	private def previous:Int	=
-			if (offset == 0)	NO_CHAR
-			else				text charAt offset-1
+		if (offset == 0)	NO_CHAR
+		else				text charAt offset-1
 	*/
 
 	private def from(before:Int):String	=
-			text substring (before, offset)
+		text substring (before, offset)
 
 	private def consume():Unit	= {
 		if (finished)	sys error "already finished"

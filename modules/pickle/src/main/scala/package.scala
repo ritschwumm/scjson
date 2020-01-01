@@ -13,15 +13,15 @@ package object pickle {
 
 	/** create a Format from the two halves of a Bijection */
 	def Format[T](writeFunc:T=>JsonValue, readFunc:JsonValue=>T):Format[T]	=
-			Bijection(writeFunc, readFunc)
+		Bijection(writeFunc, readFunc)
 
 	/** this is a bit of a hack to force a specific constructor to be used for decoding */
 	def SubtypeFormat[T,U<:JsonValue](writeFunc:T=>U, readFunc:U=>T):Format[T]	=
-			Bijection(writeFunc, it => readFunc(downcast(it)))
+		Bijection(writeFunc, it => readFunc(downcast(it)))
 
 	/** delay the construction of an actual Format until it's used */
 	def LazyFormat[T](sub: =>Format[T]):Format[T]	=
-			Format(it => sub get it, it => sub set it)
+		Format(it => sub get it, it => sub set it)
 
 	//------------------------------------------------------------------------------
 
@@ -35,10 +35,10 @@ package object pickle {
 
 	/** decode a value from its Json representation using an implicitly provided Format */
 	def doRead[T:Format](in:JsonValue):Either[JsonUnpickleFailure,T]	=
-			try {
-				Right(doReadUnsafe[T](in))
-			}
-			catch { case e:JsonUnpickleException =>
-				Left(e.failure)
-			}
+		try {
+			Right(doReadUnsafe[T](in))
+		}
+		catch { case e:JsonUnpickleException =>
+			Left(e.failure)
+		}
 }

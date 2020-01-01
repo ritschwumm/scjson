@@ -43,10 +43,10 @@ object JsonBoolean {
 
 sealed abstract class JsonBoolean extends JsonValue {
 	def value:Boolean	=
-			this match {
-				case JsonTrue	=> true
-				case JsonFalse	=> false
-			}
+		this match {
+			case JsonTrue	=> true
+			case JsonFalse	=> false
+		}
 }
 case object JsonTrue	extends JsonBoolean
 case object JsonFalse	extends JsonBoolean
@@ -92,8 +92,8 @@ object JsonString {
 	val empty	= new JsonString("")
 
 	def apply(value:String):JsonString	=
-			if (value == "")	empty
-			else				new JsonString(value)
+		if (value == "")	empty
+		else				new JsonString(value)
 }
 
 final case class JsonString(value:String)		extends JsonValue {
@@ -106,8 +106,8 @@ object JsonArray {
 	val empty	= new JsonArray(Vector.empty)
 
 	def apply(value:Seq[JsonValue]):JsonArray	=
-			if (value.isEmpty)	empty
-			else				new JsonArray(value)
+		if (value.isEmpty)	empty
+		else				new JsonArray(value)
 
 	object Var {
 		def apply(values:JsonValue*):JsonArray					= JsonArray(values.toVector)
@@ -127,8 +127,8 @@ object JsonObject {
 	val empty	= new JsonObject(Vector.empty)
 
 	def apply(value:Seq[(String,JsonValue)]):JsonObject	=
-			if (value.isEmpty)	empty
-			else				new JsonObject(value)
+		if (value.isEmpty)	empty
+		else				new JsonObject(value)
 
 	object Var {
 		def apply(it:(String,JsonValue)*):JsonObject					= JsonObject(it.toVector)

@@ -12,20 +12,20 @@ import scjson.converter.{
 
 trait CaseJsonWriters extends UnitJsonWriters {
 	def coWriter[T](value:T):JsonWriter[T]	=
-			JsonWriter[Unit] contraMap constant(())
+		JsonWriter[Unit] contraMap constant(())
 
 	//--------------------------------------------------------------------------------
 
 	def cc0Writer[S](unapply:S=>Boolean):JsonWriter[S]	=
-			(AU unapply0 unapply)													>=>
-			(Converter constant[JsonError,Unit,Map[String,JsonValue]] Map.empty)	>=>
-			JC.makeObjectMap
+		(AU unapply0 unapply)													>=>
+		(Converter constant[JsonError,Unit,Map[String,JsonValue]] Map.empty)	>=>
+		JC.makeObjectMap
 
 	[#def cc1Writer[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])], [#k1:String#]):JsonWriter[S]	=
-			(AU unapply1 unapply map arrow1)					>=>
-			([#JsonWriter[T1]# pair ])							>=>
-			AC.arrowed1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
-			JC.makeObjectMap#
+		(AU unapply1 unapply map arrow1)					>=>
+		([#JsonWriter[T1]# pair ])							>=>
+		AC.arrowed1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
+		JC.makeObjectMap#
 	]
 
 	//--------------------------------------------------------------------------------

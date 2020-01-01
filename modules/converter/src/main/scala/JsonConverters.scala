@@ -6,73 +6,73 @@ import scjson.ast._
 
 object JsonConverters {
 	val expectNull:JsonConverter[JsonValue,Unit]	=
-			Converter optional (_.asNull, JsonError(show"expected JsonNull"))
+		Converter optional (_.asNull, JsonError(show"expected JsonNull"))
 
 	val expectBoolean:JsonConverter[JsonValue,Boolean]	=
-			Converter optional (_.asBoolean, JsonError(show"expected JsonBoolean"))
+		Converter optional (_.asBoolean, JsonError(show"expected JsonBoolean"))
 
 	val expectNumber:JsonConverter[JsonValue,BigDecimal]	=
-			Converter optional (_.asNumber, JsonError(show"expected JsonNumber"))
+		Converter optional (_.asNumber, JsonError(show"expected JsonNumber"))
 
 	val expectString:JsonConverter[JsonValue,String]	=
-			Converter optional (_.asString, JsonError(show"expected JsonString"))
+		Converter optional (_.asString, JsonError(show"expected JsonString"))
 
 	val expectArray:JsonConverter[JsonValue,Seq[JsonValue]]	=
-			Converter optional (_.asArray, JsonError(show"expected JsonArray"))
+		Converter optional (_.asArray, JsonError(show"expected JsonArray"))
 
 	val expectObject:JsonConverter[JsonValue,Seq[(String,JsonValue)]]	=
-			Converter optional (_.asObject, JsonError(show"expected JsonObject"))
+		Converter optional (_.asObject, JsonError(show"expected JsonObject"))
 
 	//------------------------------------------------------------------------------
 
 	val expectObjectMap:JsonConverter[JsonValue,Map[String,JsonValue]]	=
-			expectObject map (_.toMap)
+		expectObject map (_.toMap)
 
 	//------------------------------------------------------------------------------
 
 	val makeNull:JsonConverter[Unit,JsonValue]	=
-			Converter total JsonValue.mkNull
+		Converter total JsonValue.mkNull
 
 	val makeBoolean:JsonConverter[Boolean,JsonValue]	=
-			Converter total JsonValue.mkBoolean
+		Converter total JsonValue.mkBoolean
 
 	val makeNumber:JsonConverter[BigDecimal,JsonValue]	=
-			Converter total JsonValue.mkNumber
+		Converter total JsonValue.mkNumber
 
 	val makeString:JsonConverter[String,JsonValue]	=
-			Converter total JsonValue.mkString
+		Converter total JsonValue.mkString
 
 	val makeArray:JsonConverter[Seq[JsonValue],JsonValue]	=
-			Converter total JsonValue.mkArray
+		Converter total JsonValue.mkArray
 
 	val makeObject:JsonConverter[Seq[(String,JsonValue)],JsonValue]	=
-			Converter total JsonValue.mkObject
+		Converter total JsonValue.mkObject
 
 	//------------------------------------------------------------------------------
 
 	val makeObjectMap:JsonConverter[Map[String,JsonValue],JsonValue]	=
-			makeObject contraMap { _.toVector }
+		makeObject contraMap { _.toVector }
 
 	//------------------------------------------------------------------------------
 
 	def liftNull(sub:JsonConverter[Unit,Unit]):JsonConverter[JsonValue,JsonValue]	=
-			expectNull >=> sub >=> makeNull
+		expectNull >=> sub >=> makeNull
 
 	def liftBoolean(sub:JsonConverter[Boolean,Boolean]):JsonConverter[JsonValue,JsonValue]	=
-			expectBoolean >=> sub >=> makeBoolean
+		expectBoolean >=> sub >=> makeBoolean
 
 	def liftNumber(sub:JsonConverter[BigDecimal,BigDecimal]):JsonConverter[JsonValue,JsonValue]	=
-			expectNumber >=> sub >=> makeNumber
+		expectNumber >=> sub >=> makeNumber
 
 	def liftString(sub:JsonConverter[String,String]):JsonConverter[JsonValue,JsonValue]	=
-			expectString >=> sub >=> makeString
+		expectString >=> sub >=> makeString
 
 	def liftArray(sub:JsonConverter[Seq[JsonValue],Seq[JsonValue]]):JsonConverter[JsonValue,JsonValue]	=
-			expectArray >=> sub >=> makeArray
+		expectArray >=> sub >=> makeArray
 
 	def liftObject(sub:JsonConverter[Seq[(String,JsonValue)],Seq[(String,JsonValue)]]):JsonConverter[JsonValue,JsonValue]	=
-			expectObject >=> sub >=> makeObject
+		expectObject >=> sub >=> makeObject
 
 	def liftObjectMap(sub:JsonConverter[Map[String,JsonValue],Map[String,JsonValue]]):JsonConverter[JsonValue,JsonValue]	=
-			expectObjectMap >=> sub >=> makeObjectMap
+		expectObjectMap >=> sub >=> makeObjectMap
 }

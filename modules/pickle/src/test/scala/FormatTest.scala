@@ -22,15 +22,19 @@ final case class TestADT2(a:Int, b:Int)	extends TestADT
 
 class FormatTest extends Specification {
 	object MyProtocol extends StandardProtocol2 {
-		implicit val TestEnum_F:Format[TestEnum]	= enumFormat(Seq[(String,TestEnum)](
+		implicit val TestEnum_F:Format[TestEnum]	=
+			enumFormat(Seq[(String,TestEnum)](
 				"0"	-> TestEnum0,
 				"1"	-> TestEnum1,
-				"2"	-> TestEnum2))
+				"2"	-> TestEnum2)
+			)
 
-		implicit val TestADT_F:Format[TestADT]	= caseClassSumFormat(
+		implicit val TestADT_F:Format[TestADT]	=
+			caseClassSumFormat(
 				"0"	-> TestADT0_F,
 				"1"	-> TestADT1_F,
-				"2"	-> TestADT2_F)
+				"2"	-> TestADT2_F
+			)
 		implicit lazy val TestADT0_F	= caseObjectFormat(TestADT0)
 		implicit lazy val TestADT1_F	= caseClassFormat1(TestADT1.apply, TestADT1.unapply)
 		implicit lazy val TestADT2_F	= caseClassFormat2(TestADT2.apply, TestADT2.unapply)

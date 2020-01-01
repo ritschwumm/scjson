@@ -10,9 +10,9 @@ import scjson.converter.{
 // NOTE not a standard format
 trait KeyedTupleJsonWriters {
 	[#implicit def Tuple1Writer[[#T1:JsonWriter#,]]:JsonWriter[([#T1#,])]	=
-			([#JsonWriter[T1]# pair ])	>=>
-			AC.arrowed1ToMap([#"1"#])	>=>
-			JC.makeObjectMap			contraMap
-			arrow1#
+		([#JsonWriter[T1]# pair ])	>=>
+		AC.arrowed1ToMap([#"1"#])	>=>
+		JC.makeObjectMap			contraMap
+		arrow1#
 	]
 }

@@ -7,26 +7,26 @@ import scjson.converter.{
 
 trait PrimitiveJsonWriters {
 	implicit val StringWriter:JsonWriter[String]	=
-			JC.makeString
+		JC.makeString
 
 	implicit val BooleanWriter:JsonWriter[Boolean]	=
-			JC.makeBoolean
+		JC.makeBoolean
 
 	implicit val IntWriter:JsonWriter[Int]	=
-			NB.IntToBigDecimal >=> JC.makeNumber
+		NB.IntToBigDecimal >=> JC.makeNumber
 
 	implicit val BigIntWriter:JsonWriter[BigInt]	=
-			NB.BigIntToBigDecimal >=> JC.makeNumber
+		NB.BigIntToBigDecimal >=> JC.makeNumber
 
 	implicit val LongWriter:JsonWriter[Long]	=
-			NB.LongToBigDecimal >=> JC.makeNumber
+		NB.LongToBigDecimal >=> JC.makeNumber
 
 	implicit val FloatWriter:JsonWriter[Float]	=
-			NB.FloatToBigDecimal >=> JC.makeNumber
+		NB.FloatToBigDecimal >=> JC.makeNumber
 
 	implicit val DoubleWriter:JsonWriter[Double]	=
-			NB.DoubleToBigDecimal >=> JC.makeNumber
+		NB.DoubleToBigDecimal >=> JC.makeNumber
 
 	implicit val BigDecimalWriter:JsonWriter[BigDecimal]	=
-			JC.makeNumber
+		JC.makeNumber
 }

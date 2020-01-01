@@ -5,77 +5,77 @@ import scutil.lang._
 
 object NumberBigDecimalConverters {
 	val IntToBigDecimal:JsonConverter[Int,BigDecimal]	=
-			Converter total { it => BigDecimal exact it.toLong }
+		Converter total { it => BigDecimal exact it.toLong }
 
 	val BigDecimalToInt:JsonConverter[BigDecimal,Int]	=
-			Converter { it =>
-				try {
-					Validated good it.toIntExact
-				}
-				catch { case e:ArithmeticException =>
-					// fractional or not fitting
-					Validated bad JsonError(show"${it} is not an Int")
-				}
+		Converter { it =>
+			try {
+				Validated good it.toIntExact
 			}
+			catch { case e:ArithmeticException =>
+				// fractional or not fitting
+				Validated bad JsonError(show"${it} is not an Int")
+			}
+		}
 
 	//------------------------------------------------------------------------------
 
 	val LongToBigDecimal:JsonConverter[Long,BigDecimal]	=
-			Converter total BigDecimal.exact
+		Converter total BigDecimal.exact
 
 	val BigDecimalToLong:JsonConverter[BigDecimal,Long]	=
-			Converter { it =>
-				try {
-					Validated good it.toLongExact
-				}
-				catch { case e:ArithmeticException =>
-					// fractional or not fitting
-					Validated bad JsonError(show"${it} is not a Long")
-				}
+		Converter { it =>
+			try {
+				Validated good it.toLongExact
 			}
+			catch { case e:ArithmeticException =>
+				// fractional or not fitting
+				Validated bad JsonError(show"${it} is not a Long")
+			}
+		}
 
 	//------------------------------------------------------------------------------
 
 	val BigIntToBigDecimal:JsonConverter[BigInt,BigDecimal]	=
-			Converter total BigDecimal.exact
+		Converter total BigDecimal.exact
 
 	val BigDecimalToBigInt:JsonConverter[BigDecimal,BigInt]	=
-			Converter { it =>
-				// fractional
-				it.toBigIntExact toGood JsonError(show"${it} is not a BigInt")
-			}
+		Converter { it =>
+			// fractional
+			it.toBigIntExact toGood JsonError(show"${it} is not a BigInt")
+		}
 
 	//------------------------------------------------------------------------------
 
 	val FloatToBigDecimal:JsonConverter[Float,BigDecimal]	=
-			Converter { it =>
-				try {
-					Validated good (BigDecimal exact it.toDouble)
-				}
-				catch { case e:NumberFormatException =>
-					// infinite or NaN
-					Validated bad JsonError(show"$it is not a BigDecimal")
-				}
+		Converter { it =>
+			try {
+				Validated good (BigDecimal exact it.toDouble)
 			}
+			catch { case e:NumberFormatException =>
+				// infinite or NaN
+				Validated bad JsonError(show"$it is not a BigDecimal")
+			}
+		}
 
 	// NOTE might return Double.NEGATIVE_INFINITY or Double.POSITIVE_INFINITY e
 	val BigDecimalToFloat:JsonConverter[BigDecimal,Float]	=
-			Converter total (_.toFloat)
+		Converter total (_.toFloat)
 
 	//------------------------------------------------------------------------------
 
 	val DoubleToBigDecimal:JsonConverter[Double,BigDecimal]	=
-			Converter { it =>
-				try {
-					Validated good (BigDecimal exact it)
-				}
-				catch { case e:NumberFormatException =>
-					// infinite or NaN
-					Validated bad JsonError(show"$it is not a BigDecimal")
-				}
+		Converter { it =>
+			try {
+				Validated good (BigDecimal exact it)
 			}
+			catch { case e:NumberFormatException =>
+				// infinite or NaN
+				Validated bad JsonError(show"$it is not a BigDecimal")
+			}
+		}
 
 	// NOTE might return Double.NEGATIVE_INFINITY or Double.POSITIVE_INFINITY
 	val BigDecimalToDouble:JsonConverter[BigDecimal,Double]	=
-			Converter total (_.toDouble)
+		Converter total (_.toDouble)
 }

@@ -10,5 +10,5 @@ object KeyJsonReaders extends KeyJsonReaders
 trait KeyJsonReaders {
 	// NOTE you need to call this explicitly
 	def keyToJsonReader[T](implicit ev:JsonKeyReader[T]):JsonReader[T]	=
-			JC.expectString >=> KC.StringToKey >=> ev
+		JC.expectString >=> KC.StringToKey >=> ev
 }

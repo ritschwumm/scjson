@@ -9,24 +9,24 @@ import scjson.converter.{
 
 trait TupleJsonReaders {
 	[2..#implicit def Tuple1Reader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
-			JC.expectArray	>=>
-			Converter {
-				case Seq([#t1#])	=>
-					[#(JsonReader[T1] convert t1)# zip
-					] map
-					unarrow1
-				case x	=>
-					Validated bad JsonError(s"expected 2 elements, got ${x.size.toString}")
-			}#
+		JC.expectArray	>=>
+		Converter {
+			case Seq([#t1#])	=>
+				[#(JsonReader[T1] convert t1)# zip
+				] map
+				unarrow1
+			case x	=>
+				Validated bad JsonError(s"expected 2 elements, got ${x.size.toString}")
+		}#
 
 	]
 
 	/*
 	[#def NewerTupleReader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
-			JC.expectArray	>=>
-			(TC.seqToTuple1 map arrow1)	>=>
-			([#JsonReader[T1]# pair ])	map
-			unarrow1#
+		JC.expectArray	>=>
+		(TC.seqToTuple1 map arrow1)	>=>
+		([#JsonReader[T1]# pair ])	map
+		unarrow1#
 
 	]
 	*/
