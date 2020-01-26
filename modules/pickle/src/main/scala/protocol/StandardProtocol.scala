@@ -1,8 +1,8 @@
 package scjson.pickle.protocol
 
-object StandardProtocol2 extends StandardProtocol2
+object StandardProtocol extends StandardProtocol
 
-trait StandardProtocol2
+trait StandardProtocol
 	extends	NativeProtocol
 	with	ViaProtocol
 	with	SeqProtocol

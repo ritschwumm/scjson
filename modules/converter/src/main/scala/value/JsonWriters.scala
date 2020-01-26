@@ -10,6 +10,7 @@ trait JsonWriters
 	with	EitherJsonWriters
 	with	NullOptionJsonWriters
 	with	EnumJsonWriters
+	with	SumJsonWriters
 	with	CollectionJsonWriters
 	with	CaseJsonWriters
 	with	JsonWritersLow

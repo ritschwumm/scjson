@@ -10,6 +10,7 @@ trait JsonReaders
 	with	EitherJsonReaders
 	with	NullOptionJsonReaders
 	with	EnumJsonReaders
+	with	SumJsonReaders
 	with	CollectionJsonReaders
 	with	CaseJsonReaders
 	with	JsonReadersLow

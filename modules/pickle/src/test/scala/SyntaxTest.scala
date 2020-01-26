@@ -3,7 +3,7 @@ package scjson.pickle.syntax
 import org.specs2.mutable._
 
 import scjson.ast._
-import scjson.pickle.protocol.StandardProtocol2._
+import scjson.pickle.protocol.StandardProtocol._
 
 class SyntaxTest extends Specification {
 	"syntax should" should {

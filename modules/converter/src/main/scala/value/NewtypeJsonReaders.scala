@@ -1,5 +1,7 @@
 package scjson.converter
 
+import scutil.lang.Bijection
+
 import scjson.converter.{
 	ApplyUnapplyConverters	=> AU
 }
@@ -7,4 +9,7 @@ import scjson.converter.{
 trait NewtypeJsonReaders {
 	def newtypeReader[S,T1:JsonReader](apply:(T1)=>S):JsonReader[S]	=
 		JsonReader[T1] >=> (AU apply1 apply)
+
+	def bijectionReader[S:JsonReader,T](bijection:Bijection[T,S]):JsonReader[T]	=
+		JsonReader[S] map bijection.set
 }

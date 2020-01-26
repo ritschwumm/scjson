@@ -5,7 +5,6 @@ import org.specs2.mutable._
 import scutil.lang._
 
 import scjson.ast._
-import scjson.converter.{ SumConverters => SC }
 
 import JsonFormat._
 
@@ -25,16 +24,16 @@ object TestAdt {
 	}
 
 	implicit val TestAdtReader:JsonReader[TestAdt]	=
-		SC sumReader Seq(
-			"TestAdt0"		-> SC.subReader(coReader(TestAdt0)),
-			"TestAdt1"		-> SC.subReader(cc1AutoReader(TestAdt1.apply)),
-			"TestAdt2"		-> SC.subReader(cc2AutoReader(TestAdt2.apply))
+		sumReaderVar(
+			"TestAdt0"		-> subReader(coReader(TestAdt0)),
+			"TestAdt1"		-> subReader(cc1AutoReader(TestAdt1.apply)),
+			"TestAdt2"		-> subReader(cc2AutoReader(TestAdt2.apply))
 		)
 	implicit val TestAdtWriter:JsonWriter[TestAdt]	=
-		SC sumWriter Seq(
-			"TestAdt0"		-> SC.subWriter(coWriter(TestAdt0),					P.TestAdt0.get),
-			"TestAdt1"		-> SC.subWriter(cc1AutoWriter(TestAdt1.unapply),	P.TestAdt1.get),
-			"TestAdt2"		-> SC.subWriter(cc2AutoWriter(TestAdt2.unapply),	P.TestAdt2.get)
+		sumWriterVar(
+			"TestAdt0"		-> subWriter(coWriter(TestAdt0),				P.TestAdt0.get),
+			"TestAdt1"		-> subWriter(cc1AutoWriter(TestAdt1.unapply),	P.TestAdt1.get),
+			"TestAdt2"		-> subWriter(cc2AutoWriter(TestAdt2.unapply),	P.TestAdt2.get)
 		)
 }
 
