@@ -8,7 +8,7 @@ import scjson.pickle.protocol.StandardProtocol2._
 class SyntaxTest extends Specification {
 	"syntax should" should {
 		"work with simple values" in {
-			jsonSimple(1) mustEqual JsonNumber(1)
+			jsonValue(1) mustEqual JsonNumber(1)
 		}
 		"work with arrays" in {
 			jsonArray(1, "test", false) mustEqual

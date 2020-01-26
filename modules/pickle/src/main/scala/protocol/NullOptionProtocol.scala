@@ -7,21 +7,6 @@ import JsonPickleUtil._
 
 object NullOptionProtocol extends NullOptionProtocol
 
-trait LowPrioNullOptionProtocol {
-	// alternative value or null
-	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
-		Format[Option[T]](
-			_ match {
-				case None			=> JsonNull
-				case Some(value)	=> doWrite(value)
-			},
-			_ match {
-				case JsonNull	=> None
-				case js			=> Some(doReadUnsafe[T](js))
-			}
-		)
-}
-
 trait NullOptionProtocol extends LowPrioNullOptionProtocol {
 	private val someTag	= "some"
 	private val noneTag	= "none"
@@ -40,6 +25,21 @@ trait NullOptionProtocol extends LowPrioNullOptionProtocol {
 					case (None, Some(js))	=> None
 					case _					=> fail("unexpected option")
 				}
+			}
+		)
+}
+
+trait LowPrioNullOptionProtocol {
+	// alternative value or null
+	implicit def OptionFormat[T:Format]:Format[Option[T]]	=
+		Format[Option[T]](
+			_ match {
+				case None			=> JsonNull
+				case Some(value)	=> doWrite(value)
+			},
+			_ match {
+				case JsonNull	=> None
+				case js			=> Some(doReadUnsafe[T](js))
 			}
 		)
 }

@@ -12,7 +12,7 @@ trait SumJsonWriters extends SumJsonWritersLow with UnitJsonWriters {
 		ASC altWriter ("left", "right")
 
 	/*
-	// replaced by OptionOptionWriter and OptionWriter in JsonWritersLow
+	// replaced by OptionOptionWriter and OptionWriter in SumJsonWritersLow
 	implicit def OptionWriter[T:JsonWriter]:JsonWriter[Option[T]]	=
 		optionToEither[JsonError,T]	>=>
 		ASC.altWriter("none", "some")

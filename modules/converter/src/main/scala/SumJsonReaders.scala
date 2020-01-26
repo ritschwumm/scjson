@@ -12,7 +12,7 @@ trait SumJsonReaders extends SumJsonReadersLow with UnitJsonReaders {
 		ASC altReader ("left", "right")
 
 	/*
-	// replaced by OptionOptionReader and OptionReader in JsonReadersLow
+	// replaced by OptionOptionReader and OptionReader in SumJsonReadersLow
 	implicit def OptionReader[T:JsonReader]:JsonReader[Option[T]]	=
 		altReader[Unit,T]("none", "some")	>=>
 		eitherToOption
