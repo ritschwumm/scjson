@@ -7,12 +7,13 @@ import scjson.ast._
 import scjson.converter.{
 	ArrowedConverters		=> AC,
 	JsonConverters			=> JC,
-	ApplyUnapplyConverters	=> AU
+	ApplyUnapplyConverters	=> AU,
+	UnitConverters			=> UC
 }
 
 trait CaseJsonReaders extends UnitJsonReaders {
 	def coReader[T](value:T):JsonReader[T]	=
-		JsonReader[Unit] map constant(value)
+		UC.UnitReader map constant(value)
 
 	//--------------------------------------------------------------------------------
 

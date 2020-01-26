@@ -19,7 +19,7 @@ class NullOptionTest extends Specification {
 
 	"nested option" should {
 		"serialize None as {none:true}" in {
-			doWrite(None:Option[Option[String]]) mustEqual JsonObject.Var("none" -> JsonTrue)
+			doWrite(None:Option[Option[String]]) mustEqual JsonObject.Var("none" -> Empty)
 		}
 		"serialize Some(None) as {some:null}" in {
 			doWrite(Some(None):Option[Option[String]]) mustEqual JsonObject.Var("some" -> JsonNull)
@@ -31,10 +31,10 @@ class NullOptionTest extends Specification {
 
 	"double nested option" should {
 		"serialize None as {none:true}" in {
-			doWrite(None:Option[Option[Option[String]]]) mustEqual JsonObject.Var("none" -> JsonTrue)
+			doWrite(None:Option[Option[Option[String]]]) mustEqual JsonObject.Var("none" -> Empty)
 		}
 		"serialize Some(None) as {some:{none:true}}" in {
-			doWrite(Some(None):Option[Option[Option[String]]]) mustEqual JsonObject.Var("some" -> JsonObject.Var("none" -> JsonTrue))
+			doWrite(Some(None):Option[Option[Option[String]]]) mustEqual JsonObject.Var("some" -> JsonObject.Var("none" -> Empty))
 		}
 		"serialize Some(Some(None)) as {some:{some:null}}" in {
 			doWrite(Some(Some(None)):Option[Option[Option[String]]]) mustEqual JsonObject.Var("some" -> JsonObject.Var("some" -> JsonNull))
@@ -43,4 +43,7 @@ class NullOptionTest extends Specification {
 			doWrite(Some(Some(Some("hallo"))):Option[Option[Option[String]]]) mustEqual JsonObject.Var("some" -> JsonObject.Var("some" -> JsonString("hallo")))
 		}
 	}
+
+	// TODO it seems in old times, we encoded ```none``` as ```{ "none": true }``` and now we use ```{ "none": {} }```
+	def Empty:JsonValue	= JsonTrue
 }

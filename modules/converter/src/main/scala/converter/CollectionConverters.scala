@@ -28,7 +28,7 @@ object CollectionConverters {
 				(it get k2 toGood JsonError(show"missing element ${k2.toString}"))
 			}
 			else {
-				Validated bad JsonError(show"expected 2 values, got ${it.size}")
+				JsonBad(show"expected 2 values, got ${it.size}")
 			}
 		}
 
@@ -46,10 +46,10 @@ object CollectionConverters {
 			if (it.size == 1) {
 				(it get k1 map { v => Validated good[JsonError,Either[V,V]] (Left(v) :Either[V,V]) })	orElse
 				(it get k2 map { v => Validated good[JsonError,Either[V,V]] (Right(v):Either[V,V]) })	getOrElse
-				(Validated bad JsonError(show"missing element ${k1.toString} or ${k2.toString}"))
+				(JsonBad(show"missing element ${k1.toString} or ${k2.toString}"))
 			}
 			else {
-				Validated bad JsonError(show"expected 1 value, got ${it.size}")
+				JsonBad(show"expected 1 value, got ${it.size}")
 			}
 		}
 

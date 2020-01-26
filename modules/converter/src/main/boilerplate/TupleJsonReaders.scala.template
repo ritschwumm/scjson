@@ -22,7 +22,7 @@ trait TupleJsonReaders {
 	]
 
 	/*
-	[#def NewerTupleReader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
+	[2..#def NewerTupleReader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
 		JC.expectArray	>=>
 		(TC.seqToTuple1 map arrow1)	>=>
 		([#JsonReader[T1]# pair ])	map

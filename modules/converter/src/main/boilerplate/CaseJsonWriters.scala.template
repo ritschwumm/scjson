@@ -7,12 +7,13 @@ import scjson.ast._
 import scjson.converter.{
 	ArrowedConverters		=> AC,
 	JsonConverters			=> JC,
-	ApplyUnapplyConverters	=> AU
+	ApplyUnapplyConverters	=> AU,
+	UnitConverters			=> UC
 }
 
 trait CaseJsonWriters extends UnitJsonWriters {
 	def coWriter[T](value:T):JsonWriter[T]	=
-		JsonWriter[Unit] contraMap constant(())
+		UC.UnitWriter contraMap constant(())
 
 	//--------------------------------------------------------------------------------
 

@@ -1,8 +1,6 @@
-package scjson.pickle.protocol.old
+package scjson.pickle.protocol
 
 import scjson.pickle._
-
-import scjson.pickle.protocol.OptionProtocols
 
 object OldOptionProtocol extends OldOptionProtocol
 

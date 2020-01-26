@@ -5,7 +5,7 @@ import scjson.converter.{
 	AltSeqConverters		=> ASC
 }
 trait OldOptionJsonWriters extends UnitJsonWriters {
-	// replaced by OptionOptionWriter and OptionNullWriter in NullOptionJsonWriters(Low)
+	/** replaced by OptionOptionWriter and OptionNullWriter in NullOptionJsonWriters(Low) */
 	implicit def OldOptionWriter[T:JsonWriter]:JsonWriter[Option[T]]	=
 		CC.optionToEither[JsonError,T]	>=>
 		ASC.altWriter("none", "some")

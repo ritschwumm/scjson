@@ -9,7 +9,7 @@ import scjson.converter.{
 
 // NOTE not a standard format
 trait KeyedTupleJsonReaders {
-	[#implicit def KeyedTuple1Reader[[#T1:JsonReader#,]]:JsonReader[([#T1#,])]	=
+	[2..#implicit def KeyedTuple1Reader[[#T1:JsonReader#,]]:JsonReader[([#T1#,])]	=
 		JC.expectObjectMap			>=>
 		AC.mapToArrowed1([#"1"#])	>=>
 		// TODO scutil use mapN

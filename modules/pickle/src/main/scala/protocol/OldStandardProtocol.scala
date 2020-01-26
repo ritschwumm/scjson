@@ -1,14 +1,12 @@
-package scjson.pickle.protocol.old
+package scjson.pickle.protocol
 
-import scjson.pickle.protocol._
-
-object OldStandardProtocol2 extends OldStandardProtocol2
+object OldStandardProtocol extends OldStandardProtocol
 
 /**
 uses OldOptionProtocol instead of NullOptionProtocol,
 for new development StandardProtocol is preferred
 */
-trait OldStandardProtocol2
+trait OldStandardProtocol
 	extends	NativeProtocol
 	with	ViaProtocol
 	with	SeqProtocol

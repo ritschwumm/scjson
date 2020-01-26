@@ -3,7 +3,7 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.189.0",
+	version			:= "0.190.0",
 
 	scalaVersion	:= "2.13.1",
 	scalacOptions	++= Seq(
@@ -115,7 +115,7 @@ lazy val `scjson-codec`	=
 	.settings(
 		libraryDependencies	++= Seq(
 			"de.djini"			%%%	"scutil-base"	% "0.170.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.8.1"				% "test"
+			"org.specs2"		%%	"specs2-core"	% "4.8.3"				% "test"
 		)
 	)
 	.jvmSettings()
@@ -138,7 +138,7 @@ lazy val `scjson-converter`	=
 		libraryDependencies	++= Seq(
 			//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
 			"de.djini"			%%%	"scutil-base"	% "0.170.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.8.1"				% "test"
+			"org.specs2"		%%	"specs2-core"	% "4.8.3"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
 		Compile / boilerplateSource	:= baseDirectory.value.getParentFile / "src" / "main" / "boilerplate"
@@ -164,7 +164,7 @@ lazy val `scjson-pickle`	=
 			// TODO is this dependency necessary at all?
 			"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
 			"de.djini"			%%	"scutil-base"	% "0.170.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.8.1"				% "test"
+			"org.specs2"		%%	"specs2-core"	% "4.8.3"				% "test"
 		),
 		Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
 	)

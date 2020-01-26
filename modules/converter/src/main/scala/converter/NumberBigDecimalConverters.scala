@@ -14,7 +14,7 @@ object NumberBigDecimalConverters {
 			}
 			catch { case e:ArithmeticException =>
 				// fractional or not fitting
-				Validated bad JsonError(show"${it} is not an Int")
+				JsonBad(show"${it} is not an Int")
 			}
 		}
 
@@ -30,7 +30,7 @@ object NumberBigDecimalConverters {
 			}
 			catch { case e:ArithmeticException =>
 				// fractional or not fitting
-				Validated bad JsonError(show"${it} is not a Long")
+				JsonBad(show"${it} is not a Long")
 			}
 		}
 
@@ -54,7 +54,7 @@ object NumberBigDecimalConverters {
 			}
 			catch { case e:NumberFormatException =>
 				// infinite or NaN
-				Validated bad JsonError(show"$it is not a BigDecimal")
+				JsonBad(show"$it is not a BigDecimal")
 			}
 		}
 
@@ -71,7 +71,7 @@ object NumberBigDecimalConverters {
 			}
 			catch { case e:NumberFormatException =>
 				// infinite or NaN
-				Validated bad JsonError(show"$it is not a BigDecimal")
+				JsonBad(show"$it is not a BigDecimal")
 			}
 		}
 

@@ -8,7 +8,9 @@ import scjson.converter.{
 	AltSeqConverters		=> ASC
 }
 
-trait NullOptionJsonReaders extends NullOptionJsonReadersLow with UnitJsonReaders {
+trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
+	private implicit val NullOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
+
 	implicit def OptionOptionReader[T](implicit ev:JsonReader[Option[T]]):JsonReader[Option[Option[T]]]	=
 		ASC.altReader[Unit,Option[T]]("none", "some")	>=>
 		CC.eitherToOption
