@@ -79,20 +79,19 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	def caseClassSumFormat[T](summands:CaseSummand[T,_<:T]*):Format[T]	=
 		sumFormat(summands.toVector map (new InlinePartialFormat(_).pf))
 
-
 	/** injects the type tag as a field with an empty name into an existing object */
 	private class InlinePartialFormat[T,C<:T](summand:CaseSummand[T,C]) {
 		import summand._
 
 		def write(value:T):Option[JsonValue]	=
-				castValue(value) map { it =>
-					JsonObject.Var(typeTag -> JsonString(identifier)) ++
-					downcast[JsonObject](format get it)
-				}
+			castValue(value) map { it =>
+				JsonObject.Var(typeTag -> JsonString(identifier)) ++
+				downcast[JsonObject](format get it)
+			}
 		def read(json:JsonValue):Option[T]	=
-				objectValue(json)
-				.exists	{ _ == ((typeTag, JsonString(identifier))) }
-				.option	{ format set json }
+			objectValue(json)
+			.exists	{ _ == ((typeTag, JsonString(identifier))) }
+			.option	{ format set json }
 
 		def pf:PartialFormat[T]	= PBijection(write, read)
 	}

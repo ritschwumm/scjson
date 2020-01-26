@@ -17,6 +17,8 @@ object SumConverters {
 		(Converter total { kv:(String,JsonValue) => Seq(kv) })	>=>
 		JC.makeObject
 
+	//------------------------------------------------------------------------------
+
 	def sumReader[T](partials:Seq[(String,JsonReader[T])]):JsonReader[T]	=
 		expectTagged >=>
 		Converter { case (k, v) =>
@@ -33,7 +35,7 @@ object SumConverters {
 				}
 
 			val b:JsonResult[Seq[(String,JsonValue)]]	=
-					a map { _.collapse }
+				a map { _.collapse }
 
 			val c:JsonResult[(String,JsonValue)]	=
 				b flatMap { pairs =>
@@ -48,6 +50,8 @@ object SumConverters {
 			c
 		}) >=>
 		makeTagged
+
+	//------------------------------------------------------------------------------
 
 	def subReader[Super,Sub<:Super](reader:JsonReader[Sub]):JsonReader[Super]	=
 		Converter(reader.convert)
