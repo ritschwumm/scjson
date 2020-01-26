@@ -7,7 +7,8 @@ trait JsonWriters
 	with	UnitJsonWriters
 	with	NewtypeJsonWriters
 	with	TupleJsonWriters
-	with	SumJsonWriters
+	with	EitherJsonWriters
+	with	NullOptionJsonWriters
 	with	EnumJsonWriters
 	with	CollectionJsonWriters
 	with	CaseJsonWriters

@@ -52,4 +52,12 @@ object CollectionConverters {
 				Validated bad JsonError(show"expected 1 value, got ${it.size}")
 			}
 		}
+
+	//------------------------------------------------------------------------------
+
+	def optionToEither[E,T]:Converter[E,Option[T],Either[Unit,T]]	=
+		Converter total (_.fold[Either[Unit,T]](Left(()))(Right(_)))
+
+	def eitherToOption[E,T]:Converter[E,Either[Unit,T],Option[T]]	=
+		Converter total (_.toOption)
 }

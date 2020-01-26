@@ -5,8 +5,7 @@ import scjson.converter.{
 	KeyConverters	=> KC
 }
 
-object KeyJsonWriters extends KeyJsonWriters
-
+/** JsonKeyWriter can double JsonWriter */
 trait KeyJsonWriters {
 	// NOTE you need to call this explicitly
 	def keyToJsonWriter[T](implicit ev:JsonKeyWriter[T]):JsonWriter[T]	=

@@ -5,8 +5,7 @@ import scjson.converter.{
 	KeyConverters	=> KC
 }
 
-object KeyJsonReaders extends KeyJsonReaders
-
+/** JsonKeyReader can double JsonReader */
 trait KeyJsonReaders {
 	// NOTE you need to call this explicitly
 	def keyToJsonReader[T](implicit ev:JsonKeyReader[T]):JsonReader[T]	=

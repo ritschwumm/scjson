@@ -54,7 +54,8 @@ object SumConverters {
 	//------------------------------------------------------------------------------
 
 	def subReader[Super,Sub<:Super](reader:JsonReader[Sub]):JsonReader[Super]	=
-		Converter(reader.convert)
+		reader.varyOut
+		//Converter(reader.convert)
 
 	def subWriter[Super,Sub<:Super](writer:JsonWriter[Sub], ctor:PFunction[Super,Sub]):JsonConverter[Super,Option[JsonValue]]	=
 		Converter(ctor(_) traverseValidated writer.convert)

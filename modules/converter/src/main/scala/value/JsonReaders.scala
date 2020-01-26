@@ -7,7 +7,8 @@ trait JsonReaders
 	with	UnitJsonReaders
 	with	NewtypeJsonReaders
 	with	TupleJsonReaders
-	with	SumJsonReaders
+	with	EitherJsonReaders
+	with	NullOptionJsonReaders
 	with	EnumJsonReaders
 	with	CollectionJsonReaders
 	with	CaseJsonReaders
