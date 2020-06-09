@@ -3,7 +3,7 @@ package scjson.io.pickle
 import java.io._
 
 import scutil.base.implicits._
-import scutil.core.implicits._
+import scutil.jdk.implicits._
 import scutil.lang._
 
 import scjson.ast._
