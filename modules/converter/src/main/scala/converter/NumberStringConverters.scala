@@ -8,7 +8,7 @@ object NumberStringConverters {
 		Converter constant ""
 
 	val StringToUnit:JsonConverter[String,Unit]	=
-		Converter { it => it == "" validated (JsonError(show"$it is not a Unit"), ()) }
+		Converter { it => (it == "").validated(JsonError(show"$it is not a Unit"), ()) }
 
 	//------------------------------------------------------------------------------
 

@@ -3,21 +3,16 @@ import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.199.0",
+	version			:= "0.200.0",
 
-	scalaVersion	:= "2.13.2",
+	scalaVersion	:= "2.13.3",
 	scalacOptions	++= Seq(
+		"-feature",
 		"-deprecation",
 		"-unchecked",
+		"-Werror",
+		"-Xlint",
 		"-language:implicitConversions",
-		"-language:existentials",
-		// "-language:higherKinds",
-		// "-language:reflectiveCalls",
-		// "-language:dynamics",
-		// "-language:experimental.macros"
-		"-feature",
-		"-Xfatal-warnings",
-		"-Xlint"
 	),
 	conflictManager	:= ConflictManager.strict withOrganization "^(?!(org\\.scala-lang|org\\.scala-js)(\\..*)?)$",
 
@@ -96,7 +91,7 @@ lazy val `scjson-ast`	=
 	.enablePlugins()
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-base"	% "0.179.0"				% "compile"
+			"de.djini"			%%%	"scutil-base"	% "0.180.0"				% "compile"
 		)
 	)
 	.jvmSettings()
@@ -114,8 +109,8 @@ lazy val `scjson-codec`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-base"	% "0.179.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.9.4"				% "test"
+			"de.djini"			%%%	"scutil-base"	% "0.180.0"				% "compile",
+			"org.specs2"		%%	"specs2-core"	% "4.10.0"				% "test"
 		)
 	)
 	.jvmSettings()
@@ -137,8 +132,8 @@ lazy val `scjson-converter`	=
 	.settings(
 		libraryDependencies	++= Seq(
 			//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-			"de.djini"			%%%	"scutil-base"	% "0.179.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.9.4"				% "test"
+			"de.djini"			%%%	"scutil-base"	% "0.180.0"				% "compile",
+			"org.specs2"		%%	"specs2-core"	% "4.10.0"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
 		Compile / boilerplateSource	:= baseDirectory.value.getParentFile / "src" / "main" / "boilerplate"
@@ -163,8 +158,8 @@ lazy val `scjson-pickle`	=
 			// TODO could this be a provided dependency?
 			// TODO is this dependency necessary at all?
 			"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-			"de.djini"			%%	"scutil-base"	% "0.179.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.9.4"				% "test"
+			"de.djini"			%%	"scutil-base"	% "0.180.0"				% "compile",
+			"org.specs2"		%%	"specs2-core"	% "4.10.0"				% "test"
 		),
 		Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
 	)
@@ -179,7 +174,7 @@ lazy val `scjson-io-pickle`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.179.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.180.0"				% "compile"
 		)
 	)
 
@@ -193,6 +188,6 @@ lazy val `scjson-io-converter`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.179.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.180.0"				% "compile"
 		)
 	)

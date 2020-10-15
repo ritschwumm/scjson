@@ -42,7 +42,7 @@ object JsonIo {
 
 	def writeFileString(file:File)(content:String):Either[IOException,Unit]	=
 		try {
-			file writeString (charset, content)
+			file.writeString(charset, content)
 			Right(())
 		}
 		catch { case e:IOException =>
@@ -62,7 +62,7 @@ object JsonIo {
 		for {
 			ast	<-	writeAst(value)	leftMap (it => JsonWriteFailure.UnparseFailure(it):JsonWriteFailure)
 		}
-		yield JsonCodec encode (ast, pretty)
+		yield JsonCodec.encode(ast, pretty)
 
 	//------------------------------------------------------------------------------
 

@@ -37,7 +37,7 @@ object JsonIo {
 
 	def writeFileString(file:File)(content:String):Either[IOException,Unit]	=
 		try {
-			file writeString (charset, content)
+			file.writeString(charset, content)
 			Right(())
 		}
 		catch { case e:IOException =>
@@ -55,7 +55,7 @@ object JsonIo {
 
 	def writeString[T:Format](value:T, pretty:Boolean):String	=
 		writeAst(value)	|>
-		(JsonCodec encode (_, pretty))
+		(JsonCodec.encode(_, pretty))
 
 	//------------------------------------------------------------------------------
 

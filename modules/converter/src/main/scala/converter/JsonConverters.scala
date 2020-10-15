@@ -6,22 +6,22 @@ import scjson.ast._
 
 object JsonConverters {
 	val expectNull:JsonConverter[JsonValue,Unit]	=
-		Converter optional (_.asNull, JsonError(show"expected JsonNull"))
+		Converter.optional(_.asNull, JsonError(show"expected JsonNull"))
 
 	val expectBoolean:JsonConverter[JsonValue,Boolean]	=
-		Converter optional (_.asBoolean, JsonError(show"expected JsonBoolean"))
+		Converter.optional(_.asBoolean, JsonError(show"expected JsonBoolean"))
 
 	val expectNumber:JsonConverter[JsonValue,BigDecimal]	=
-		Converter optional (_.asNumber, JsonError(show"expected JsonNumber"))
+		Converter.optional(_.asNumber, JsonError(show"expected JsonNumber"))
 
 	val expectString:JsonConverter[JsonValue,String]	=
-		Converter optional (_.asString, JsonError(show"expected JsonString"))
+		Converter.optional(_.asString, JsonError(show"expected JsonString"))
 
 	val expectArray:JsonConverter[JsonValue,Seq[JsonValue]]	=
-		Converter optional (_.asArray, JsonError(show"expected JsonArray"))
+		Converter.optional(_.asArray, JsonError(show"expected JsonArray"))
 
 	val expectObject:JsonConverter[JsonValue,Seq[(String,JsonValue)]]	=
-		Converter optional (_.asObject, JsonError(show"expected JsonObject"))
+		Converter.optional(_.asObject, JsonError(show"expected JsonObject"))
 
 	//------------------------------------------------------------------------------
 

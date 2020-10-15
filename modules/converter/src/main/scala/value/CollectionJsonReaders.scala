@@ -20,7 +20,7 @@ trait CollectionJsonReaders extends CollectionJsonReadersLow {
 
 	implicit def NesReader[T:JsonReader]:JsonReader[Nes[T]]	=
 		VectorReader	>=>
-		(Converter optional (_.toNesOption, JsonError("expected at least 1 element")))
+		Converter.optional(_.toNesOption, JsonError("expected at least 1 element"))
 
 	implicit def KeyMapReader[K:JsonKeyReader,V:JsonReader]:JsonReader[Map[K,V]]	=
 		JC.expectObject		>=>

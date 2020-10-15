@@ -37,19 +37,19 @@ private final class JsonDecoder(text:String) {
 		if (isChar('[')) {
 			val	out	= new immutable.VectorBuilder[JsonValue]
 			ws()
-			if (isChar(']'))	return JsonArray(out.result)
+			if (isChar(']'))	return JsonArray(out.result())
 			while (true) {
 				val value	= decodeNext()
 				out	+= value
 				ws()
-				if (isChar(']'))	return JsonArray(out.result)
+				if (isChar(']'))	return JsonArray(out.result())
 				if (!isChar(','))	throw expectedClass(",]")
 			}
 		}
 		if (isChar('{')) {
 			val out	= new immutable.VectorBuilder[(String,JsonValue)]
 			ws()
-			if (isChar('}'))	return JsonObject(out.result)
+			if (isChar('}'))	return JsonObject(out.result())
 			while (true) {
 				val key	= decodeNext() match {
 					case JsonString(s)	=> s
@@ -60,7 +60,7 @@ private final class JsonDecoder(text:String) {
 				val value	= decodeNext()
 				out	+= (key -> value)
 				ws()
-				if (isChar('}'))	return JsonObject(out.result)
+				if (isChar('}'))	return JsonObject(out.result())
 				if (!isChar(','))	throw expectedClass(",}");
 			}
 		}
@@ -90,7 +90,7 @@ private final class JsonDecoder(text:String) {
 					else throw expectedClass("\"\\/trnfbu")
 				}
 				else if (isChar('"')) {
-					return JsonString(out.result)
+					return JsonString(out.result())
 				}
 				else if (rng('\u0000', '\u001f')) {
 					offset	-= 1
@@ -207,7 +207,7 @@ private final class JsonDecoder(text:String) {
 	private def isString(s:String):Boolean	= {
 		val end	= offset + s.length
 			 if (end > text.length)						false
-		else if ((text substring (offset, end)) != s)	false
+		else if ((text.substring(offset, end)) != s)	false
 		else											{ offset	= end; true }
 	}
 
@@ -228,7 +228,7 @@ private final class JsonDecoder(text:String) {
 	*/
 
 	private def from(before:Int):String	=
-		text substring (before, offset)
+		text.substring(before, offset)
 
 	private def consume():Unit	= {
 		if (finished)	sys error "already finished"

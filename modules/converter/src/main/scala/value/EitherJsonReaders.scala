@@ -6,5 +6,5 @@ import scjson.converter.{
 
 trait EitherJsonReaders {
 	implicit def EitherReader[T1:JsonReader,T2:JsonReader]:JsonReader[Either[T1,T2]]	=
-		ASC altReader ("left", "right")
+		ASC.altReader("left", "right")
 }

@@ -15,7 +15,7 @@ trait CaseClassProtocolGenerated {
 			},
 			(in:JsonValue)	=> {
 				val map	= objectMap(in)
-				apply([#doReadUnsafe[S1](JsonPickleUtil requireField (map, k1))#])
+				apply([#doReadUnsafe[S1](JsonPickleUtil.requireField(map, k1))#])
 			}
 		)
 	}

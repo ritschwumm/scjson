@@ -13,7 +13,7 @@ object JsonCodec {
 
 	/** unparse a JsonValue into a String */
 	def encode(it:JsonValue, pretty:Boolean):String	=
-		JsonEncoder encode (it, pretty)
+		JsonEncoder.encode(it, pretty)
 
 	/** parse a Json formatted String into a JsonValue */
 	def decode(it:String):Either[JsonDecodeFailure,JsonValue]	=
