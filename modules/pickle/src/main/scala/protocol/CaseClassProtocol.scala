@@ -2,7 +2,7 @@ package scjson.pickle.protocol
 
 import reflect.runtime.universe._
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang._
 
 import scjson.ast._

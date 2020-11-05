@@ -1,6 +1,6 @@
 package scjson.converter
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang._
 
 import scjson.ast._
@@ -37,7 +37,7 @@ trait SumJsonWriters {
 		}) >=>
 		SC.makeTagged
 
-	def subWriter[Super,Sub<:Super](writer:JsonWriter[Sub], ctor:PFunction[Super,Sub]):JsonConverter[Super,Option[JsonValue]]	=
+	def subWriter[Super,Sub<:Super](writer:JsonWriter[Sub], ctor:Super=>Option[Sub]):JsonConverter[Super,Option[JsonValue]]	=
 		Converter(ctor(_) traverseValidated writer.convert)
 
 	def prismWriter[E,S,T,U](prism:Prism[S,T], writer:Converter[E,T,U]):Converter[E,S,Option[U]]	=

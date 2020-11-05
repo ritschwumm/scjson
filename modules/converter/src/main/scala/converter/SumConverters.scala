@@ -1,6 +1,6 @@
 package scjson.converter
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang._
 import scjson.ast._
 import scjson.converter.{ JsonConverters => JC }

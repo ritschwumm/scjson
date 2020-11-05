@@ -1,6 +1,6 @@
 package scjson.converter
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scutil.lang._
 
 object NumberStringConverters {

@@ -1,6 +1,6 @@
 package scjson.pickle.protocol
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 
 import scjson.ast._
 import scjson.pickle._

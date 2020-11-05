@@ -1,7 +1,7 @@
 package scjson.converter
 
 import scutil.lang._
-import scutil.base.implicits._
+import scutil.core.implicits._
 import scjson.ast._
 import scjson.codec._
 

@@ -2,7 +2,7 @@ package scjson.converter
 
 import scutil.lang._
 import scutil.lang.assoc._
-import scutil.lang.pimp.OptionImplicits._
+import scutil.lang.extension.OptionImplicits._
 
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object ArrowedConverters {

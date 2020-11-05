@@ -1,6 +1,6 @@
 package scjson.ast
 
-import scutil.base.implicits._
+import scutil.core.implicits._
 
 object JsonValue {
 	val theNull:JsonValue								= JsonNull
