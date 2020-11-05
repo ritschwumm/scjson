@@ -36,7 +36,7 @@ object ArrowedConverters {
 	[#def mapToArrowed1[K,V]([#k1:K#]):JsonConverter[Map[K,V],Arrowed1[[#V#]]]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 1) {
-				[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# zip
+				[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# tuple
 				]
 			}
 			else {

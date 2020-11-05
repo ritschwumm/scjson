@@ -12,7 +12,7 @@ trait TupleJsonReaders {
 		JC.expectArray	>=>
 		Converter {
 			case Seq([#t1#])	=>
-				[#(JsonReader[T1] convert t1)# zip
+				[#(JsonReader[T1] convert t1)# tuple
 				] map
 				unarrow1
 			case x	=>

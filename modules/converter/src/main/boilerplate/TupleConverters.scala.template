@@ -37,7 +37,7 @@ object TupleConverters {
 	[#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],([#V#])]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 1) {
-				[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# zip
+				[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# tuple
 				] map
 				unarrow1
 			}

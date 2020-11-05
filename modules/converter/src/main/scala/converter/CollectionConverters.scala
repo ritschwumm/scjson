@@ -24,7 +24,7 @@ object CollectionConverters {
 	def mapToPair[K,V](k1:K, k2:K):JsonConverter[Map[K,V],(V,V)]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 2) {
-				(it get k1 toGood JsonError(show"missing element ${k1.toString}"))	zip
+				(it get k1 toGood JsonError(show"missing element ${k1.toString}"))	tuple
 				(it get k2 toGood JsonError(show"missing element ${k2.toString}"))
 			}
 			else {
