@@ -38,7 +38,7 @@ case object JsonNull extends JsonValue
 
 object JsonBoolean {
 	def apply(value:Boolean):JsonBoolean			= if (value) JsonTrue else JsonFalse
-	def unapply(value:JsonBoolean):Option[Boolean]	= Some(value.value)
+	def unapply(value:JsonBoolean):Some[Boolean]	= Some(value.value)
 }
 
 sealed abstract class JsonBoolean extends JsonValue {
