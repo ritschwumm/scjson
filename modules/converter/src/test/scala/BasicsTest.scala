@@ -230,5 +230,5 @@ object BasicsTest extends SimpleTestSuite {
 		Validated.valid(JsonCodec encodeShort it)
 
 	private def decode(it:String):JsonResult[JsonValue]	=
-		(JsonCodec decode it leftMap { it => Nes single it.message }).toValidated
+		(JsonCodec decode it leftMap { it => Nes one it.message }).toValidated
 }

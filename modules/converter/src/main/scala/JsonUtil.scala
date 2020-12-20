@@ -20,6 +20,6 @@ object JsonUtil {
 	val stringToJson:JsonConverter[String,JsonValue]	=
 		Converter { it =>
 			// TODO swallows the "looking at" information. sad...
-			(JsonCodec decode it leftMap { it => Nes single it.message }).toValidated
+			(JsonCodec decode it leftMap { it => Nes one it.message }).toValidated
 		}
 }
