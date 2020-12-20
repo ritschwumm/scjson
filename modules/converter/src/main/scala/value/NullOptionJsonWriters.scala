@@ -25,7 +25,7 @@ trait NullOptionJsonWriters extends NullOptionJsonWritersLow with UnitJsonWriter
 trait NullOptionJsonWritersLow {
 	implicit def OptionNullWriter[T:JsonWriter]:JsonWriter[Option[T]]	=
 		Converter {
-			case None		=> Validated good JsonNull
+			case None		=> Validated valid JsonNull
 			case Some(x)	=> JsonWriter[T] convert x
 		}
 }

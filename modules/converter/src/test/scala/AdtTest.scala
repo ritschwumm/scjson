@@ -47,39 +47,39 @@ object AdtTest extends SimpleTestSuite {
 	test("adts should unparse 0") {
 		assertEquals(
 			JsonWriter[TestAdt] convert TestAdt.TestAdt0,
-			Validated.good(JsonObject.Var("TestAdt0" -> Empty))
+			Validated.valid(JsonObject.Var("TestAdt0" -> Empty))
 		)
 	}
 	test("adts should parse 0") {
 		assertEquals(
 			JsonReader[TestAdt] convert JsonObject.Var("TestAdt0" -> Empty),
-			Validated.good(TestAdt.TestAdt0)
+			Validated.valid(TestAdt.TestAdt0)
 		)
 	}
 
 	test("adts should unparse 1") {
 		assertEquals(
 			JsonWriter[TestAdt] convert TestAdt.TestAdt1(7),
-			Validated.good(JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))))
+			Validated.valid(JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))))
 		)
 	}
 	test("adts should parse 1") {
 		assertEquals(
 			JsonReader[TestAdt] convert JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))),
-			Validated.good(TestAdt.TestAdt1(7))
+			Validated.valid(TestAdt.TestAdt1(7))
 		)
 	}
 
 	test("adts should unparse 2") {
 		assertEquals(
 			JsonWriter[TestAdt] convert TestAdt.TestAdt2(7, "z"),
-			Validated.good(JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))))
+			Validated.valid(JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))))
 		)
 	}
 	test("adts should parse 2") {
 		assertEquals(
 			JsonReader[TestAdt] convert JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))),
-			Validated.good(TestAdt.TestAdt2(7, "z"))
+			Validated.valid(TestAdt.TestAdt2(7, "z"))
 		)
 	}
 }

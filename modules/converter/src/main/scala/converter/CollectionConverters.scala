@@ -24,11 +24,11 @@ object CollectionConverters {
 	def mapToPair[K,V](k1:K, k2:K):JsonConverter[Map[K,V],(V,V)]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 2) {
-				(it get k1 toGood JsonError(show"missing element ${k1.toString}"))	tuple
-				(it get k2 toGood JsonError(show"missing element ${k2.toString}"))
+				(it get k1 toValid JsonError(show"missing element ${k1.toString}"))	tuple
+				(it get k2 toValid JsonError(show"missing element ${k2.toString}"))
 			}
 			else {
-				JsonBad(show"expected 2 values, got ${it.size}")
+				JsonInvalid(show"expected 2 values, got ${it.size}")
 			}
 		}
 
@@ -44,12 +44,12 @@ object CollectionConverters {
 	def mapToEither[K,V](k1:K, k2:K):JsonConverter[Map[K,V],Either[V,V]]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 1) {
-				(it get k1 map { v => Validated good[JsonError,Either[V,V]] (Left(v) :Either[V,V]) })	orElse
-				(it get k2 map { v => Validated good[JsonError,Either[V,V]] (Right(v):Either[V,V]) })	getOrElse
-				(JsonBad(show"missing element ${k1.toString} or ${k2.toString}"))
+				(it get k1 map { v => Validated valid[JsonError,Either[V,V]] (Left(v) :Either[V,V]) })	orElse
+				(it get k2 map { v => Validated valid[JsonError,Either[V,V]] (Right(v):Either[V,V]) })	getOrElse
+				(JsonInvalid(show"missing element ${k1.toString} or ${k2.toString}"))
 			}
 			else {
-				JsonBad(show"expected 1 value, got ${it.size}")
+				JsonInvalid(show"expected 1 value, got ${it.size}")
 			}
 		}
 

@@ -12,19 +12,19 @@ object CollectionTest extends SimpleTestSuite {
 	test("special collections should serialize string maps") {
 		assertEquals(
 			JsonWriter[Map[String,Int]] convert Map("a" -> 1),
-			Validated.good(JsonObject.Var("a" -> JsonNumber(1)))
+			Validated.valid(JsonObject.Var("a" -> JsonNumber(1)))
 		)
 	}
 	test("special collections should serialize int maps") {
 		assertEquals(
 			JsonWriter[Map[Int,Int]] convert Map(2 -> 3),
-			Validated.good(JsonObject.Var("2" -> JsonNumber(3)))
+			Validated.valid(JsonObject.Var("2" -> JsonNumber(3)))
 		)
 	}
 	test("special collections should serialize long maps") {
 		assertEquals(
 			JsonWriter[Map[Long,Int]] convert Map(4L -> 5),
-			Validated.good(JsonObject.Var("4" -> JsonNumber(5)))
+			Validated.valid(JsonObject.Var("4" -> JsonNumber(5)))
 		)
 	}
 
@@ -37,14 +37,14 @@ object CollectionTest extends SimpleTestSuite {
 	test("keyless maps should serialize without having a key writer") {
 		assertEquals(
 			JsonWriter[Map[X.type,String]] convert Map(X -> "1"),
-			Validated.good(JsonArray.Var(JsonArray.Var(JsonValue.theNull, JsonString("1"))))
+			Validated.valid(JsonArray.Var(JsonArray.Var(JsonValue.theNull, JsonString("1"))))
 		)
 	}
 
 	test("keyless maps should deserialize without having a key reader") {
 		assertEquals(
 			JsonReader[Map[X.type,String]] convert JsonArray.Var(JsonArray.Var(JsonValue.theNull, JsonString("1"))),
-			Validated.good(Map(X -> "1"))
+			Validated.valid(Map(X -> "1"))
 		)
 	}
 
@@ -53,25 +53,25 @@ object CollectionTest extends SimpleTestSuite {
 	test("tuples should serialize 2-tuples") {
 		assertEquals(
 			JsonWriter[(String,Int)] convert (("a", 1)),
-			Validated.good(JsonArray.Var(JsonString("a"), JsonNumber(1)))
+			Validated.valid(JsonArray.Var(JsonString("a"), JsonNumber(1)))
 		)
 	}
 	test("tuples should serialize 3-tuples") {
 		assertEquals(
 			JsonWriter[(String,Int,Boolean)] convert (("a", 1, true)),
-			Validated.good(JsonArray.Var(JsonString("a"), JsonNumber(1), JsonBoolean(true)))
+			Validated.valid(JsonArray.Var(JsonString("a"), JsonNumber(1), JsonBoolean(true)))
 		)
 	}
 	test("tuples should parse 2-tuples") {
 		assertEquals(
 			JsonReader[(String,Int)] convert JsonArray.Var(JsonString("a"), JsonNumber(1)),
-			Validated.good(("a", 1))
+			Validated.valid(("a", 1))
 		)
 	}
 	test("tuples should parse 3-tuples") {
 		assertEquals(
 			JsonReader[(String,Int,Boolean)] convert JsonArray.Var(JsonString("a"), JsonNumber(1), JsonBoolean(true)),
-			Validated.good(("a", 1, true))
+			Validated.valid(("a", 1, true))
 		)
 	}
 
@@ -81,25 +81,25 @@ object CollectionTest extends SimpleTestSuite {
 	test("keyed tuples should serialize 2-tuples") {
 		assertEquals(
 			JsonWriter[(String,Int)] convert (("a", 1)),
-			Validated.good(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1)))
+			Validated.valid(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1)))
 		)
 	}
 	test("keyed tuples should serialize 3-tuples") {
 		assertEquals(
 			JsonWriter[(String,Int,Boolean)] convert (("a", 1, true)),
-			Validated.good(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1), "3" -> JsonBoolean(true)))
+			Validated.valid(JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1), "3" -> JsonBoolean(true)))
 		)
 	}
 	test("keyed tuples should parse 2-tuples") {
 		assertEquals(
 			JsonReader[(String,Int)] convert JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1)),
-			Validated.good(("a", 1))
+			Validated.valid(("a", 1))
 		)
 	}
 	test("keyed tuples should parse 3-tuples") {
 		assertEquals(
 			JsonReader[(String,Int,Boolean)] convert JsonObject.Var("1" -> JsonString("a"), "2" -> JsonNumber(1), "3" -> JsonBoolean(true)),
-			Validated.good(("a", 1, true))
+			Validated.valid(("a", 1, true))
 		)
 	}
 	*/

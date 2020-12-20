@@ -20,8 +20,8 @@ trait CaseJsonReaders extends UnitJsonReaders {
 	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
 		JC.expectObjectMap	>=>
 		Converter { map =>
-			if (map.isEmpty)	Validated good apply()
-			else				Validated bad JsonError(s"expected zero elements, got ${map.size.toString}")
+			if (map.isEmpty)	Validated valid apply()
+			else				Validated invalid JsonError(s"expected zero elements, got ${map.size.toString}")
 		}
 
 	[#def cc1Reader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S, [#k1:String#]):JsonReader[S]	=

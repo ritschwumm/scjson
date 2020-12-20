@@ -16,7 +16,7 @@ object NumberStringConverters {
 		Converter total (_.toString)
 
 	val StringToInt:JsonConverter[String,Int]	=
-		Converter { it => it.toIntOption toGood JsonError(show"$it is not an Int") }
+		Converter { it => it.toIntOption toValid JsonError(show"$it is not an Int") }
 
 	//------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ object NumberStringConverters {
 		Converter total (_.toString)
 
 	val StringToLong:JsonConverter[String,Long]	=
-		Converter { it => it.toLongOption toGood JsonError(show"$it is not a Long") }
+		Converter { it => it.toLongOption toValid JsonError(show"$it is not a Long") }
 
 	//------------------------------------------------------------------------------
 
@@ -32,5 +32,5 @@ object NumberStringConverters {
 		Converter total (_.toString)
 
 	val StringToBigInt:JsonConverter[String,BigInt]	=
-		Converter { it => it.toBigIntOption toGood JsonError(show"$it is not a BigInt") }
+		Converter { it => it.toBigIntOption toValid JsonError(show"$it is not a BigInt") }
 }

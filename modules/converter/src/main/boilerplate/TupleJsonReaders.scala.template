@@ -16,7 +16,7 @@ trait TupleJsonReaders {
 				] map
 				unarrow1
 			case x	=>
-				Validated bad JsonError(s"expected 2 elements, got ${x.size.toString}")
+				Validated invalid JsonError(s"expected 2 elements, got ${x.size.toString}")
 		}#
 
 	]

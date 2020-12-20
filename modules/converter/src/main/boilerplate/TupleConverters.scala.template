@@ -16,9 +16,9 @@ object TupleConverters {
 	[#def seqToTuple1[T]:JsonConverter[Seq[T],([#T#])]	=
 		Converter {
 			case Seq([#t1#]) =>
-				Validated good	(([#t1#]))
+				Validated valid (([#t1#]))
 			case x	=>
-				Validated bad	JsonError(s"expected 1, not ${x.size.toString} value(s)")
+				Validated invalid JsonError(s"expected 1, not ${x.size.toString} value(s)")
 		}#
 
 	]
@@ -37,12 +37,12 @@ object TupleConverters {
 	[#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],([#V#])]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 1) {
-				[#(it get k1 toGood JsonError(s"missing element ${k1.toString}"))# tuple
+				[#(it get k1 toValid JsonError(s"missing element ${k1.toString}"))# tuple
 				] map
 				unarrow1
 			}
 			else {
-				Validated bad JsonError(s"expected 1, not ${it.size.toString} value(s)")
+				Validated invalid JsonError(s"expected 1, not ${it.size.toString} value(s)")
 			}
 		}#
 	]

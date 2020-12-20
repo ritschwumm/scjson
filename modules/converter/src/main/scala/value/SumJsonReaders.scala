@@ -17,7 +17,7 @@ trait SumJsonReaders {
 		Converter { case (k, v) =>
 			partials
 			.collectFirst	{ case (`k`, conv) => conv convert v }
-			.getOrElse		(JsonBad(show"unexpected key '$k'"))
+			.getOrElse		(JsonInvalid(show"unexpected key '$k'"))
 		}
 
 	def subReader[Super,Sub<:Super](reader:JsonReader[Sub]):JsonReader[Super]	=

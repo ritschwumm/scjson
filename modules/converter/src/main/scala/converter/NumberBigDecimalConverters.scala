@@ -10,11 +10,11 @@ object NumberBigDecimalConverters {
 	val BigDecimalToInt:JsonConverter[BigDecimal,Int]	=
 		Converter { it =>
 			try {
-				Validated good it.toIntExact
+				Validated valid it.toIntExact
 			}
 			catch { case e:ArithmeticException =>
 				// fractional or not fitting
-				JsonBad(show"${it} is not an Int")
+				JsonInvalid(show"${it} is not an Int")
 			}
 		}
 
@@ -26,11 +26,11 @@ object NumberBigDecimalConverters {
 	val BigDecimalToLong:JsonConverter[BigDecimal,Long]	=
 		Converter { it =>
 			try {
-				Validated good it.toLongExact
+				Validated valid it.toLongExact
 			}
 			catch { case e:ArithmeticException =>
 				// fractional or not fitting
-				JsonBad(show"${it} is not a Long")
+				JsonInvalid(show"${it} is not a Long")
 			}
 		}
 
@@ -42,7 +42,7 @@ object NumberBigDecimalConverters {
 	val BigDecimalToBigInt:JsonConverter[BigDecimal,BigInt]	=
 		Converter { it =>
 			// fractional
-			it.toBigIntExact toGood JsonError(show"${it} is not a BigInt")
+			it.toBigIntExact toValid JsonError(show"${it} is not a BigInt")
 		}
 
 	//------------------------------------------------------------------------------
@@ -50,11 +50,11 @@ object NumberBigDecimalConverters {
 	val FloatToBigDecimal:JsonConverter[Float,BigDecimal]	=
 		Converter { it =>
 			try {
-				Validated good (BigDecimal exact it.toDouble)
+				Validated valid (BigDecimal exact it.toDouble)
 			}
 			catch { case e:NumberFormatException =>
 				// infinite or NaN
-				JsonBad(show"$it is not a BigDecimal")
+				JsonInvalid(show"$it is not a BigDecimal")
 			}
 		}
 
@@ -67,11 +67,11 @@ object NumberBigDecimalConverters {
 	val DoubleToBigDecimal:JsonConverter[Double,BigDecimal]	=
 		Converter { it =>
 			try {
-				Validated good (BigDecimal exact it)
+				Validated valid (BigDecimal exact it)
 			}
 			catch { case e:NumberFormatException =>
 				// infinite or NaN
-				JsonBad(show"$it is not a BigDecimal")
+				JsonInvalid(show"$it is not a BigDecimal")
 			}
 		}
 
