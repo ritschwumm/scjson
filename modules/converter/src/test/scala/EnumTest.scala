@@ -36,14 +36,14 @@ object EnumTest extends SimpleTestSuite {
 	test("enums should unparse ") {
 		assertEquals(
 			JsonWriter[TestEnum] convert TestEnum.X1,
-			Good(JsonString("x1"))
+			Validated.good(JsonString("x1"))
 		)
 	}
 
 	test("enums should parse") {
 		assertEquals(
 			JsonReader[TestEnum] convert JsonString("x2"),
-			Good(TestEnum.X2)
+			Validated.good(TestEnum.X2)
 		)
 	}
 }

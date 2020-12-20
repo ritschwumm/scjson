@@ -7,7 +7,7 @@ package object converter {
 	// BETTER use a sum type instead of a simple String
 	type JsonError	= Nes[String]
 	def JsonError(s:String):JsonError		= Nes single s
-	def JsonBad[T](s:String):JsonResult[T]	= Bad(JsonError(s))
+	def JsonBad[T](s:String):JsonResult[T]	= Validated.bad(JsonError(s))
 
 	type JsonResult[T]		= Validated[JsonError,T]
 	type JsonConverter[S,T]	= Converter[JsonError,S,T]

@@ -12,13 +12,13 @@ object SyntaxTest extends SimpleTestSuite {
 	test("syntax should work with simple values") {
 		assertEquals(
 			jsonValue(1),
-			Good(JsonNumber(1))
+			Validated.good(JsonNumber(1))
 		)
 	}
 	test("syntax should work with arrays") {
 		assertEquals(
 			jsonArray(1, "test", false),
-			Good(
+			Validated.good(
 				JsonArray.Var(
 					JsonNumber(1),
 					JsonString("test"),
@@ -31,7 +31,7 @@ object SyntaxTest extends SimpleTestSuite {
 		// TODO implicit lookup failing for JsonNull (as a subtype of JsonValue) sucks
 		assertEquals(
 			jsonObject("a" -> 1, "b" -> "x", "c" -> (JsonNull:JsonValue)),
-			Good(
+			Validated.good(
 				JsonObject.Var(
 					"a"	-> JsonNumber(1),
 					"b"	-> JsonString("x"),
@@ -48,7 +48,7 @@ object SyntaxTest extends SimpleTestSuite {
 					"x"	-> 2
 				)
 			),
-			Good(
+			Validated.good(
 				JsonObject.Var(
 					"a"	-> JsonNumber(1),
 					"b"	-> JsonObject.Var(

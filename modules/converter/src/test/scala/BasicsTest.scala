@@ -227,7 +227,7 @@ object BasicsTest extends SimpleTestSuite {
 		decode(it) flatMap JsonReader[T].convert
 
 	private def encode(it:JsonValue):JsonResult[String]	=
-		Good(JsonCodec encodeShort it)
+		Validated.good(JsonCodec encodeShort it)
 
 	private def decode(it:String):JsonResult[JsonValue]	=
 		(JsonCodec decode it leftMap { it => Nes single it.message }).toValidated
