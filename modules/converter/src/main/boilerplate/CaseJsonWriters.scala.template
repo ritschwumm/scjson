@@ -31,9 +31,10 @@ trait CaseJsonWriters extends UnitJsonWriters {
 
 	//--------------------------------------------------------------------------------
 
-	[#def cc1AutoWriter[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])])(implicit FN:FieldNames[S]):JsonWriter[S]	= {
-		val Vector([#k1#,]) = FN.names
-		cc1Writer(unapply, [#k1#, ])
-	}#
+	[#def cc1AutoWriter[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])])(implicit FN:FieldNames[S]):JsonWriter[S]	=
+		FN.names match {
+			case Vector([#k1#,])	=> cc1Writer(unapply, [#k1#, ])
+			case x	=> sys error s"unexpected number of elements in ${x.toString}"
+		}#
 	]
 }

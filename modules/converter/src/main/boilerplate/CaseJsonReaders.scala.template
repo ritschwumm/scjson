@@ -34,9 +34,10 @@ trait CaseJsonReaders extends UnitJsonReaders {
 
 	//--------------------------------------------------------------------------------
 
-	[#def cc1AutoReader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S)(implicit FN:FieldNames[S]):JsonReader[S]	= {
-		val Vector([#k1#,]) = FN.names
-		cc1Reader(apply, [#k1#, ])
-	}#
+	[#def cc1AutoReader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S)(implicit FN:FieldNames[S]):JsonReader[S]	=
+		FN.names match {
+			case Vector([#k1#,])	=> cc1Reader(apply, [#k1#, ])
+			case x	=> sys error s"unexpected number of elements in ${x.toString}"
+		}#
 	]
 }
