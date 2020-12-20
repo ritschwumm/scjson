@@ -1,6 +1,6 @@
 package scjson.converter
 
-import org.specs2.mutable._
+import minitest._
 
 import scutil.lang._
 
@@ -32,15 +32,18 @@ sealed trait TestEnum
 
 //------------------------------------------------------------------------------
 
-class EnumTest extends Specification {
-	"enums should" should {
-		"unparse " in {
-			JsonWriter[TestEnum] convert TestEnum.X1 mustEqual
+object EnumTest extends SimpleTestSuite {
+	test("enums should unparse ") {
+		assertEquals(
+			JsonWriter[TestEnum] convert TestEnum.X1,
 			Good(JsonString("x1"))
-		}
-		"parse" in {
-			JsonReader[TestEnum] convert JsonString("x2") mustEqual
+		)
+	}
+
+	test("enums should parse") {
+		assertEquals(
+			JsonReader[TestEnum] convert JsonString("x2"),
 			Good(TestEnum.X2)
-		}
+		)
 	}
 }

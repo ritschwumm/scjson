@@ -1,9 +1,11 @@
 import spray.boilerplate.BoilerplatePlugin
 import sbtcrossproject.{ CrossProject, CrossType, Platform }
 
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.211.0",
+	version			:= "0.212.0",
 
 	scalaVersion	:= "2.13.4",
 	scalacOptions	++= Seq(
@@ -91,7 +93,7 @@ lazy val `scjson-ast`	=
 	.enablePlugins()
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.190.0"				% "compile"
+			"de.djini"			%%%	"scutil-core"	% "0.191.0"				% "compile"
 		)
 	)
 	.jvmSettings()
@@ -109,11 +111,13 @@ lazy val `scjson-codec`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.190.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.10.5"				% "test"
+			"de.djini"			%%%	"scutil-core"	% "0.191.0"				% "compile",
+			"io.monix"			%%	"minitest"		% "2.9.1"				% "test"
 		)
 	)
-	.jvmSettings()
+	.jvmSettings(
+		testFrameworks	+= new TestFramework("minitest.runner.Framework"),
+	)
 	.jsSettings(
 		noTestSettings
 	)
@@ -132,13 +136,15 @@ lazy val `scjson-converter`	=
 	.settings(
 		libraryDependencies	++= Seq(
 			//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-			"de.djini"			%%%	"scutil-core"	% "0.190.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.10.5"				% "test"
+			"de.djini"			%%%	"scutil-core"	% "0.191.0"				% "compile",
+			"io.monix"			%%	"minitest"		% "2.9.1"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
 		Compile / boilerplateSource	:= baseDirectory.value.getParentFile / "src" / "main" / "boilerplate"
 	)
-	.jvmSettings()
+	.jvmSettings(
+		testFrameworks	+= new TestFramework("minitest.runner.Framework"),
+	)
 	.jsSettings(
 		noTestSettings
 	)
@@ -158,9 +164,10 @@ lazy val `scjson-pickle`	=
 			// TODO could this be a provided dependency?
 			// TODO is this dependency necessary at all?
 			"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-			"de.djini"			%%	"scutil-core"	% "0.190.0"				% "compile",
-			"org.specs2"		%%	"specs2-core"	% "4.10.5"				% "test"
+			"de.djini"			%%	"scutil-core"	% "0.191.0"				% "compile",
+			"io.monix"			%%	"minitest"		% "2.9.1"				% "test"
 		),
+		testFrameworks	+= new TestFramework("minitest.runner.Framework"),
 		Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
 	)
 
@@ -174,7 +181,7 @@ lazy val `scjson-io-pickle`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.190.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.191.0"				% "compile"
 		)
 	)
 
@@ -188,6 +195,6 @@ lazy val `scjson-io-converter`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.190.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.191.0"				% "compile"
 		)
 	)

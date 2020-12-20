@@ -1,6 +1,6 @@
 package scjson.pickle
 
-import org.specs2.mutable._
+import minitest._
 
 import scjson.ast._
 import scjson.pickle.protocol._
@@ -20,7 +20,7 @@ case object TestADT0					extends TestADT
 final case class TestADT1(a:Int)		extends TestADT
 final case class TestADT2(a:Int, b:Int)	extends TestADT
 
-class FormatTest extends Specification {
+object FormatTest extends SimpleTestSuite {
 	object MyProtocol extends StandardProtocol {
 		implicit val TestEnum_F:Format[TestEnum]	=
 			enumFormat(Seq[(String,TestEnum)](
@@ -44,65 +44,87 @@ class FormatTest extends Specification {
 
 	//------------------------------------------------------------------------------
 
-	"serialization should" should {
-		"encode an enum as expected" in {
-			doWrite[TestEnum](TestEnum1)		mustEqual	JsonString("1")
-		}
-		"decode an enum as expected" in {
-			doReadUnsafe[TestEnum](JsonString("1"))	mustEqual	TestEnum1
-		}
+	test("serialization should encode an enum as expected") {
+		assertEquals(
+			doWrite[TestEnum](TestEnum1)	,
+			JsonString("1")
+		)
+	}
+	test("serialization should decode an enum as expected") {
+		assertEquals(
+			doReadUnsafe[TestEnum](JsonString("1")),
+			TestEnum1
+		)
+	}
 
-		//------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------
 
-		"encode an adt constructor with 0 parameters as expected" in {
-			val data	= TestADT0
-			val json	= JsonObject.Var(
-				"" -> JsonString("0")
-			)
-			doWrite[TestADT](data)	mustEqual	json
-		}
-		"encode an adt constructor with 1 parameter as expected" in {
-			val data	= TestADT1(4711)
-			val json	= JsonObject.Var(
-				""	-> JsonString("1"),
-				"a"	-> JsonNumber(4711)
-			)
-			doWrite[TestADT](data)	mustEqual	json
+	test("serialization should encode an adt constructor with 0 parameters as expected") {
+		val data	= TestADT0
+		val json	= JsonObject.Var(
+			"" -> JsonString("0")
+		)
+		assertEquals(
+			doWrite[TestADT](data),
+			json
+		)
+	}
+	test("serialization should encode an adt constructor with 1 parameter as expected") {
+		val data	= TestADT1(4711)
+		val json	= JsonObject.Var(
+			""	-> JsonString("1"),
+			"a"	-> JsonNumber(4711)
+		)
+		assertEquals(
+			doWrite[TestADT](data),
+			json
+		)
 
-		}
-		"encode an adt constructor with 2 parameters as expected" in {
-			val data	= TestADT2(1337,4711)
-			val json	= JsonObject.Var(
-				""	-> JsonString("2"),
-				"a"	-> JsonNumber(1337),
-				"b"	-> JsonNumber(4711)
-			)
-			doWrite[TestADT](data)	mustEqual	json
-		}
+	}
+	test("serialization should encode an adt constructor with 2 parameters as expected") {
+		val data	= TestADT2(1337,4711)
+		val json	= JsonObject.Var(
+			""	-> JsonString("2"),
+			"a"	-> JsonNumber(1337),
+			"b"	-> JsonNumber(4711)
+		)
+		assertEquals(
+			doWrite[TestADT](data),
+			json
+		)
+	}
 
-		"decode an adt constructor with 0 parameters as expected" in {
-			val data	= TestADT0
-			val json	= JsonObject.Var(
-				"" -> JsonString("0")
-			)
-			doReadUnsafe[TestADT](json)	mustEqual	data
-		}
-		"decode an adt constructor with 1 parameter as expected" in {
-			val data	= TestADT1(4711)
-			val json	= JsonObject.Var(
-				""	-> JsonString("1"),
-				"a"	-> JsonNumber(4711)
-			)
-			doReadUnsafe[TestADT](json)	mustEqual	data
-		}
-		"decode an adt constructor with 2 parameters as expected" in {
-			val data	= TestADT2(1337,4711)
-			val json	= JsonObject.Var(
-				""	-> JsonString("2"),
-				"a"	-> JsonNumber(1337),
-				"b"	-> JsonNumber(4711)
-			)
-			doReadUnsafe[TestADT](json)	mustEqual	data
-		}
+	test("serialization should decode an adt constructor with 0 parameters as expected") {
+		val data	= TestADT0
+		val json	= JsonObject.Var(
+			"" -> JsonString("0")
+		)
+		assertEquals(
+			doReadUnsafe[TestADT](json),
+			data
+		)
+	}
+	test("serialization should decode an adt constructor with 1 parameter as expected") {
+		val data	= TestADT1(4711)
+		val json	= JsonObject.Var(
+			""	-> JsonString("1"),
+			"a"	-> JsonNumber(4711)
+		)
+		assertEquals(
+			doReadUnsafe[TestADT](json),
+			data
+		)
+	}
+	test("serialization should decode an adt constructor with 2 parameters as expected") {
+		val data	= TestADT2(1337,4711)
+		val json	= JsonObject.Var(
+			""	-> JsonString("2"),
+			"a"	-> JsonNumber(1337),
+			"b"	-> JsonNumber(4711)
+		)
+		assertEquals(
+			doReadUnsafe[TestADT](json),
+			data
+		)
 	}
 }

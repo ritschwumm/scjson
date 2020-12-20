@@ -111,7 +111,7 @@ object JsonArray {
 
 	object Var {
 		def apply(values:JsonValue*):JsonArray					= JsonArray(values.toVector)
-		def unapplySeq(array:JsonArray):Option[Seq[JsonValue]]	= Some(array.value)
+		def unapplySeq(array:JsonArray):Some[Seq[JsonValue]]	= Some(array.value)
 	}
 }
 
@@ -132,7 +132,7 @@ object JsonObject {
 
 	object Var {
 		def apply(it:(String,JsonValue)*):JsonObject					= JsonObject(it.toVector)
-		def unapplySeq(it:JsonObject):Option[Seq[(String,JsonValue)]]	= Some(it.value)
+		def unapplySeq(it:JsonObject):Some[Seq[(String,JsonValue)]]	= Some(it.value)
 	}
 }
 

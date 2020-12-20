@@ -1,122 +1,214 @@
 package scjson.codec
 
-import org.specs2.mutable._
+import minitest._
 
 import scjson.ast._
 
-class JsonDecoderTest extends Specification {
-	"JsonDecoderTest" should {
-		"decode null" in {
-			(JsonCodec decode "null") mustEqual Right(JsonNull)
-		}
-		"decode true" in {
-			(JsonCodec decode "true") mustEqual Right(JsonTrue)
-		}
-		"decode false" in {
-			(JsonCodec decode "false") mustEqual Right(JsonFalse)
-		}
+object JsonDecoderTest extends SimpleTestSuite {
+	test("JsonDecoder should decode null") {
+		assertEquals(
+			JsonCodec decode "null",
+			Right(JsonNull)
+		)
+	}
+	test("JsonDecoder should decode true") {
+		assertEquals(
+			JsonCodec decode "true",
+			Right(JsonTrue)
+		)
+	}
+	test("JsonDecoder should decode false") {
+		assertEquals(
+			JsonCodec decode "false",
+			Right(JsonFalse)
+		)
+	}
 
-		"decode int 0" in {
-			(JsonCodec decode "0") mustEqual Right(JsonNumber(0))
-		}
-		"decode int -1" in {
-			(JsonCodec decode "-1") mustEqual Right(JsonNumber(-1))
-		}
-		"decode int 1" in {
-			(JsonCodec decode "1") mustEqual Right(JsonNumber(1))
-		}
+	test("JsonDecoder should decode int 0") {
+		assertEquals(
+			JsonCodec decode "0",
+			Right(JsonNumber(0))
+		)
+	}
+	test("JsonDecoder should decode int -1") {
+		assertEquals(
+			JsonCodec decode "-1",
+			Right(JsonNumber(-1))
+		)
+	}
+	test("JsonDecoder should decode int 1") {
+		assertEquals(
+			JsonCodec decode "1",
+			Right(JsonNumber(1))
+		)
+	}
 
-		"fail with a single dot" in {
-			JsonCodec decode "." must beLeft
-		}
-		"fail without fraction after dot" in {
-			JsonCodec decode "0." must beLeft
-		}
-		"fail without int before fraction" in {
-			JsonCodec decode ".0" must beLeft
-		}
-		"fail with a single dot before exp" in {
-			JsonCodec decode ".e1" must beLeft
-		}
-		"fail without int before exp" in {
-			JsonCodec decode "e1" must beLeft
-		}
-		"fail without digits after exp" in {
-			JsonCodec decode "1e" must beLeft
-		}
+	test("JsonDecoder should fail with a single dot") {
+		assert(
+			(JsonCodec decode ".").isLeft
+		)
+	}
+	test("JsonDecoder should fail without fraction after dot") {
+		assert(
+			(JsonCodec decode "0.").isLeft
+		)
+	}
+	test("JsonDecoder should fail without int before fraction") {
+		assert(
+			(JsonCodec decode ".0").isLeft
+		)
+	}
+	test("JsonDecoder should fail with a single dot before exp") {
+		assert(
+			(JsonCodec decode ".e1").isLeft
+		)
+	}
+	test("JsonDecoder should fail without int before exp") {
+		assert(
+			(JsonCodec decode "e1").isLeft
+		)
+	}
+	test("JsonDecoder should fail without digits after exp") {
+		assert(
+			(JsonCodec decode "1e").isLeft
+		)
+	}
 
-		"decode float 0.0" in {
-			(JsonCodec decode "0.0") mustEqual Right(JsonNumber(0))
-		}
-		"decode float 1e1" in {
-			(JsonCodec decode "1e1") mustEqual Right(JsonNumber(10))
-		}
-		"decode float 2e+3" in {
-			(JsonCodec decode "2e+3") mustEqual Right(JsonNumber(2000))
-		}
-		"decode float 10e-1" in {
-			(JsonCodec decode "10e-1") mustEqual Right(JsonNumber(1))
-		}
-		"decode float 47.11" in {
-			(JsonCodec decode "47.11") mustEqual Right(JsonNumber(47.11))
-		}
+	test("JsonDecoder should decode float 0.0") {
+		assertEquals(
+			JsonCodec decode "0.0",
+			Right(JsonNumber(0))
+		)
+	}
+	test("JsonDecoder should decode float 1e1") {
+		assertEquals(
+			JsonCodec decode "1e1",
+			Right(JsonNumber(10))
+		)
+	}
+	test("JsonDecoder should decode float 2e+3") {
+		assertEquals(
+			JsonCodec decode "2e+3",
+			Right(JsonNumber(2000))
+		)
+	}
+	test("JsonDecoder should decode float 10e-1") {
+		assertEquals(
+			JsonCodec decode "10e-1",
+			Right(JsonNumber(1))
+		)
+	}
+	test("JsonDecoder should decode float 47.11") {
+		assertEquals(
+			JsonCodec decode "47.11",
+			Right(JsonNumber(47.11))
+		)
+	}
 
-		"fail with a leading zero in the body" in {
-			// (JsonCodec decode "00") must beLike { case Fail(_) => ok }
-			JsonCodec decode "00" must beLeft
-		}
-		"allow a leading zero in the exponent" in {
-			(JsonCodec decode "0E00") mustEqual Right(JsonNumber(0))
-		}
+	test("JsonDecoder should fail with a leading zero in the body") {
+		// (JsonCodec decode "00") must beLike { case Fail(_) => ok }
+		assert(
+			(JsonCodec decode "00").isLeft
+		)
+	}
+	test("JsonDecoder should allow a leading zero in the exponent") {
+		assertEquals(
+			JsonCodec decode "0E00",
+			Right(JsonNumber(0))
+		)
+	}
 
-		"decode simple strings" in {
-			(JsonCodec decode "\"hallo, welt!\"") mustEqual Right(JsonString("hallo, welt!"))
-		}
-		"decode string escapes" in {
-			(JsonCodec decode "\" \\\\ \\/ \\t \\r \\n \\f \\b \"") mustEqual Right(JsonString(" \\ / \t \r \n \f \b "))
-		}
-		"decode small hex escapes" in {
-			(JsonCodec decode "\" \\u0123 \"") mustEqual Right(JsonString(" \u0123 "))
-		}
-		"decode big hex escapes" in {
-			(JsonCodec decode "\" \\uf3e2 \"") mustEqual Right(JsonString(" \uf3e2 "))
-		}
-		"decode upper case hex escapes" in {
-			(JsonCodec decode "\" \\uBEEF \"") mustEqual Right(JsonString(" \uBEEF "))
-		}
-		"decode hex escapes outside the basic plane" in {
-			(JsonCodec decode "\"\\uD834\\uDD1E\"") mustEqual Right(JsonString("\uD834\uDD1E"))
-		}
-		"decode hex escapes outside the basic plane" in {
-			val cs	= new java.lang.StringBuilder appendCodePoint 0x1D11E toString;
-			(JsonCodec decode "\"\\uD834\\uDD1E\"") mustEqual Right(JsonString(cs))
-		}
+	test("JsonDecoder should decode simple strings") {
+		assertEquals(
+			JsonCodec decode "\"hallo, welt!\"",
+			Right(JsonString("hallo, welt!"))
+		)
+	}
+	test("JsonDecoder should decode string escapes") {
+		assertEquals(
+			JsonCodec decode "\" \\\\ \\/ \\t \\r \\n \\f \\b \"",
+			Right(JsonString(" \\ / \t \r \n \f \b "))
+		)
+	}
+	test("JsonDecoder should decode small hex escapes") {
+		assertEquals(
+			JsonCodec decode "\" \\u0123 \"",
+			Right(JsonString(" \u0123 "))
+		)
+	}
+	test("JsonDecoder should decode big hex escapes") {
+		assertEquals(
+			JsonCodec decode "\" \\uf3e2 \"",
+			Right(JsonString(" \uf3e2 "))
+		)
+	}
+	test("JsonDecoder should decode upper case hex escapes") {
+		assertEquals(
+			JsonCodec decode "\" \\uBEEF \"",
+			Right(JsonString(" \uBEEF "))
+		)
+	}
+	test("JsonDecoder should decode hex escapes outside the basic plane") {
+		assertEquals(
+			JsonCodec decode "\"\\uD834\\uDD1E\"",
+			Right(JsonString("\uD834\uDD1E"))
+		)
+	}
+	test("JsonDecoder should decode hex escapes outside the basic plane") {
+		val cs	= (new java.lang.StringBuilder appendCodePoint 0x1D11E).toString
+		assertEquals(
+			JsonCodec decode "\"\\uD834\\uDD1E\"",
+			Right(JsonString(cs))
+		)
+	}
 
-		"decode arrays with 0 elements" in {
-			(JsonCodec decode "[]") mustEqual Right(JsonArray(Seq()))
-		}
-		"decode arrays with 1 elements" in {
-			(JsonCodec decode "[1]") mustEqual Right(JsonArray(Seq(JsonNumber(1))))
-		}
-		"decode arrays with 2 elements" in {
-			(JsonCodec decode "[1,2]") mustEqual Right(JsonArray(Seq(JsonNumber(1),JsonNumber(2))))
-		}
+	test("JsonDecoder should decode arrays with 0 elements") {
+		assertEquals(
+			JsonCodec decode "[]",
+			Right(JsonArray(Seq()))
+		)
+	}
+	test("JsonDecoder should decode arrays with 1 elements") {
+		assertEquals(
+			JsonCodec decode "[1]",
+			Right(JsonArray(Seq(JsonNumber(1))))
+		)
+	}
+	test("JsonDecoder should decode arrays with 2 elements") {
+		assertEquals(
+			JsonCodec decode "[1,2]",
+			Right(JsonArray(Seq(JsonNumber(1),JsonNumber(2))))
+		)
+	}
 
-		"allow legal whitespace in arrays" in {
-			(JsonCodec decode "[ ]") mustEqual Right(JsonArray(Seq()))
-		}
-		"disallow illegal whitespace in arrays" in {
-			JsonCodec decode "[\u00a0]" must beLeft
-		}
+	test("JsonDecoder should allow legal whitespace in arrays") {
+		assertEquals(
+			JsonCodec decode "[ ]",
+			Right(JsonArray(Seq()))
+		)
+	}
+	test("JsonDecoder should disallow illegal whitespace in arrays") {
+		assert(
+			(JsonCodec decode "[\u00a0]").isLeft
+		)
+	}
 
-		"decode objects with 0 elements" in {
-			(JsonCodec decode "{}") mustEqual Right(JsonObject.empty)
-		}
-		"decode objects with 1 elements" in {
-			(JsonCodec decode "{\"a\":1}") mustEqual Right(JsonObject(Seq("a"->JsonNumber(1))))
-		}
-		"decode objects with 2 elements" in {
-			(JsonCodec decode "{\"a\":1,\"b\":2}") mustEqual Right(JsonObject(Seq("a"->JsonNumber(1),"b"->JsonNumber(2))))
-		}
+	test("JsonDecoder should decode objects with 0 elements") {
+		assertEquals(
+			JsonCodec decode "{}",
+			Right(JsonObject.empty)
+		)
+	}
+	test("JsonDecoder should decode objects with 1 elements") {
+		assertEquals(
+			JsonCodec decode "{\"a\":1}",
+			Right(JsonObject(Seq("a"->JsonNumber(1))))
+		)
+	}
+	test("JsonDecoder should decode objects with 2 elements") {
+		assertEquals(
+			JsonCodec decode "{\"a\":1,\"b\":2}",
+			Right(JsonObject(Seq("a"->JsonNumber(1),"b"->JsonNumber(2))))
+		)
 	}
 }

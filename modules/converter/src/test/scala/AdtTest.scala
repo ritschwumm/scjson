@@ -1,6 +1,6 @@
 package scjson.converter
 
-import org.specs2.mutable._
+import minitest._
 
 import scutil.lang._
 
@@ -41,35 +41,45 @@ sealed trait TestAdt
 
 //------------------------------------------------------------------------------
 
-class AdtTest extends Specification {
+object AdtTest extends SimpleTestSuite {
 	val Empty	= JsonObject.Var()
 
-	"adts should" should {
-		"unparse 0" in {
-			JsonWriter[TestAdt] convert TestAdt.TestAdt0 mustEqual
+	test("adts should unparse 0") {
+		assertEquals(
+			JsonWriter[TestAdt] convert TestAdt.TestAdt0,
 			Good(JsonObject.Var("TestAdt0" -> Empty))
-		}
-		"parse 0" in {
-			JsonReader[TestAdt] convert JsonObject.Var("TestAdt0" -> Empty) mustEqual
+		)
+	}
+	test("adts should parse 0") {
+		assertEquals(
+			JsonReader[TestAdt] convert JsonObject.Var("TestAdt0" -> Empty),
 			Good(TestAdt.TestAdt0)
-		}
+		)
+	}
 
-		"unparse 1" in {
-			JsonWriter[TestAdt] convert TestAdt.TestAdt1(7) mustEqual
+	test("adts should unparse 1") {
+		assertEquals(
+			JsonWriter[TestAdt] convert TestAdt.TestAdt1(7),
 			Good(JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))))
-		}
-		"parse 1" in {
-			JsonReader[TestAdt] convert JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))) mustEqual
+		)
+	}
+	test("adts should parse 1") {
+		assertEquals(
+			JsonReader[TestAdt] convert JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))),
 			Good(TestAdt.TestAdt1(7))
-		}
+		)
+	}
 
-		"unparse 2" in {
-			JsonWriter[TestAdt] convert TestAdt.TestAdt2(7, "z") mustEqual
+	test("adts should unparse 2") {
+		assertEquals(
+			JsonWriter[TestAdt] convert TestAdt.TestAdt2(7, "z"),
 			Good(JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))))
-		}
-		"parse 2" in {
-			JsonReader[TestAdt] convert JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))) mustEqual
+		)
+	}
+	test("adts should parse 2") {
+		assertEquals(
+			JsonReader[TestAdt] convert JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))),
 			Good(TestAdt.TestAdt2(7, "z"))
-		}
+		)
 	}
 }
