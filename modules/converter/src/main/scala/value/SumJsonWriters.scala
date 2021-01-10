@@ -21,7 +21,7 @@ trait SumJsonWriters {
 				}
 
 			val b:JsonResult[Seq[(String,JsonValue)]]	=
-				a map { _.collapse }
+				a map { _.flattenOption }
 
 			val c:JsonResult[(String,JsonValue)]	=
 				b flatMap { pairs =>

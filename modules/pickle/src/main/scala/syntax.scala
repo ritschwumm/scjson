@@ -11,7 +11,4 @@ package object syntax {
 
 	def jsonObject(values:(String,JsonWrapper)*):JsonObject	=
 		JsonObject(values.toVector map { case (k, v) => (k, v.unwrap) })
-
-	@deprecated("use jsonValue", "0.187.0")
-	def jsonSimple(value:JsonWrapper):JsonValue	= jsonValue(value)
 }
