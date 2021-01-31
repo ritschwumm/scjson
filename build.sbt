@@ -5,7 +5,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.222.0",
+	version			:= "0.223.0",
 
 	scalaVersion	:= "2.13.4",
 	scalacOptions	++= Seq(
@@ -93,7 +93,7 @@ lazy val `scjson-ast`	=
 	.enablePlugins()
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.201.0"				% "compile"
+			"de.djini"			%%%	"scutil-core"	% "0.202.0"				% "compile"
 		)
 	)
 	.jvmSettings()
@@ -111,7 +111,7 @@ lazy val `scjson-codec`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.201.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.202.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.2"				% "test"
 		)
 	)
@@ -136,7 +136,7 @@ lazy val `scjson-converter`	=
 	.settings(
 		libraryDependencies	++= Seq(
 			//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-			"de.djini"			%%%	"scutil-core"	% "0.201.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.202.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.2"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
@@ -164,7 +164,7 @@ lazy val `scjson-pickle`	=
 			// TODO could this be a provided dependency?
 			// TODO is this dependency necessary at all?
 			"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-			"de.djini"			%%	"scutil-core"	% "0.201.0"				% "compile",
+			"de.djini"			%%	"scutil-core"	% "0.202.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.2"				% "test"
 		),
 		testFrameworks	+= new TestFramework("minitest.runner.Framework"),
@@ -181,7 +181,7 @@ lazy val `scjson-io-pickle`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.201.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.202.0"				% "compile"
 		)
 	)
 
@@ -195,6 +195,6 @@ lazy val `scjson-io-converter`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.201.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.202.0"				% "compile"
 		)
 	)
