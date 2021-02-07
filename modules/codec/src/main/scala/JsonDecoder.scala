@@ -31,21 +31,6 @@ private final class JsonDecoder(text:String) {
 		ws()
 		if (finished)	throw expected("any char")
 
-		if (isString("null"))	return JsonNull
-		if (isString("true"))	return JsonTrue
-		if (isString("false"))	return JsonFalse
-		if (isChar('[')) {
-			val	out	= new immutable.VectorBuilder[JsonValue]
-			ws()
-			if (isChar(']'))	return JsonArray(out.result())
-			while (true) {
-				val value	= decodeNext()
-				out	+= value
-				ws()
-				if (isChar(']'))	return JsonArray(out.result())
-				if (!isChar(','))	throw expectedClass(",]")
-			}
-		}
 		if (isChar('{')) {
 			val out	= new immutable.VectorBuilder[(String,JsonValue)]
 			ws()
@@ -64,10 +49,25 @@ private final class JsonDecoder(text:String) {
 				if (!isChar(','))	throw expectedClass(",}");
 			}
 		}
+		if (isChar('[')) {
+			val	out	= new immutable.VectorBuilder[JsonValue]
+			ws()
+			if (isChar(']'))	return JsonArray(out.result())
+			while (true) {
+				val value	= decodeNext()
+				out	+= value
+				ws()
+				if (isChar(']'))	return JsonArray(out.result())
+				if (!isChar(','))	throw expectedClass(",]")
+			}
+		}
 		if (isChar('"')) {
 			val out	= new StringBuilder
 			while (true) {
-				if (isChar('\\')) {
+				if (isChar('"')) {
+					return JsonString(out.result())
+				}
+				else if (isChar('\\')) {
 					if (finished)	throw expected("escape continuation")
 						 if (isChar('"'))	out	+= '"'
 					else if (isChar('\\'))	out	+= '\\'
@@ -89,9 +89,6 @@ private final class JsonDecoder(text:String) {
 					}
 					else throw expectedClass("\"\\/trnfbu")
 				}
-				else if (isChar('"')) {
-					return JsonString(out.result())
-				}
 				else if (rng('\u0000', '\u001f')) {
 					offset	-= 1
 					throw expected("not a control character")
@@ -103,6 +100,9 @@ private final class JsonDecoder(text:String) {
 				}
 			}
 		}
+		if (isString("true"))	return JsonTrue
+		if (isString("false"))	return JsonFalse
+		if (isString("null"))	return JsonNull
 
 		val before		= offset
 
@@ -149,10 +149,10 @@ private final class JsonDecoder(text:String) {
 	}
 
 	private def expected(what:String)	=
-			new JsonDecodeException(JsonDecodeFailure(text, offset, what))
+		new JsonDecodeException(JsonDecodeFailure(text, offset, what))
 
 	private def expectedClass(charClass:String)	=
-			new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonString(charClass))))
+		new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonString(charClass))))
 
 	//-------------------------------------------------------------------------
 	//## tokens
@@ -160,10 +160,10 @@ private final class JsonDecoder(text:String) {
 	private def hexDigit():Int	= {
 		val	c	= text charAt offset
 		val h	=
-					 if (c >= '0' && c <= '9')	c - '0'
-				else if (c >= 'a' && c <= 'f')	c - 'a' + 10
-				else if (c >= 'A' && c <= 'F')	c - 'A' + 10
-				else throw expected("a hex digit")
+				 if (c >= '0' && c <= '9')	c - '0'
+			else if (c >= 'a' && c <= 'f')	c - 'a' + 10
+			else if (c >= 'A' && c <= 'F')	c - 'A' + 10
+			else throw expected("a hex digit")
 		offset	+= 1
 		h
 	}
@@ -204,11 +204,27 @@ private final class JsonDecoder(text:String) {
 		else				{ consume(); true }
 	}
 
+	/*
 	private def isString(s:String):Boolean	= {
 		val end	= offset + s.length
 			 if (end > text.length)						false
 		else if ((text.substring(offset, end)) != s)	false
 		else											{ offset	= end; true }
+	}
+	*/
+
+	private def isString(s:String):Boolean	= {
+		val end	= offset + s.length
+		if (end <= text.length) {
+			var i	= 0
+			while (i < s.length) {
+				if (text.charAt(offset+i) != s.charAt(i))	return false
+				i	+= 1
+			}
+			offset	= end
+			true
+		}
+		else false
 	}
 
 	//-------------------------------------------------------------------------
