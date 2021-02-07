@@ -47,9 +47,9 @@ object OptionProtocols {
 				case None			=> JsonValue.Null
 				case Some(value)	=> doWrite(value)
 			},
-			_ match {
-				case JsonNull	=> None
-				case js			=> Some(doReadUnsafe[T](js))
+			it => {
+				if (it.isNull)	None
+				else			Some(doReadUnsafe[T](it))
 			}
 		)
 }

@@ -37,10 +37,7 @@ private final class JsonDecoder(text:String) {
 			if (isChar('}'))	return JsonValue.fromFields(out.result())
 			while (true) {
 				// TODO decode only strings here, nothing else!
-				val key	= decodeNext() match {
-					case JsonString(s)	=> s
-					case _				=> throw expected("string key")
-				}
+				val key	= decodeNext().asString getOrElse { throw expected("string key") }
 				ws();
 				if (!isChar(':'))	throw expectedClass(":")
 				val value	= decodeNext()

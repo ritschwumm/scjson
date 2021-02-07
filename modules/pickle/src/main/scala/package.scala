@@ -4,8 +4,6 @@ import scutil.lang._
 
 import scjson.ast._
 
-import scjson.pickle.JsonPickleUtil._
-
 /** typeclass-based, bidirectional Json serialization */
 package object pickle {
 	/** convert values to Json and back */
@@ -14,11 +12,6 @@ package object pickle {
 	/** create a Format from the two halves of a Bijection */
 	def Format[T](writeFunc:T=>JsonValue, readFunc:JsonValue=>T):Format[T]	=
 		Bijection(writeFunc, readFunc)
-
-	/** this is a bit of a hack to force a specific constructor to be used for decoding */
-	@deprecated("will be removed", "0.226.0")
-	def SubtypeFormat[T,U<:JsonValue](writeFunc:T=>U, readFunc:U=>T):Format[T]	=
-		Bijection(writeFunc, it => readFunc(downcast(it)))
 
 	/** delay the construction of an actual Format until it's used */
 	def LazyFormat[T](sub: =>Format[T]):Format[T]	=

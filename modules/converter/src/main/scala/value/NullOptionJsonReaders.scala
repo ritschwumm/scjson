@@ -1,7 +1,6 @@
 package scjson.converter
 
 import scutil.lang._
-import scjson.ast._
 
 import scjson.converter.{
 	CollectionConverters	=> CC,
@@ -27,8 +26,8 @@ trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 
 trait NullOptionJsonReadersLow {
 	implicit def OptionNullReader[T:JsonReader]:JsonReader[Option[T]]	=
-		Converter {
-			case JsonNull	=> Validated valid None
-			case x			=> JsonReader[T] convert x map Some.apply
+		Converter { it =>
+			if (it.isNull)	Validated valid None
+			else			JsonReader[T] convert it map Some.apply
 		}
 }

@@ -6,52 +6,27 @@ object JsonPickleUtil {
 	def fail(message:String):Nothing =
 		throw new JsonUnpickleException(JsonUnpickleFailure(message))
 
-	// TODO add expected and actual ctor name
-	@SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
-	@deprecated("will be removed", "0.226.0")
-	def downcast[T<:JsonValue](it:JsonValue):T	=
-		try { it.asInstanceOf[T] }
-		catch { case e:ClassCastException => fail("unexpected json value type") }
-
 	//------------------------------------------------------------------------------
 
 	def objectMap(it:JsonValue):Map[String,JsonValue]	=
-		it match {
-			case JsonObject(value)	=> value.toMap
-			case _					=> fail("expected a json object")
-		}
+		objectValue(it).toMap
 
 	def objectValue(it:JsonValue):Seq[(String,JsonValue)]	=
-		it match {
-			case JsonObject(value)	=> value
-			case _					=> fail("expected a json object")
-		}
+		it.asObject.getOrElse(fail("expected a json object"))
 
 	def arrayValue(it:JsonValue):Seq[JsonValue]	=
-		it match {
-			case JsonArray(value)	=> value
-			case _					=> fail("expected a json array")
-		}
+		it.asArray.getOrElse(fail("expected a json array"))
 
 	//------------------------------------------------------------------------------
 
 	def stringValue(it:JsonValue):String	=
-		it match {
-			case JsonString(value)	=> value
-			case _					=> fail("expected a json string")
-		}
+		it.asString.getOrElse(fail("expected a json string"))
 
 	def numberValue(it:JsonValue):BigDecimal	=
-		it match {
-			case JsonNumber(value)	=> value
-			case _					=> fail("expected a json number")
-		}
+		it.asNumber.getOrElse(fail("expected a json number"))
 
 	def booleanValue(it:JsonValue):Boolean	=
-		it match {
-			case JsonBoolean(value)	=> value
-			case _					=> fail("expected a json boolean")
-		}
+		it.asBoolean.getOrElse(fail("expected a json boolean"))
 
 	//------------------------------------------------------------------------------
 
