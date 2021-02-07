@@ -8,7 +8,7 @@ trait TupleProtocolGenerated {
 	[2..#implicit def Tuple1Format[[#T1:Format#]]:Format[([#T1#])]	=
 		Format[([#T1#])](
 			(out:([#T1#])) => {
-				JsonArray.Var([#doWrite[T1](out._1)#])
+				JsonValue.arr([#doWrite[T1](out._1)#])
 			},
 			(in:JsonValue) => {
 				val	arr	= arrayValue(in)

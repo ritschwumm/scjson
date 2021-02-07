@@ -12,7 +12,7 @@ trait CaseClassProtocolGenerated {
 				Format[T](
 					(out:T)	=> {
 						val fields	= unapplyTotal(unapply, out)
-						JsonObject.Var([#k1 -> doWrite[S1](fields._1)#])
+						JsonValue.obj([#k1 -> doWrite[S1](fields._1)#])
 					},
 					(in:JsonValue)	=> {
 						val map	= objectMap(in)

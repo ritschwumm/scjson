@@ -12,13 +12,13 @@ object NullOptionTest extends SimpleTestSuite {
 	test("plain option should serialize None as null") {
 		assertEquals(
 			writeAst(None:Option[String]),
-			Right(JsonNull)
+			Right(JsonValue.Null)
 		)
 	}
 	test("plain option should serialize Some as value") {
 		assertEquals(
 			writeAst(Some("hallo"):Option[String]),
-			Right(JsonString("hallo"))
+			Right(JsonValue.fromString("hallo"))
 		)
 	}
 
@@ -27,19 +27,19 @@ object NullOptionTest extends SimpleTestSuite {
 	test("nested option should serialize None as {none:{}}") {
 		assertEquals(
 			writeAst(None:Option[Option[String]]),
-			Right(JsonObject.Var("none" -> Empty))
+			Right(JsonValue.obj("none" -> Empty))
 		)
 	}
 	test("nested option should serialize Some(None) as {some:null}") {
 		assertEquals(
 			writeAst(Some(None):Option[Option[String]]),
-			Right(JsonObject.Var("some" -> JsonNull))
+			Right(JsonValue.obj("some" -> JsonValue.Null))
 		)
 	}
 	test("nested option should serialize Some(Some) as {some:value}") {
 		assertEquals(
 			writeAst(Some(Some("hallo")):Option[Option[String]]),
-			Right(JsonObject.Var("some" -> JsonString("hallo")))
+			Right(JsonValue.obj("some" -> JsonValue.fromString("hallo")))
 		)
 	}
 
@@ -48,33 +48,32 @@ object NullOptionTest extends SimpleTestSuite {
 	test("double nested option should serialize None as {none:{}}") {
 		assertEquals(
 			writeAst(None:Option[Option[Option[String]]]),
-			Right(JsonObject.Var("none" -> Empty))
+			Right(JsonValue.obj("none" -> Empty))
 		)
 	}
 	test("double nested option should serialize Some(None) as {some:{none:{}}}") {
 		assertEquals(
 			writeAst(Some(None):Option[Option[Option[String]]]),
-			Right(JsonObject.Var("some" -> JsonObject.Var("none" -> Empty)))
+			Right(JsonValue.obj("some" -> JsonValue.obj("none" -> Empty)))
 		)
 	}
 	test("double nested option should serialize Some(Some(None)) as {some:{some:null}}") {
 		assertEquals(
 			writeAst(Some(Some(None)):Option[Option[Option[String]]]),
-			Right(JsonObject.Var("some" -> JsonObject.Var("some" -> JsonNull)))
+			Right(JsonValue.obj("some" -> JsonValue.obj("some" -> JsonValue.Null)))
 		)
 	}
 	test("double nested option should serialize Some(Some(Some)) as {some:{some:value}}") {
 		assertEquals(
 			writeAst(Some(Some(Some("hallo"))):Option[Option[Option[String]]]),
-			Right(JsonObject.Var("some" -> JsonObject.Var("some" -> JsonString("hallo"))))
+			Right(JsonValue.obj("some" -> JsonValue.obj("some" -> JsonValue.fromString("hallo"))))
 		)
 	}
 
 	//------------------------------------------------------------------------------
 
 	// TODO it seems in old times, we encoded ```none``` as ```{ "none": true }``` and now we use ```{ "none": {} }```
-	//	JsonTrue
-	def Empty:JsonValue	= JsonObject.Var()
+	def Empty:JsonValue	= JsonValue.emptyObject
 
 	def readAst[T:JsonReader](json:JsonValue):Either[JsonError,T]	=
 		JsonReader[T].convert(json).toEither

@@ -42,17 +42,17 @@ sealed trait TestAdt
 //------------------------------------------------------------------------------
 
 object AdtTest extends SimpleTestSuite {
-	val Empty	= JsonObject.Var()
+	val Empty	= JsonValue.emptyObject
 
 	test("adts should unparse 0") {
 		assertEquals(
 			JsonWriter[TestAdt] convert TestAdt.TestAdt0,
-			Validated.valid(JsonObject.Var("TestAdt0" -> Empty))
+			Validated.valid(JsonValue.obj("TestAdt0" -> Empty))
 		)
 	}
 	test("adts should parse 0") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonObject.Var("TestAdt0" -> Empty),
+			JsonReader[TestAdt] convert JsonValue.obj("TestAdt0" -> Empty),
 			Validated.valid(TestAdt.TestAdt0)
 		)
 	}
@@ -60,12 +60,12 @@ object AdtTest extends SimpleTestSuite {
 	test("adts should unparse 1") {
 		assertEquals(
 			JsonWriter[TestAdt] convert TestAdt.TestAdt1(7),
-			Validated.valid(JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))))
+			Validated.valid(JsonValue.obj("TestAdt1" -> JsonValue.obj("a" -> JsonValue.fromInt(7))))
 		)
 	}
 	test("adts should parse 1") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonObject.Var("TestAdt1" -> JsonObject.Var("a" -> JsonNumber(7))),
+			JsonReader[TestAdt] convert JsonValue.obj("TestAdt1" -> JsonValue.obj("a" -> JsonValue.fromInt(7))),
 			Validated.valid(TestAdt.TestAdt1(7))
 		)
 	}
@@ -73,12 +73,12 @@ object AdtTest extends SimpleTestSuite {
 	test("adts should unparse 2") {
 		assertEquals(
 			JsonWriter[TestAdt] convert TestAdt.TestAdt2(7, "z"),
-			Validated.valid(JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))))
+			Validated.valid(JsonValue.obj("TestAdt2" -> JsonValue.obj("a" -> JsonValue.fromInt(7), "b" -> JsonValue.fromString("z"))))
 		)
 	}
 	test("adts should parse 2") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonObject.Var("TestAdt2" -> JsonObject.Var("a" -> JsonNumber(7), "b" -> JsonString("z"))),
+			JsonReader[TestAdt] convert JsonValue.obj("TestAdt2" -> JsonValue.obj("a" -> JsonValue.fromInt(7), "b" -> JsonValue.fromString("z"))),
 			Validated.valid(TestAdt.TestAdt2(7, "z"))
 		)
 	}

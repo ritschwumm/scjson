@@ -34,7 +34,7 @@ object SumConverters {
 			}
 			yield {
 				val remainder	= map - typeTag
-				JsonObject.Var(tagStr -> JsonValue.mkObject(remainder.toVector))
+				JsonValue.obj(tagStr -> JsonValue.fromFields(remainder.toVector))
 			}
 		}
 
@@ -48,8 +48,8 @@ object SumConverters {
 				payload	<-	v.asObject		toValid JsonError(show"expected payload to be an object")
 			}
 			yield {
-				JsonValue.mkObject(
-					payload	:+ (typeTag -> JsonValue.mkString(k))
+				JsonValue.fromFields(
+					payload	:+ (typeTag -> JsonValue.fromString(k))
 				)
 			}
 		}

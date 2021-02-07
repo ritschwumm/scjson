@@ -9,10 +9,10 @@ object syntax {
 		value.unwrap
 
 	def jsonArray(values:JsonWrapper*):JsonResult[JsonValue]	=
-		values.toVector traverseValidated (_.unwrap) map JsonArray.apply
+		values.toVector traverseValidated (_.unwrap) map JsonValue.fromItems
 
 	def jsonObject(values:(String,JsonWrapper)*):JsonResult[JsonValue]	=
-		values.toVector traverseValidated { case (key, value) => value.unwrap map (key -> _) } map JsonObject.apply
+		values.toVector traverseValidated { case (key, value) => value.unwrap map (key -> _) } map JsonValue.fromFields
 
 	//------------------------------------------------------------------------------
 

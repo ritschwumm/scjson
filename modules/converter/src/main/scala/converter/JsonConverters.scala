@@ -6,22 +6,22 @@ import scjson.ast._
 
 object JsonConverters {
 	val expectNull:JsonConverter[JsonValue,Unit]	=
-		Converter.optional(_.asNull, JsonError(show"expected JsonNull"))
+		Converter.optional(_.asNull, JsonError(show"expected json null"))
 
 	val expectBoolean:JsonConverter[JsonValue,Boolean]	=
-		Converter.optional(_.asBoolean, JsonError(show"expected JsonBoolean"))
+		Converter.optional(_.asBoolean, JsonError(show"expected json boolean"))
 
 	val expectNumber:JsonConverter[JsonValue,BigDecimal]	=
-		Converter.optional(_.asNumber, JsonError(show"expected JsonNumber"))
+		Converter.optional(_.asNumber, JsonError(show"expected json number"))
 
 	val expectString:JsonConverter[JsonValue,String]	=
-		Converter.optional(_.asString, JsonError(show"expected JsonString"))
+		Converter.optional(_.asString, JsonError(show"expected json string"))
 
 	val expectArray:JsonConverter[JsonValue,Seq[JsonValue]]	=
-		Converter.optional(_.asArray, JsonError(show"expected JsonArray"))
+		Converter.optional(_.asArray, JsonError(show"expected json array"))
 
 	val expectObject:JsonConverter[JsonValue,Seq[(String,JsonValue)]]	=
-		Converter.optional(_.asObject, JsonError(show"expected JsonObject"))
+		Converter.optional(_.asObject, JsonError(show"expected json object"))
 
 	//------------------------------------------------------------------------------
 
@@ -31,22 +31,22 @@ object JsonConverters {
 	//------------------------------------------------------------------------------
 
 	val makeNull:JsonConverter[Unit,JsonValue]	=
-		Converter total JsonValue.mkNull
+		Converter pure JsonValue.Null
 
 	val makeBoolean:JsonConverter[Boolean,JsonValue]	=
-		Converter total JsonValue.mkBoolean
+		Converter total JsonValue.fromBoolean
 
 	val makeNumber:JsonConverter[BigDecimal,JsonValue]	=
-		Converter total JsonValue.mkNumber
+		Converter total JsonValue.fromBigDecimal
 
 	val makeString:JsonConverter[String,JsonValue]	=
-		Converter total JsonValue.mkString
+		Converter total JsonValue.fromString
 
 	val makeArray:JsonConverter[Seq[JsonValue],JsonValue]	=
-		Converter total JsonValue.mkArray
+		Converter total JsonValue.fromItems
 
 	val makeObject:JsonConverter[Seq[(String,JsonValue)],JsonValue]	=
-		Converter total JsonValue.mkObject
+		Converter total JsonValue.fromFields
 
 	//------------------------------------------------------------------------------
 

@@ -32,7 +32,7 @@ trait CollectionProtocol {
 	implicit def StringMapFormat[T:Format]:Format[Map[String,T]]	=
 		Format[Map[String,T]](
 			(out:Map[String,T])	=> {
-				JsonObject(out.toVector map {
+				JsonValue.fromFields(out.toVector map {
 					case (k,v) => (k, doWrite[T](v))
 				})
 			},

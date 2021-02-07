@@ -12,55 +12,55 @@ import JsonFormat._
 
 object BasicsTest extends SimpleTestSuite {
 	test("Json values should roundtrip null") {
-		val in:JsonValue	= JsonNull
+		val in:JsonValue	= JsonValue.Null
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip true") {
-		val in:JsonValue	= JsonBoolean(true)
+		val in:JsonValue	= JsonValue.fromBoolean(true)
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip false") {
-		val in:JsonValue	= JsonBoolean(false)
+		val in:JsonValue	= JsonValue.fromBoolean(false)
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip 1") {
-		val in:JsonValue	= JsonNumber(1)
+		val in:JsonValue	= JsonValue.fromInt(1)
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip 2.3") {
-		val in:JsonValue	= JsonNumber(2.3)
+		val in:JsonValue	= JsonValue.fromDouble(2.3)
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip 4.5e6") {
-		val in:JsonValue	= JsonNumber(4.5e6)
+		val in:JsonValue	= JsonValue.fromDouble(4.5e6)
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip a string") {
-		val in:JsonValue	= JsonString("hallo")
+		val in:JsonValue	= JsonValue.fromString("hallo")
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip an array") {
-		val in:JsonValue	= JsonArray(Vector[JsonValue](JsonString("b"), JsonNumber(1)))
+		val in:JsonValue	= JsonValue.fromItems(Vector(JsonValue.fromString("b"), JsonValue.fromInt(1)))
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
 	}
 	test("Json values should roundtrip an object") {
-		val in:JsonValue	= JsonObject(Vector[(String,JsonValue)]("a" -> JsonString("b"), "c" -> JsonNumber(1)))
+		val in:JsonValue	= JsonValue.fromFields(Vector("a" -> JsonValue.fromString("b"), "c" -> JsonValue.fromInt(1)))
 		val str:String		= pickle(in)	getOrError "oops"
 		val out:JsonValue	= unpickle(str)	getOrError "oops"
 		assertEquals(out, in)
@@ -218,7 +218,7 @@ object BasicsTest extends SimpleTestSuite {
 
 	//------------------------------------------------------------------------------
 
-	val Empty	= JsonObject.Var()
+	val Empty	= JsonValue.emptyObject
 
 	private def pickle[T:JsonWriter](it:T):JsonResult[String]	=
 		JsonWriter[T] convert it flatMap encode

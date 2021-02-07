@@ -16,6 +16,7 @@ package object pickle {
 		Bijection(writeFunc, readFunc)
 
 	/** this is a bit of a hack to force a specific constructor to be used for decoding */
+	@deprecated("will be removed", "0.226.0")
 	def SubtypeFormat[T,U<:JsonValue](writeFunc:T=>U, readFunc:U=>T):Format[T]	=
 		Bijection(writeFunc, it => readFunc(downcast(it)))
 

@@ -9,26 +9,26 @@ object SyntaxTest extends SimpleTestSuite {
 	test("syntax should work with simple values") {
 		assertEquals(
 			jsonValue(1),
-			JsonNumber(1)
+			JsonValue.fromInt(1)
 		)
 	}
 	test("syntax should work with arrays") {
 		assertEquals(
 			jsonArray(1, "test", false),
-			JsonArray.Var(
-				JsonNumber(1),
-				JsonString("test"),
-				JsonFalse
+			JsonValue.arr(
+				JsonValue.fromInt(1),
+				JsonValue.fromString("test"),
+				JsonValue.False
 			)
 		)
 	}
 	test("syntax should work with objects") {
 		assertEquals(
-			jsonObject("a" -> 1, "b" -> "x", "c" -> JsonNull),
-			JsonObject.Var(
-				"a"	-> JsonNumber(1),
-				"b"	-> JsonString("x"),
-				"c"	-> JsonNull
+			jsonObject("a" -> 1, "b" -> "x", "c" -> JsonValue.Null),
+			JsonValue.obj(
+				"a"	-> JsonValue.fromInt(1),
+				"b"	-> JsonValue.fromString("x"),
+				"c"	-> JsonValue.Null
 			)
 		)
 	}

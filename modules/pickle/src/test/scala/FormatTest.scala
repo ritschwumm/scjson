@@ -47,12 +47,12 @@ object FormatTest extends SimpleTestSuite {
 	test("serialization should encode an enum as expected") {
 		assertEquals(
 			doWrite[TestEnum](TestEnum1)	,
-			JsonString("1")
+			JsonValue.fromString("1")
 		)
 	}
 	test("serialization should decode an enum as expected") {
 		assertEquals(
-			doReadUnsafe[TestEnum](JsonString("1")),
+			doReadUnsafe[TestEnum](JsonValue.fromString("1")),
 			TestEnum1
 		)
 	}
@@ -61,8 +61,8 @@ object FormatTest extends SimpleTestSuite {
 
 	test("serialization should encode an adt constructor with 0 parameters as expected") {
 		val data	= TestADT0
-		val json	= JsonObject.Var(
-			"" -> JsonString("0")
+		val json	= JsonValue.obj(
+			"" -> JsonValue.fromString("0")
 		)
 		assertEquals(
 			doWrite[TestADT](data),
@@ -71,9 +71,9 @@ object FormatTest extends SimpleTestSuite {
 	}
 	test("serialization should encode an adt constructor with 1 parameter as expected") {
 		val data	= TestADT1(4711)
-		val json	= JsonObject.Var(
-			""	-> JsonString("1"),
-			"a"	-> JsonNumber(4711)
+		val json	= JsonValue.obj(
+			""	-> JsonValue.fromString("1"),
+			"a"	-> JsonValue.fromInt(4711)
 		)
 		assertEquals(
 			doWrite[TestADT](data),
@@ -83,10 +83,10 @@ object FormatTest extends SimpleTestSuite {
 	}
 	test("serialization should encode an adt constructor with 2 parameters as expected") {
 		val data	= TestADT2(1337,4711)
-		val json	= JsonObject.Var(
-			""	-> JsonString("2"),
-			"a"	-> JsonNumber(1337),
-			"b"	-> JsonNumber(4711)
+		val json	= JsonValue.obj(
+			""	-> JsonValue.fromString("2"),
+			"a"	-> JsonValue.fromInt(1337),
+			"b"	-> JsonValue.fromInt(4711)
 		)
 		assertEquals(
 			doWrite[TestADT](data),
@@ -96,8 +96,8 @@ object FormatTest extends SimpleTestSuite {
 
 	test("serialization should decode an adt constructor with 0 parameters as expected") {
 		val data	= TestADT0
-		val json	= JsonObject.Var(
-			"" -> JsonString("0")
+		val json	= JsonValue.obj(
+			"" -> JsonValue.fromString("0")
 		)
 		assertEquals(
 			doReadUnsafe[TestADT](json),
@@ -106,9 +106,9 @@ object FormatTest extends SimpleTestSuite {
 	}
 	test("serialization should decode an adt constructor with 1 parameter as expected") {
 		val data	= TestADT1(4711)
-		val json	= JsonObject.Var(
-			""	-> JsonString("1"),
-			"a"	-> JsonNumber(4711)
+		val json	= JsonValue.obj(
+			""	-> JsonValue.fromString("1"),
+			"a"	-> JsonValue.fromInt(4711)
 		)
 		assertEquals(
 			doReadUnsafe[TestADT](json),
@@ -117,10 +117,10 @@ object FormatTest extends SimpleTestSuite {
 	}
 	test("serialization should decode an adt constructor with 2 parameters as expected") {
 		val data	= TestADT2(1337,4711)
-		val json	= JsonObject.Var(
-			""	-> JsonString("2"),
-			"a"	-> JsonNumber(1337),
-			"b"	-> JsonNumber(4711)
+		val json	= JsonValue.obj(
+			""	-> JsonValue.fromString("2"),
+			"a"	-> JsonValue.fromInt(1337),
+			"b"	-> JsonValue.fromInt(4711)
 		)
 		assertEquals(
 			doReadUnsafe[TestADT](json),

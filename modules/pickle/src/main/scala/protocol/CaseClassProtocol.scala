@@ -14,12 +14,12 @@ object CaseClassProtocol extends CaseClassProtocol
 
 trait CaseClassProtocol extends CaseClassProtocolGenerated {
 	def caseObjectFormat[T:TypeTag](singleton:T):Format[T]	=
-		Format[T](constant(JsonObject.empty), constant(singleton))
+		Format[T](constant(JsonValue.emptyObject), constant(singleton))
 
 	def caseClassFormat0[T](apply:()=>T, unapply:T=>Boolean):Format[T]	=
 		Format[T](
 			(out:T)	=> {
-				JsonObject.Var()
+				JsonValue.emptyObject
 			},
 			(in:JsonValue)	=> {
 				val _	= objectMap(in)
@@ -33,7 +33,7 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 				Format[T](
 					(out:T)	=> {
 						val fields	= unapplyTotal(unapply, out)
-						JsonObject.Var(
+						JsonValue.obj(
 							k1	-> doWrite[S1](fields)
 						)
 					},
@@ -88,12 +88,12 @@ trait CaseClassProtocol extends CaseClassProtocolGenerated {
 
 		def write(value:T):Option[JsonValue]	=
 			castValue(value) map { it =>
-				JsonObject.Var(typeTag -> JsonString(identifier)) ++
-				downcast[JsonObject](format get it)
+				val header	= typeTag -> JsonValue.fromString(identifier)
+				format.get(it).modifyObject(header +: _)
 			}
 		def read(json:JsonValue):Option[T]	=
 			objectValue(json)
-			.exists	{ _ == ((typeTag, JsonString(identifier))) }
+			.exists	{ _ == ((typeTag, JsonValue.fromString(identifier))) }
 			.option	{ format set json }
 
 		def pf:PartialFormat[T]	= PBijection(write, read)

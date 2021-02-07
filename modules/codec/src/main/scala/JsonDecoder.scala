@@ -34,8 +34,9 @@ private final class JsonDecoder(text:String) {
 		if (isChar('{')) {
 			val out	= new immutable.VectorBuilder[(String,JsonValue)]
 			ws()
-			if (isChar('}'))	return JsonObject(out.result())
+			if (isChar('}'))	return JsonValue.fromFields(out.result())
 			while (true) {
+				// TODO decode only strings here, nothing else!
 				val key	= decodeNext() match {
 					case JsonString(s)	=> s
 					case _				=> throw expected("string key")
@@ -45,19 +46,19 @@ private final class JsonDecoder(text:String) {
 				val value	= decodeNext()
 				out	+= (key -> value)
 				ws()
-				if (isChar('}'))	return JsonObject(out.result())
+				if (isChar('}'))	return JsonValue.fromFields(out.result())
 				if (!isChar(','))	throw expectedClass(",}");
 			}
 		}
 		if (isChar('[')) {
 			val	out	= new immutable.VectorBuilder[JsonValue]
 			ws()
-			if (isChar(']'))	return JsonArray(out.result())
+			if (isChar(']'))	return JsonValue.fromItems(out.result())
 			while (true) {
 				val value	= decodeNext()
 				out	+= value
 				ws()
-				if (isChar(']'))	return JsonArray(out.result())
+				if (isChar(']'))	return JsonValue.fromItems(out.result())
 				if (!isChar(','))	throw expectedClass(",]")
 			}
 		}
@@ -65,7 +66,7 @@ private final class JsonDecoder(text:String) {
 			val out	= new StringBuilder
 			while (true) {
 				if (isChar('"')) {
-					return JsonString(out.result())
+					return JsonValue.fromString(out.result())
 				}
 				else if (isChar('\\')) {
 					if (finished)	throw expected("escape continuation")
@@ -100,9 +101,9 @@ private final class JsonDecoder(text:String) {
 				}
 			}
 		}
-		if (isString("true"))	return JsonTrue
-		if (isString("false"))	return JsonFalse
-		if (isString("null"))	return JsonNull
+		if (isString("true"))	return JsonValue.True
+		if (isString("false"))	return JsonValue.False
+		if (isString("null"))	return JsonValue.Null
 
 		val before		= offset
 
@@ -135,7 +136,7 @@ private final class JsonDecoder(text:String) {
 				if (countExpo == 0)	throw expected("at least one digit in the exponent")
 			}
 			try {
-				return JsonNumber(BigDecimal(from(before)))
+				return JsonValue.fromBigDecimal(BigDecimal(from(before)))
 			}
 			catch { case e:NumberFormatException	=>
 				offset	= before
@@ -152,7 +153,7 @@ private final class JsonDecoder(text:String) {
 		new JsonDecodeException(JsonDecodeFailure(text, offset, what))
 
 	private def expectedClass(charClass:String)	=
-		new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonString(charClass))))
+		new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonValue.fromString(charClass))))
 
 	//-------------------------------------------------------------------------
 	//## tokens

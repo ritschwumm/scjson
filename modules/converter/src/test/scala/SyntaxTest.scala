@@ -12,30 +12,29 @@ object SyntaxTest extends SimpleTestSuite {
 	test("syntax should work with simple values") {
 		assertEquals(
 			jsonValue(1),
-			Validated.valid(JsonNumber(1))
+			Validated.valid(JsonValue.fromInt(1))
 		)
 	}
 	test("syntax should work with arrays") {
 		assertEquals(
 			jsonArray(1, "test", false),
 			Validated.valid(
-				JsonArray.Var(
-					JsonNumber(1),
-					JsonString("test"),
-					JsonFalse
+				JsonValue.arr(
+					JsonValue.fromInt(1),
+					JsonValue.fromString("test"),
+					JsonValue.False
 				)
 			)
 		)
 	}
 	test("syntax should work with objects") {
-		// TODO implicit lookup failing for JsonNull (as a subtype of JsonValue) sucks
 		assertEquals(
-			jsonObject("a" -> 1, "b" -> "x", "c" -> (JsonNull:JsonValue)),
+			jsonObject("a" -> 1, "b" -> "x", "c" -> JsonValue.Null),
 			Validated.valid(
-				JsonObject.Var(
-					"a"	-> JsonNumber(1),
-					"b"	-> JsonString("x"),
-					"c"	-> JsonNull
+				JsonValue.obj(
+					"a"	-> JsonValue.fromInt(1),
+					"b"	-> JsonValue.fromString("x"),
+					"c"	-> JsonValue.Null
 				)
 			)
 		)
@@ -49,10 +48,10 @@ object SyntaxTest extends SimpleTestSuite {
 				)
 			),
 			Validated.valid(
-				JsonObject.Var(
-					"a"	-> JsonNumber(1),
-					"b"	-> JsonObject.Var(
-						"x"	-> JsonNumber(2)
+				JsonValue.obj(
+					"a"	-> JsonValue.fromInt(1),
+					"b"	-> JsonValue.obj(
+						"x"	-> JsonValue.fromInt(2)
 					)
 				)
 			)

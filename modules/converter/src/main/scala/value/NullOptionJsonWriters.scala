@@ -13,7 +13,7 @@ trait NullOptionJsonWriters extends NullOptionJsonWritersLow with UnitJsonWriter
 		ASC.altWriter("none", "some")
 
 	/*
-	// in old times, OptionWriter would have broken for Option[Unit] because Unit was encoded as JsonNull just like None.
+	// in old times, OptionWriter would have broken for Option[Unit] because Unit was encoded as json null just like None.
 	implicit val OptionUnitWriter:JsonWriter[Option[Unit]]	=
 		JC.makeBoolean contraMap {
 			case Some(())	=> true
@@ -25,7 +25,7 @@ trait NullOptionJsonWriters extends NullOptionJsonWritersLow with UnitJsonWriter
 trait NullOptionJsonWritersLow {
 	implicit def OptionNullWriter[T:JsonWriter]:JsonWriter[Option[T]]	=
 		Converter {
-			case None		=> Validated valid JsonNull
+			case None		=> Validated valid JsonValue.Null
 			case Some(x)	=> JsonWriter[T] convert x
 		}
 }

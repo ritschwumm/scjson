@@ -16,7 +16,7 @@ trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 		CC.eitherToOption
 
 	/*
-	// in old times, OptionReader would have broken for Option[Unit] because Unit was encoded as JsonNull just like None.
+	// in old times, OptionReader would have broken for Option[Unit] because Unit was encoded as json null just like None.
 	implicit def OptionUnitReader:JsonReader[Option[Unit]]	=
 		JC.expectBoolean	map {
 			case true	=> Some(())

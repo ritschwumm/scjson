@@ -21,78 +21,77 @@ private final class JsonEncoder(pretty:Boolean) {
 	def result:String	= b.toString
 
 	/** unparse a JsonValue into a String */
-	private def encode(v:JsonValue):Unit	= {
+	private def encode(v:JsonValue):Unit	=
 		v match {
-		case JsonNull			=> b append "null"
-		case JsonTrue			=> b append "true"
-		case JsonFalse			=> b append "false"
-		case JsonNumber(data)	=> b append  data.toString
-		case JsonString(data)	=> encodeString(data)
-		case JsonArray(data)	=>
-			if (data.isEmpty) {
-				b	+= '['
-				b	+= ']'
-			}
-			else if (pretty) {
-				b		+= '['
-				level	+= 1
-				var sep	= false
-				data foreach { it =>
-					if (sep)	b += ','
-					else		sep	= true
+			case JsonNull			=> b append "null"
+			case JsonTrue			=> b append "true"
+			case JsonFalse			=> b append "false"
+			case JsonNumber(data)	=> b append  data.toString
+			case JsonString(data)	=> encodeString(data)
+			case JsonArray(data)	=>
+				if (data.isEmpty) {
+					b	+= '['
+					b	+= ']'
+				}
+				else if (pretty) {
+					b		+= '['
+					level	+= 1
+					var sep	= false
+					data foreach { it =>
+						if (sep)	b += ','
+						else		sep	= true
+						b	+= '\n';	indent()
+						encode(it)
+					}
+					level	-= 1
 					b	+= '\n';	indent()
-					encode(it)
+					b	+= ']'
 				}
-				level	-= 1
-				b	+= '\n';	indent()
-				b	+= ']'
-			}
-			else {
-				b	+= '['
-				var sep	= false
-				data foreach { it =>
-					if (sep)	b += ','
-					else		sep	= true
-					encode(it)
+				else {
+					b	+= '['
+					var sep	= false
+					data foreach { it =>
+						if (sep)	b += ','
+						else		sep	= true
+						encode(it)
+					}
+					b	+= ']'
 				}
-				b	+= ']'
-			}
-		case JsonObject(data)	=>
-			if (data.isEmpty) {
-				b	+= '{'
-				b	+= '}'
-			}
-			else if (pretty) {
-				b	+= '{'
-				level	+= 1
-				var sep	= false
-				data foreach { case (key, value) =>
-					if (sep)	b += ','
-					else		sep	= true
+			case JsonObject(data)	=>
+				if (data.isEmpty) {
+					b	+= '{'
+					b	+= '}'
+				}
+				else if (pretty) {
+					b	+= '{'
+					level	+= 1
+					var sep	= false
+					data foreach { case (key, value) =>
+						if (sep)	b += ','
+						else		sep	= true
+						b	+= '\n';	indent()
+						encodeString(key)
+						b	+= ':'
+						b	++= JsonEncoder.indention
+						encode(value)
+					}
+					level	-= 1
 					b	+= '\n';	indent()
-					encodeString(key)
-					b	+= ':'
-					b	++= JsonEncoder.indention
-					encode(value)
+					b	+= '}'
 				}
-				level	-= 1
-				b	+= '\n';	indent()
-				b	+= '}'
-			}
-			else {
-				b	+= '{'
-				var sep	= false
-				data foreach { case (key, value) =>
-					if (sep)	b += ','
-					else		sep	= true
-					encodeString(key)
-					b	+= ':'
-					encode(value)
+				else {
+					b	+= '{'
+					var sep	= false
+					data foreach { case (key, value) =>
+						if (sep)	b += ','
+						else		sep	= true
+						encodeString(key)
+						b	+= ':'
+						encode(value)
+					}
+					b	+= '}'
 				}
-				b	+= '}'
-			}
 		}
-	}
 
 	private def encodeString(data:String):Unit	= {
 		b += '"'

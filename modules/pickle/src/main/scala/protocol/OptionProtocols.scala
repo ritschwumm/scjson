@@ -26,8 +26,8 @@ object OptionProtocols {
 	def adtFormat[T:Format]:Format[Option[T]]	=
 		Format[Option[T]](
 			_ match {
-				case Some(value)	=> JsonObject.Var(someTag -> doWrite(value))
-				case None			=> JsonObject.Var(noneTag -> JsonTrue)
+				case Some(value)	=> JsonValue.obj(someTag -> doWrite(value))
+				case None			=> JsonValue.obj(noneTag -> JsonValue.True)
 			},
 			(in:JsonValue)	=> {
 				val map	= objectMap(in)
@@ -44,7 +44,7 @@ object OptionProtocols {
 	def nullFormat[T:Format]:Format[Option[T]]	=
 		Format[Option[T]](
 			_ match {
-				case None			=> JsonNull
+				case None			=> JsonValue.Null
 				case Some(value)	=> doWrite(value)
 			},
 			_ match {
