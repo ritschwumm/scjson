@@ -5,7 +5,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.227.0",
+	version			:= "0.228.0",
 
 	scalaVersion	:= "2.13.4",
 	scalacOptions	++= Seq(
@@ -76,9 +76,7 @@ lazy val `scjson` =
 		`scjson-codec-js`,
 		`scjson-converter-jvm`,
 		`scjson-converter-js`,
-		`scjson-pickle`,
-		`scjson-io-converter`,
-		`scjson-io-pickle`
+		`scjson-io`,
 	)
 	.settings(
 		publishArtifact := false
@@ -151,42 +149,8 @@ lazy val `scjson-converter`	=
 lazy val `scjson-converter-jvm`	= `scjson-converter`.jvm
 lazy val `scjson-converter-js`	= `scjson-converter`.js
 
-lazy val `scjson-pickle`	=
-	(project in file("modules/pickle"))
-	.enablePlugins(
-		BoilerplatePlugin
-	)
-	.dependsOn(
-		`scjson-ast-jvm`
-	)
-	.settings(
-		libraryDependencies	++= Seq(
-			// TODO could this be a provided dependency?
-			// TODO is this dependency necessary at all?
-			"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "compile",
-			"de.djini"			%%	"scutil-core"	% "0.203.0"				% "compile",
-			"io.monix"			%%	"minitest"		% "2.9.2"				% "test"
-		),
-		testFrameworks	+= new TestFramework("minitest.runner.Framework"),
-		Compile / boilerplateSource	:= baseDirectory.value / "src" / "main" / "boilerplate"
-	)
-
-lazy val `scjson-io-pickle`	=
-	(project in file("modules/io-pickle"))
-	.enablePlugins()
-	.dependsOn(
-		`scjson-ast-jvm`,
-		`scjson-codec-jvm`,
-		`scjson-pickle`
-	)
-	.settings(
-		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.203.0"				% "compile"
-		)
-	)
-
-lazy val `scjson-io-converter`	=
-	(project in file("modules/io-converter"))
+lazy val `scjson-io`	=
+	(project in file("modules/io"))
 	.enablePlugins()
 	.dependsOn(
 		`scjson-ast-jvm`,

@@ -1,4 +1,4 @@
-package scjson.io.converter
+package scjson.io
 
 import scjson.converter._
 
