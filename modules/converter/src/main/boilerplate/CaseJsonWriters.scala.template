@@ -1,32 +1,39 @@
 package scjson.converter
 
 import scutil.lang._
-import scutil.lang.assoc._
+import scutil.lang.TupleNApplySyntax._
+import scutil.lang.tc.ApplicativeTupleNSyntax._
 import scjson.ast._
 
 import scjson.converter.{
-	ArrowedConverters		=> AC,
+	TupleConverters			=> TC,
 	JsonConverters			=> JC,
+	UnitConverters			=> UC,
 	ApplyUnapplyConverters	=> AU,
-	UnitConverters			=> UC
 }
 
 trait CaseJsonWriters extends UnitJsonWriters {
 	def coWriter[T](value:T):JsonWriter[T]	=
 		UC.UnitWriter contraMap constant(())
 
-	//--------------------------------------------------------------------------------
-
 	def cc0Writer[S](unapply:S=>Boolean):JsonWriter[S]	=
-		(AU unapply0 unapply)													>=>
-		(Converter constant[JsonError,Unit,Map[String,JsonValue]] Map.empty)	>=>
+		AU.unapplySingleton(unapply)	>=>
+		Converter.constant[JsonError,Unit,Map[String,JsonValue]](Map.empty)	>=>
 		JC.makeObjectMap
 
-	[#def cc1Writer[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])], [#k1:String#]):JsonWriter[S]	=
-		(AU unapply1 unapply map arrow1)					>=>
-		([#JsonWriter[T1]# pair ])							>=>
-		AC.arrowed1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
+	[#def cc1Writer[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])],  [#k1:String#]):JsonWriter[S]	=
+		AU.unapply1(unapply)	>=>
+		Converter { values =>
+			Tuple1(
+				[#JsonWriter[T1].convert#,
+				]
+			)
+			.applyN(values)
+			.zipN
+		} >=>
+		TC.tuple1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
 		JC.makeObjectMap#
+
 	]
 
 	//--------------------------------------------------------------------------------
@@ -36,5 +43,6 @@ trait CaseJsonWriters extends UnitJsonWriters {
 			case Vector([#k1#,])	=> cc1Writer(unapply, [#k1#, ])
 			case x	=> sys error s"unexpected number of elements in ${x.toString}"
 		}#
+
 	]
 }

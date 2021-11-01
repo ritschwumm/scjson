@@ -8,11 +8,11 @@ import scjson.converter.{
 }
 
 trait TupleJsonReaders {
-	[2..#implicit def Tuple1Reader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
+	[#implicit def Tuple1Reader[[#T1:JsonReader#]]:JsonReader[Tuple1[[#T1#]]]	=
 		JC.expectArray	>=>
 		Converter {
 			case Seq([#t1#])	=>
-				[#(JsonReader[T1] convert t1)# product
+				[#JsonReader[T1].convert(t1)# product
 				] map
 				unarrow1
 			case x	=>
@@ -24,7 +24,7 @@ trait TupleJsonReaders {
 	/*
 	[2..#def NewerTupleReader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
 		JC.expectArray	>=>
-		(TC.seqToTuple1 map arrow1)	>=>
+		TC.seqToTuple1.map(arrow1)	>=>
 		([#JsonReader[T1]# pair ])	map
 		unarrow1#
 

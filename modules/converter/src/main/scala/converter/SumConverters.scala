@@ -14,7 +14,7 @@ object SumConverters {
 		}
 
 	val makeTagged:JsonConverter[(String,JsonValue),JsonValue]	=
-		(Converter total { kv:(String,JsonValue) => Seq(kv) })	>=>
+		Converter.total { (kv:(String,JsonValue)) => Seq(kv) }	>=>
 		JC.makeObject
 
 	//------------------------------------------------------------------------------

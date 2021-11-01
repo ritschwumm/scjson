@@ -8,7 +8,7 @@ import scjson.converter.{
 
 trait NewtypeJsonKeyReaders {
 	def newtypeKeyReader[S,T1:JsonKeyReader](apply:(T1)=>S):JsonKeyReader[S]	=
-		JsonKeyReader[T1] >=> (AU apply1 apply)
+		JsonKeyReader[T1] >=> AU.applyNewtype(apply)
 
 	def bijectionKeyReader[S:JsonKeyReader,T](bijection:Bijection[T,S]):JsonKeyReader[T]	=
 		JsonKeyReader[S] map bijection.set

@@ -3,22 +3,42 @@ package scjson.converter
 import scutil.lang._
 
 object ApplyUnapplyConverters {
-	def apply0[E,S](apply:()=>S):Converter[E,Unit,S]	=
-		Converter total (it => apply())
-	def apply1[E,S,T1](apply:(T1)=>S):Converter[E,(T1),S]	=
-		Converter total apply
-	[2..#def apply1[E,S,[#T1#,]](apply:([#T1#,])=>S):Converter[E,([#T1#,]),S]	=
-		Converter total apply.tupled#
+	//--------------------------------------------------------------------------------
+
+	def applySingleton[E,S](apply:()=>S):Converter[E,Unit,S]	=
+		Converter.total { it => apply() }
+
+	def applyNewtype[E,S,T1](apply:(T1)=>S):Converter[E,(T1),S]	=
+		Converter.total(apply)
+
+	//--------------------------------------------------------------------------------
+
+	def unapplySingleton[E,S](unapply:(S)=>Boolean):Converter[E,S,Unit]	=
+		Converter total (it =>
+			if (!unapply(it)) sys error "expected total unapply"
+		)
+
+	def unapplyNewtype[E,S,T1](unapply:S=>Option[T1]):Converter[E,S,T1]	=
+		Converter.total(unapply andThen forceOption)
+
+	//--------------------------------------------------------------------------------
+
+	def apply1[E,S,T1](apply:(T1)=>S):Converter[E,Tuple1[T1],S]	=
+		Converter.total(it => apply(it._1))
+
+	[2..#def apply1[E,S,[#T1#,]](apply:([#T1#,])=>S):Converter[E,Tuple1[[#T1#,]],S]	=
+		Converter.total(apply.tupled)#
+
 	]
 
 	//--------------------------------------------------------------------------------
 
-	def unapply0[E,S](unapply:(S)=>Boolean):Converter[E,S,Unit]	=
-		Converter total (it =>
-			if (!unapply(it)) sys error "expected total unapply"
-		)
-	[#def unapply1[E,S,[#T1#,]](unapply:S=>Option[([#T1#,])]):Converter[E,S,([#T1#,])]	=
-		Converter total (unapply andThen forceOption)#
+	def unapply1[E,S,T1](unapply:S=>Option[T1]):Converter[E,S,Tuple1[T1]]	=
+		Converter.total { it => Tuple1(forceOption(unapply(it))) }
+
+	[2..#def unapply1[E,S,[#T1#,]](unapply:S=>Option[([#T1#,])]):Converter[E,S,([#T1#,])]	=
+		Converter.total(unapply andThen forceOption)#
+
 	]
 
 	//--------------------------------------------------------------------------------

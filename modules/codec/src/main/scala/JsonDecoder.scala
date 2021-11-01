@@ -67,15 +67,15 @@ private final class JsonDecoder(text:String) {
 				}
 				else if (isChar('\\')) {
 					if (finished)	throw expected("escape continuation")
-						 if (isChar('"'))	out	+= '"'
-					else if (isChar('\\'))	out	+= '\\'
-					else if (isChar('/'))	out	+= '/'
-					else if (isChar('t'))	out	+= '\t'
-					else if (isChar('r'))	out	+= '\r'
-					else if (isChar('n'))	out	+= '\n'
-					else if (isChar('f'))	out	+= '\f'
-					else if (isChar('b'))	out	+= '\b'
-					else if (isChar('u')) {
+					if		(isChar('"'))	out	+= '"'
+					else if	(isChar('\\'))	out	+= '\\'
+					else if	(isChar('/'))	out	+= '/'
+					else if	(isChar('t'))	out	+= '\t'
+					else if	(isChar('r'))	out	+= '\r'
+					else if	(isChar('n'))	out	+= '\n'
+					else if	(isChar('f'))	out	+= '\f'
+					else if	(isChar('b'))	out	+= '\b'
+					else if	(isChar('u')) {
 						if (offset+4 > text.length)	throw expected("4 hex digits")
 
 						val h1	= hexDigit()
@@ -158,9 +158,9 @@ private final class JsonDecoder(text:String) {
 	private def hexDigit():Int	= {
 		val	c	= text charAt offset
 		val h	=
-				 if (c >= '0' && c <= '9')	c - '0'
-			else if (c >= 'a' && c <= 'f')	c - 'a' + 10
-			else if (c >= 'A' && c <= 'F')	c - 'A' + 10
+			if		(c >= '0' && c <= '9')	c - '0'
+			else if	(c >= 'a' && c <= 'f')	c - 'a' + 10
+			else if	(c >= 'A' && c <= 'F')	c - 'A' + 10
 			else throw expected("a hex digit")
 		offset	+= 1
 		h
@@ -191,8 +191,8 @@ private final class JsonDecoder(text:String) {
 
 	private def rng(start:Char, end:Char):Boolean	= {
 		val c	= next
-			 if (c == NO_CHAR)			false
-		else if (c < start || c > end)	false
+		if		(c == NO_CHAR)			false
+		else if	(c < start || c > end)	false
 		else							{ consume(); true }
 	}
 
@@ -205,8 +205,8 @@ private final class JsonDecoder(text:String) {
 	/*
 	private def isString(s:String):Boolean	= {
 		val end	= offset + s.length
-			 if (end > text.length)						false
-		else if ((text.substring(offset, end)) != s)	false
+		if		(end > text.length)						false
+		else if	((text.substring(offset, end)) != s)	false
 		else											{ offset	= end; true }
 	}
 	*/

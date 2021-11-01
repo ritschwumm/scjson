@@ -7,7 +7,7 @@ import scutil.lang.extension.OptionImplicits._
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object ArrowedConverters {
 	[#def arrowed1ToSeq[T]:JsonConverter[Arrowed1[[#T#]],Seq[T]]	=
-		Converter total { case ([#t1# -> ]) => Vector([#t1#]) }#
+		Converter.total { case ([#t1# -> ]) => Vector([#t1#]) }#
 
 	]
 
@@ -26,9 +26,10 @@ object ArrowedConverters {
 	//--------------------------------------------------------------------------------
 
 	[#def arrowed1ToMap[E,K,V]([#k1:K#]):Converter[E,Arrowed1[[#V#]],Map[K,V]]	=
-		Converter total { case ([#t1# -> ])	=>
+		Converter.total { case ([#t1# -> ])	=>
 			Map([#k1 -> t1#])
 		}#
+
 	]
 
 	//------------------------------------------------------------------------------
@@ -36,12 +37,13 @@ object ArrowedConverters {
 	[#def mapToArrowed1[K,V]([#k1:K#]):JsonConverter[Map[K,V],Arrowed1[[#V#]]]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 1) {
-				[#(it get k1 toValid JsonError(s"missing element ${k1.toString}"))# product
+				[#it.get(k1).toValid(JsonError(s"missing element ${k1.toString}"))# product
 				]
 			}
 			else {
 				Validated invalid JsonError(s"expected 1, not ${it.size.toString} value(s)")
 			}
 		}#
+
 	]
 }
