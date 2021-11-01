@@ -1,5 +1,7 @@
 package scjson.ast
 
+import scala.language.implicitConversions
+
 object JsonNavigation {
 	implicit def extendJsonNavigation(value:JsonValue):JsonNavigation				= new JsonNavigation(Some(value))
 	implicit def extendJsonNavigationOption(value:Option[JsonValue]):JsonNavigation	= new JsonNavigation(value)

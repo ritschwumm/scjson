@@ -1,5 +1,7 @@
 package scjson.converter
 
+import scala.language.implicitConversions
+
 import scutil.core.implicits._
 
 import scjson.ast._

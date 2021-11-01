@@ -5,7 +5,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.231.0",
+	version			:= "0.232.0",
 
 	scalaVersion	:= "2.13.6",
 	scalacOptions	++= Seq(
@@ -14,7 +14,7 @@ inThisBuild(Seq(
 		"-unchecked",
 		"-Werror",
 		"-Xlint",
-		"-language:implicitConversions",
+		"-Xsource:3",
 	),
 
 	versionScheme	:= Some("early-semver"),
@@ -93,7 +93,7 @@ lazy val `scjson-ast`	=
 	.enablePlugins()
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.206.0"				% "compile"
+			"de.djini"			%%%	"scutil-core"	% "0.207.0"				% "compile"
 		)
 	)
 	.jvmSettings()
@@ -111,7 +111,7 @@ lazy val `scjson-codec`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.206.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.207.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.6"				% "test"
 		)
 	)
@@ -136,7 +136,7 @@ lazy val `scjson-converter`	=
 	.settings(
 		libraryDependencies	++= Seq(
 			//"org.scala-lang"	%	"scala-reflect"	% scalaVersion.value	% "provided",
-			"de.djini"			%%%	"scutil-core"	% "0.206.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.207.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.6"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
@@ -161,6 +161,6 @@ lazy val `scjson-io`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.206.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.207.0"				% "compile"
 		)
 	)
