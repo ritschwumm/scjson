@@ -18,11 +18,14 @@ trait CaseJsonReaders extends UnitJsonReaders {
 	def coReader[T](value:T):JsonReader[T]	=
 		UC.UnitReader map constant(value)
 
+	/*
 	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
-		JC.expectObjectMap	>=>
-		Converter { map =>
-			if (map.isEmpty)	Validated valid apply()
-			else				Validated invalid JsonError(s"expected zero elements, got ${map.size.toString}")
+		UC.UnitReader map { _ => apply() }
+	*/
+
+	def cc0AutoReader[S](using m:Mirror.ProductOf[S] { type MirroredElemTypes = EmptyTuple }):JsonReader[S]	=
+		UC.UnitReader map { _ =>
+			m.fromProduct(EmptyTuple)
 		}
 
 	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
@@ -31,7 +34,7 @@ trait CaseJsonReaders extends UnitJsonReaders {
 			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,
 			]
 		)	>=>
-		Converter { values =>
+		Converter { (values:Tuple1[[#JsonValue#]]) =>
 			Tuple1(
 				[#f1.convert#,
 				]
