@@ -12,8 +12,8 @@ final case class NewtypeFixed(value:String)
 final case class NewtypeGeneric[T](value:T)
 
 object NewtypeTest extends SimpleTestSuite {
-	implicit val NewtypeFixedReader:JsonReader[NewtypeFixed]	= newtypeReader(NewtypeFixed.apply)
-	implicit val NewtypeFixedWriter:JsonWriter[NewtypeFixed]	= newtypeWriter(NewtypeFixed.unapply)
+	implicit val NewtypeFixedReader:JsonReader[NewtypeFixed]	= newtypeReader
+	implicit val NewtypeFixedWriter:JsonWriter[NewtypeFixed]	= newtypeWriter
 
 	test("fixed newtypes should unparse") {
 		assertEquals(
@@ -31,8 +31,8 @@ object NewtypeTest extends SimpleTestSuite {
 
 	//------------------------------------------------------------------------------
 
-	implicit def NewtypeGenericReader[T:JsonReader]:JsonReader[NewtypeGeneric[T]]	= newtypeReader(NewtypeGeneric.apply)
-	implicit def NewtypeGenericWriter[T:JsonWriter]:JsonWriter[NewtypeGeneric[T]]	= newtypeWriter(NewtypeGeneric.unapply)
+	implicit def NewtypeGenericReader[T:JsonReader]:JsonReader[NewtypeGeneric[T]]	= newtypeReader
+	implicit def NewtypeGenericWriter[T:JsonWriter]:JsonWriter[NewtypeGeneric[T]]	= newtypeWriter
 
 	test("generic newtypes should unparse") {
 		assertEquals(

@@ -1,5 +1,8 @@
 package scjson.converter
 
+import scala.deriving.Mirror
+import scala.compiletime.*
+
 import scutil.lang._
 import scutil.lang.TupleNApplySyntax._
 import scutil.lang.tc.ApplicativeTupleNSyntax._
@@ -22,27 +25,22 @@ trait CaseJsonReaders extends UnitJsonReaders {
 			else				Validated invalid JsonError(s"expected zero elements, got ${map.size.toString}")
 		}
 
-	[#def cc1Reader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S, [#k1:String#]):JsonReader[S]	=
+	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
 		JC.expectObjectMap	>=>
-		TC.mapToTuple1[String,JsonValue]([#k1#])	>=>
+		TC.mapToTuple1[String,JsonValue](
+			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,
+			]
+		)	>=>
 		Converter { values =>
 			Tuple1(
-				[#JsonReader[T1].convert#,
+				[#f1.convert#,
 				]
 			)
 			.applyN(values)
-			.mapN(apply)
-		}#
-
-	]
-
-	//--------------------------------------------------------------------------------
-
-	[#def cc1AutoReader[S,[#T1:JsonReader#,]](apply:([#T1#,])=>S)(implicit FN:FieldNames[S]):JsonReader[S]	=
-		FN.names match {
-			case Vector([#k1#,])	=> cc1Reader(apply, [#k1#, ])
-			case x	=> sys error s"unexpected number of elements in ${x.toString}"
-		}#
+			.zipN
+			.map(m.fromProduct)
+		}
+	}#
 
 	]
 }

@@ -26,14 +26,14 @@ object TestAdt {
 	implicit val TestAdtReader:JsonReader[TestAdt]	=
 		sumReaderVar(
 			"TestAdt0"		-> subReader(coReader(TestAdt0)),
-			"TestAdt1"		-> subReader(cc1AutoReader(TestAdt1.apply)),
-			"TestAdt2"		-> subReader(cc2AutoReader(TestAdt2.apply))
+			"TestAdt1"		-> subReader(cc1AutoReader[TestAdt1]),
+			"TestAdt2"		-> subReader(cc2AutoReader[TestAdt2])
 		)
 	implicit val TestAdtWriter:JsonWriter[TestAdt]	=
 		sumWriterVar(
-			"TestAdt0"		-> subWriter(coWriter(TestAdt0),				P.TestAdt0.get),
-			"TestAdt1"		-> subWriter(cc1AutoWriter(TestAdt1.unapply),	P.TestAdt1.get),
-			"TestAdt2"		-> subWriter(cc2AutoWriter(TestAdt2.unapply),	P.TestAdt2.get)
+			"TestAdt0"		-> subWriter(coWriter(TestAdt0),		P.TestAdt0.get),
+			"TestAdt1"		-> subWriter(cc1AutoWriter[TestAdt1],	P.TestAdt1.get),
+			"TestAdt2"		-> subWriter(cc2AutoWriter[TestAdt2],	P.TestAdt2.get)
 		)
 }
 

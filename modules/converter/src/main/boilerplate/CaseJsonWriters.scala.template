@@ -1,5 +1,8 @@
 package scjson.converter
 
+import scala.deriving.Mirror
+import scala.compiletime.*
+
 import scutil.lang._
 import scutil.lang.TupleNApplySyntax._
 import scutil.lang.tc.ApplicativeTupleNSyntax._
@@ -21,28 +24,33 @@ trait CaseJsonWriters extends UnitJsonWriters {
 		Converter.constant[JsonError,Unit,Map[String,JsonValue]](Map.empty)	>=>
 		JC.makeObjectMap
 
-	[#def cc1Writer[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])],  [#k1:String#]):JsonWriter[S]	=
-		AU.unapply1(unapply)	>=>
-		Converter { values =>
+	[#inline def cc1AutoWriter[S<:Product](using m:Mirror.ProductOf[S], [#f1:JsonWriter[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonWriter[S]	= {
+		// TODO this sucks, but scala is not smart enough to find out
+		// i'm manually doing a Map[MirroredElemTypes,JsonWriter]
+		// and this type is identical to m.MirroredElemTypes
+		type Values	=
+			Tuple1[
+				[#Tuple.Elem[m.MirroredElemTypes, 0]#,
+				]
+			]
+
+		Converter.total[JsonError,S,m.MirroredElemTypes] { (s:S) =>
+			Tuple.fromProductTyped(s)(using m)
+		} >=>
+		Converter { (values:m.MirroredElemTypes) =>
 			Tuple1(
-				[#JsonWriter[T1].convert#,
+				[#f1.convert#,
 				]
 			)
-			.applyN(values)
+			.applyN(values.asInstanceOf[Values])
 			.zipN
 		} >=>
-		TC.tuple1ToMap[JsonError,String,JsonValue]([#k1#])	>=>
-		JC.makeObjectMap#
-
-	]
-
-	//--------------------------------------------------------------------------------
-
-	[#def cc1AutoWriter[S,[#T1:JsonWriter#,]](unapply:S=>Option[([#T1#,])])(implicit FN:FieldNames[S]):JsonWriter[S]	=
-		FN.names match {
-			case Vector([#k1#,])	=> cc1Writer(unapply, [#k1#, ])
-			case x	=> sys error s"unexpected number of elements in ${x.toString}"
-		}#
+		TC.tuple1ToMap[JsonError,String,JsonValue](
+			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,
+			]
+		)	>=>
+		JC.makeObjectMap
+	}#
 
 	]
 }
