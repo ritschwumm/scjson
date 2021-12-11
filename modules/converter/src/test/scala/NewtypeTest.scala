@@ -6,14 +6,14 @@ import scutil.lang._
 
 import scjson.ast._
 
-import JsonFormat._
+import JsonFormat.{ given, _ }
 
 final case class NewtypeFixed(value:String)
 final case class NewtypeGeneric[T](value:T)
 
 object NewtypeTest extends SimpleTestSuite {
-	implicit val NewtypeFixedReader:JsonReader[NewtypeFixed]	= newtypeReader
-	implicit val NewtypeFixedWriter:JsonWriter[NewtypeFixed]	= newtypeWriter
+	given NewtypeFixedReader:JsonReader[NewtypeFixed]	= newtypeReader
+	given NewtypeFixedWriter:JsonWriter[NewtypeFixed]	= newtypeWriter
 
 	test("fixed newtypes should unparse") {
 		assertEquals(
@@ -31,8 +31,8 @@ object NewtypeTest extends SimpleTestSuite {
 
 	//------------------------------------------------------------------------------
 
-	implicit def NewtypeGenericReader[T:JsonReader]:JsonReader[NewtypeGeneric[T]]	= newtypeReader
-	implicit def NewtypeGenericWriter[T:JsonWriter]:JsonWriter[NewtypeGeneric[T]]	= newtypeWriter
+	given NewtypeGenericReader[T:JsonReader]:JsonReader[NewtypeGeneric[T]]	= newtypeReader
+	given NewtypeGenericWriter[T:JsonWriter]:JsonWriter[NewtypeGeneric[T]]	= newtypeWriter
 
 	test("generic newtypes should unparse") {
 		assertEquals(

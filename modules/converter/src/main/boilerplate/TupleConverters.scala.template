@@ -1,72 +1,41 @@
 package scjson.converter
 
 import scutil.lang._
-import scutil.lang.assoc._
+import scutil.lang.tc.ApplicativeTupleNSyntax._
 import scutil.lang.extension.OptionImplicits._
 
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object TupleConverters {
-	def tuple1ToSeq[T]:JsonConverter[Tuple1[T],Seq[T]]	=
-		Converter total { case Tuple1(t1) => Vector(t1) }
-
-	[2..#def tuple1ToSeq[T]:JsonConverter[([#T#]),Seq[T]]	=
-		Converter total { case ([#t1#]) => Vector([#t1#]) }#
+	[#def tuple1ToSeq[T]:JsonConverter[Tuple1[[#T#]],Seq[T]]	=
+		Converter total { case Tuple1([#t1#]) => Vector([#t1#]) }#
 
 	]
 
-	//--------------------------------------------------------------------------------
-
-	def seqToTuple1[T]:JsonConverter[Seq[T],Tuple1[T]]	=
-		Converter {
-			case Seq(t1) =>
-				Validated valid Tuple1(t1)
-			case x	=>
-				Validated invalid JsonError(s"expected 1, not ${x.size.toString} value(s)")
-		}
-
-	[2..#def seqToTuple1[T]:JsonConverter[Seq[T],([#T#])]	=
+	[#def seqToTuple1[T]:JsonConverter[Seq[T],Tuple1[[#T#]]]	=
 		Converter {
 			case Seq([#t1#]) =>
-				Validated valid (([#t1#]))
+				Validated valid Tuple1([#t1#])
 			case x	=>
 				Validated invalid JsonError(s"expected 1, not ${x.size.toString} value(s)")
 		}#
 
 	]
 
-	//--------------------------------------------------------------------------------
-
-	def tuple1ToMap[E,K,V](k1:K):Converter[E,Tuple1[V],Map[K,V]]	=
-		Converter total { case Tuple1(t1)	=>
-			Map(k1 -> t1)
-		}
-
-	[2..#def tuple1ToMap[E,K,V]([#k1:K#]):Converter[E,([#V#]),Map[K,V]]	=
-		Converter total { case ([#t1#])	=>
+	[#def tuple1ToMap[E,K,V]([#k1:K#]):Converter[E,Tuple1[[#V#]],Map[K,V]]	=
+		Converter total { case Tuple1([#t1#])	=>
 			Map([#k1 -> t1#])
 		}#
 
 	]
 
-	//--------------------------------------------------------------------------------
-
-	def mapToTuple1[K,V](k1:K):JsonConverter[Map[K,V],Tuple1[V]]	=
+	[#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],Tuple1[[#V#]]]	=
 		Converter { (it:Map[K,V]) =>
 			if (it.size == 1) {
-				it.get(k1).toValid(JsonError(s"missing element ${k1.toString}")) map
-				unarrow1
-			}
-			else {
-				Validated invalid JsonError(s"expected 1, not ${it.size.toString} value(s)")
-			}
-		}
-
-	[2..#def mapToTuple1[K,V]([#k1:K#]):JsonConverter[Map[K,V],([#V#])]	=
-		Converter { (it:Map[K,V]) =>
-			if (it.size == 1) {
-				[#it.get(k1).toValid(JsonError(s"missing element ${k1.toString}"))# product
-				] map
-				unarrow1
+				Tuple1(
+					[#it.get(k1).toValid(JsonError(s"missing element ${k1.toString}"))#,
+					]
+				)
+				.zipN
 			}
 			else {
 				Validated invalid JsonError(s"expected 1, not ${it.size.toString} value(s)")

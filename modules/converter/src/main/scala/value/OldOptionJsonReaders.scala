@@ -6,10 +6,10 @@ import scjson.converter.{
 }
 
 trait OldOptionJsonReaders extends UnitJsonReaders {
-	private implicit val OldOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
+	private given OldOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
 
 	/** replaced by OptionOptionReader and OptionNullReader in NullOptionJsonReaders(Low) */
-	implicit def OldOptionReader[T:JsonReader]:JsonReader[Option[T]]	=
+	given OldOptionReader[T:JsonReader]:JsonReader[Option[T]]	=
 		ASC.altReader[Unit,T]("none", "some")	>=>
 		CC.eitherToOption
 }

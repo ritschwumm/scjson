@@ -7,9 +7,9 @@ import scjson.converter.{
 }
 
 trait PrimitiveJsonKeyReaders {
-	implicit val StringKeyReader:JsonKeyReader[String]	= Converter total (_.value)
-	implicit val IntKeyReader:JsonKeyReader[Int]		= StringKeyReader >=> NS.StringToInt
-	implicit val LongKeyReader:JsonKeyReader[Long]		= StringKeyReader >=> NS.StringToLong
-	implicit val BigIntKeyReader:JsonKeyReader[BigInt]	= StringKeyReader >=> NS.StringToBigInt
-	implicit val UnitKeyReader:JsonKeyReader[Unit]		= StringKeyReader >=> NS.StringToUnit
+	given StringKeyReader:JsonKeyReader[String]	= Converter total (_.value)
+	given IntKeyReader:JsonKeyReader[Int]		= StringKeyReader >=> NS.StringToInt
+	given LongKeyReader:JsonKeyReader[Long]		= StringKeyReader >=> NS.StringToLong
+	given BigIntKeyReader:JsonKeyReader[BigInt]	= StringKeyReader >=> NS.StringToBigInt
+	given UnitKeyReader:JsonKeyReader[Unit]		= StringKeyReader >=> NS.StringToUnit
 }

@@ -8,6 +8,6 @@ import scjson.converter.{
 /** JsonKeyWriter can double JsonWriter */
 trait KeyJsonWriters {
 	// NOTE you need to call this explicitly
-	def keyToJsonWriter[T](implicit ev:JsonKeyWriter[T]):JsonWriter[T]	=
+	def keyToJsonWriter[T](using ev:JsonKeyWriter[T]):JsonWriter[T]	=
 		ev >=> KC.KeyToString >=> JC.makeString
 }

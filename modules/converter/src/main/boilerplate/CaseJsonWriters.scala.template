@@ -9,10 +9,9 @@ import scutil.lang.tc.ApplicativeTupleNSyntax._
 import scjson.ast._
 
 import scjson.converter.{
-	TupleConverters			=> TC,
-	JsonConverters			=> JC,
-	UnitConverters			=> UC,
-	ApplyUnapplyConverters	=> AU,
+	TupleConverters	=> TC,
+	JsonConverters	=> JC,
+	UnitConverters	=> UC,
 }
 
 trait CaseJsonWriters extends UnitJsonWriters {
@@ -20,7 +19,9 @@ trait CaseJsonWriters extends UnitJsonWriters {
 		UC.UnitWriter contraMap constant(())
 
 	def cc0Writer[S](unapply:S=>Boolean):JsonWriter[S]	=
-		AU.unapplySingleton(unapply)	>=>
+		Converter.total[JsonError,S,Unit] { it =>
+			if (!unapply(it)) sys error "expected total unapply"
+		} >=>
 		Converter.constant[JsonError,Unit,Map[String,JsonValue]](Map.empty)	>=>
 		JC.makeObjectMap
 

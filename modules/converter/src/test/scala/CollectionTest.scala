@@ -6,7 +6,7 @@ import scutil.lang._
 
 import scjson.ast._
 
-import JsonFormat._
+import JsonFormat.given
 
 object CollectionTest extends SimpleTestSuite {
 	test("special collections should serialize string maps") {
@@ -31,8 +31,8 @@ object CollectionTest extends SimpleTestSuite {
 	//------------------------------------------------------------------------------
 
 	case object X
-	implicit val XReader:JsonReader[X.type]	= Converter.total(_ => X)
-	implicit val XWriter:JsonWriter[X.type]	= Converter.total(_ => JsonValue.Null)
+	given XReader:JsonReader[X.type]	= Converter.total(_ => X)
+	given XWriter:JsonWriter[X.type]	= Converter.total(_ => JsonValue.Null)
 
 	test("keyless maps should serialize without having a key writer") {
 		assertEquals(

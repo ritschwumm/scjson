@@ -8,6 +8,6 @@ import scjson.converter.{
 /** JsonKeyReader can double JsonReader */
 trait KeyJsonReaders {
 	// NOTE you need to call this explicitly
-	def keyToJsonReader[T](implicit ev:JsonKeyReader[T]):JsonReader[T]	=
+	def keyToJsonReader[T](using ev:JsonKeyReader[T]):JsonReader[T]	=
 		JC.expectString >=> KC.StringToKey >=> ev
 }

@@ -1,28 +1,24 @@
 package scjson.converter
 
-import scutil.lang.assoc._
 import scutil.lang._
-
+import scutil.lang.TupleNApplySyntax._
+import scutil.lang.tc.ApplicativeTupleNSyntax._
 import scjson.ast._
 
 import scjson.converter.{
-	JsonConverters		=> JC,
-	TupleConverters		=> TC
+	JsonConverters	=> JC,
+	TupleConverters	=> TC
 }
 
 trait TupleJsonWriters {
-	implicit def Tuple1Writer[T1:JsonWriter]:JsonWriter[Tuple1[T1]]	=
-		Converter[JsonError,Tuple1[T1],Tuple1[JsonValue]] { case Tuple1(t1) =>
-			JsonWriter[T1].convert(t1).map(Tuple1.apply)
-		} >=>
-		TC.tuple1ToSeq >=>
-		JC.makeArray
-
-	[2..#implicit def Tuple1Writer[[#T1:JsonWriter#]]:JsonWriter[Tuple1[[#T1#]]]	=
-		Converter[JsonError,([#T1#]),([#JsonValue#])] { case ([#t1#]) =>
-			[#JsonWriter[T1].convert(t1)#	product
-			]	map
-			unarrow1
+	[#given Tuple1Writer[[#T1#]](using [#f1:JsonWriter[T1]#]):JsonWriter[Tuple1[[#T1#]]]	=
+		Converter[JsonError,Tuple1[[#T1#]],Tuple1[[#JsonValue#]]] { values =>
+			Tuple1(
+				[#f1.convert#,
+				]
+			)
+			.applyN(values)
+			.zipN
 		} >=>
 		TC.tuple1ToSeq >=>
 		JC.makeArray#

@@ -8,7 +8,7 @@ import scutil.lang.implicits._
 import scjson.ast._
 import scjson.codec._
 
-import JsonFormat._
+import JsonFormat.given
 
 object BasicsTest extends SimpleTestSuite {
 	test("Json values should roundtrip null") {

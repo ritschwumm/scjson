@@ -6,7 +6,7 @@ import scutil.lang._
 
 import scjson.ast._
 import scjson.converter.syntax._
-import JsonWriters._
+import JsonWriters.given
 
 object SyntaxTest extends SimpleTestSuite {
 	test("syntax should work with simple values") {

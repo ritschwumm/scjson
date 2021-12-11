@@ -1,33 +1,26 @@
 package scjson.converter
 
 import scutil.lang._
-import scutil.lang.assoc._
+import scutil.lang.TupleNApplySyntax._
+import scutil.lang.tc.ApplicativeTupleNSyntax._
 
 import scjson.converter.{
-	JsonConverters		=> JC
+	JsonConverters	=> JC,
+	TupleConverters	=> TC,
 }
 
 trait TupleJsonReaders {
-	[#implicit def Tuple1Reader[[#T1:JsonReader#]]:JsonReader[Tuple1[[#T1#]]]	=
+	[#given Tuple1Reader[[#T1#]](using [#f1:JsonReader[T1]#]):JsonReader[Tuple1[[#T1#]]]	=
 		JC.expectArray	>=>
-		Converter {
-			case Seq([#t1#])	=>
-				[#JsonReader[T1].convert(t1)# product
-				] map
-				unarrow1
-			case x	=>
-				Validated invalid JsonError(s"expected 2 elements, got ${x.size.toString}")
+		TC.seqToTuple1	>=>
+		Converter { values =>
+			Tuple1(
+				[#f1.convert#,
+				]
+			)
+			.applyN(values)
+			.zipN
 		}#
 
 	]
-
-	/*
-	[2..#def NewerTupleReader[[#T1:JsonReader#]]:JsonReader[([#T1#])]	=
-		JC.expectArray	>=>
-		TC.seqToTuple1.map(arrow1)	>=>
-		([#JsonReader[T1]# pair ])	map
-		unarrow1#
-
-	]
-	*/
 }

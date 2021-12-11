@@ -15,13 +15,13 @@ object TestEnum {
 	case object X2	extends TestEnum
 	case object X3	extends TestEnum
 
-	implicit val TestEnumReader:JsonReader[TestEnum]	=
+	given TestEnumReader:JsonReader[TestEnum]	=
 		enumReaderPf {
 			case "x1"	=> X1
 			case "x2"	=> X2
 			case "x3"	=> X3
 		}
-	implicit val TestEnumWriter:JsonWriter[TestEnum]	=
+	given TestEnumWriter:JsonWriter[TestEnum]	=
 		enumWriter {
 			case X1	=>	"x1"
 			case X2	=>	"x2"

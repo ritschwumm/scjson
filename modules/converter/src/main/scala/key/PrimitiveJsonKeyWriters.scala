@@ -7,9 +7,9 @@ import scjson.converter.{
 }
 
 trait PrimitiveJsonKeyWriters {
-	implicit val StringKeyWriter:JsonKeyWriter[String]	= Converter total JsonKey.apply
-	implicit val IntKeyWriter:JsonKeyWriter[Int]		= NS.IntToString	>=> StringKeyWriter
-	implicit val LongKeyWriter:JsonKeyWriter[Long]		= NS.LongToString	>=> StringKeyWriter
-	implicit val BigIntKeyWriter:JsonKeyWriter[BigInt]	= NS.BigIntToString	>=> StringKeyWriter
-	implicit val UnitKeyWriter:JsonKeyWriter[Unit]		= NS.UnitToString	>=> StringKeyWriter
+	given StringKeyWriter:JsonKeyWriter[String]	= Converter total JsonKey.apply
+	given IntKeyWriter:JsonKeyWriter[Int]		= NS.IntToString	>=> StringKeyWriter
+	given LongKeyWriter:JsonKeyWriter[Long]		= NS.LongToString	>=> StringKeyWriter
+	given BigIntKeyWriter:JsonKeyWriter[BigInt]	= NS.BigIntToString	>=> StringKeyWriter
+	given UnitKeyWriter:JsonKeyWriter[Unit]		= NS.UnitToString	>=> StringKeyWriter
 }

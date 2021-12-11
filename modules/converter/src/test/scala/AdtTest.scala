@@ -6,7 +6,7 @@ import scutil.lang._
 
 import scjson.ast._
 
-import JsonFormat._
+import JsonFormat.{ given, _ }
 
 //------------------------------------------------------------------------------
 
@@ -23,13 +23,13 @@ object TestAdt {
 		val TestAdt2	= Prism.Gen[Self,Self.TestAdt2]
 	}
 
-	implicit val TestAdtReader:JsonReader[TestAdt]	=
+	given TestAdtReader:JsonReader[TestAdt]	=
 		sumReaderVar(
 			"TestAdt0"		-> subReader(coReader(TestAdt0)),
 			"TestAdt1"		-> subReader(cc1AutoReader[TestAdt1]),
 			"TestAdt2"		-> subReader(cc2AutoReader[TestAdt2])
 		)
-	implicit val TestAdtWriter:JsonWriter[TestAdt]	=
+	given TestAdtWriter:JsonWriter[TestAdt]	=
 		sumWriterVar(
 			"TestAdt0"		-> subWriter(coWriter(TestAdt0),		P.TestAdt0.get),
 			"TestAdt1"		-> subWriter(cc1AutoWriter[TestAdt1],	P.TestAdt1.get),
