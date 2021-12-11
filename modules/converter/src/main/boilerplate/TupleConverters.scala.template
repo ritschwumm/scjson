@@ -2,7 +2,7 @@ package scjson.converter
 
 import scutil.lang._
 import scutil.lang.tc.ApplicativeTupleNSyntax._
-import scutil.lang.extension.OptionImplicits._
+import scutil.lang.extension.OptionExtensions._
 
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object TupleConverters {

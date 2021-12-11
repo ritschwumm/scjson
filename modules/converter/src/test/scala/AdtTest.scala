@@ -18,9 +18,9 @@ object TestAdt {
 	object P {
 		type Self	= TestAdt
 		val Self	= TestAdt
-		val TestAdt0	= Prism.Gen[Self,Self.TestAdt0.type]
-		val TestAdt1	= Prism.Gen[Self,Self.TestAdt1]
-		val TestAdt2	= Prism.Gen[Self,Self.TestAdt2]
+		val TestAdt0	= Prism.subType[Self,Self.TestAdt0.type]
+		val TestAdt1	= Prism.subType[Self,Self.TestAdt1]
+		val TestAdt2	= Prism.subType[Self,Self.TestAdt2]
 	}
 
 	given TestAdtReader:JsonReader[TestAdt]	=
