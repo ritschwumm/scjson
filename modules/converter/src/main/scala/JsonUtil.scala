@@ -1,9 +1,9 @@
 package scjson.converter
 
-import scutil.lang._
-import scutil.core.implicits._
-import scjson.ast._
-import scjson.codec._
+import scutil.lang.*
+import scutil.core.implicits.*
+import scjson.ast.*
+import scjson.codec.*
 
 object JsonUtil {
 	def stringToValue[T:JsonReader]:JsonConverter[String,T]	=

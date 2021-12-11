@@ -1,8 +1,8 @@
 package scjson.codec
 
-import scutil.lang._
+import scutil.lang.*
 
-import scjson.ast._
+import scjson.ast.*
 
 object JsonCodec {
 	def encodeShort(it:JsonValue):String	=

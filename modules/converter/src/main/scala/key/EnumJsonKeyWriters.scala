@@ -1,9 +1,9 @@
 package scjson.converter
 
-import scutil.lang._
+import scutil.lang.*
 
 import scjson.converter.{
-	KeyConverters	=> KC
+	KeyConverters	as KC
 }
 
 trait EnumJsonKeyWriters {

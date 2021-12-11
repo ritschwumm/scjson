@@ -1,7 +1,7 @@
 package scjson.converter
 
 import scjson.converter.{
-	AltSeqConverters	=> ASC
+	AltSeqConverters	as ASC
 }
 
 trait EitherJsonReaders {

@@ -1,14 +1,14 @@
 package scjson.io
 
-import java.io._
+import java.io.*
 
-import scutil.core.implicits._
-import scutil.jdk.implicits._
-import scutil.lang._
+import scutil.core.implicits.*
+import scutil.jdk.implicits.*
+import scutil.lang.*
 
-import scjson.ast._
-import scjson.codec._
-import scjson.converter._
+import scjson.ast.*
+import scjson.codec.*
+import scjson.converter.*
 
 object JsonIo {
 	def loadFile[T:JsonReader](file:File):Either[JsonLoadFailure,T]	=

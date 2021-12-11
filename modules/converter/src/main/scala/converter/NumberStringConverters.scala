@@ -1,7 +1,7 @@
 package scjson.converter
 
-import scutil.core.implicits._
-import scutil.lang._
+import scutil.core.implicits.*
+import scutil.lang.*
 
 object NumberStringConverters {
 	val UnitToString:JsonConverter[Unit,String]	=

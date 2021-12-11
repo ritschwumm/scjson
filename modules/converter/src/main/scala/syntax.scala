@@ -2,9 +2,9 @@ package scjson.converter
 
 import scala.language.implicitConversions
 
-import scutil.core.implicits._
+import scutil.core.implicits.*
 
-import scjson.ast._
+import scjson.ast.*
 
 object syntax {
 	def jsonValue(value:JsonWrapper):JsonResult[JsonValue]	=

@@ -1,12 +1,12 @@
 package scjson.converter
 
-import scutil.core.implicits._
-import scutil.lang._
+import scutil.core.implicits.*
+import scutil.lang.*
 
 import scjson.converter.{
-	CollectionConverters	=> CC,
-	JsonConverters			=> JC,
-	KeyConverters			=> KC
+	CollectionConverters	as CC,
+	JsonConverters			as JC,
+	KeyConverters			as KC
 }
 
 trait CollectionJsonReaders extends CollectionJsonReadersLow {

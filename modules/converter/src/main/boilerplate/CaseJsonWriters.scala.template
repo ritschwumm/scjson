@@ -25,7 +25,7 @@ trait CaseJsonWriters extends UnitJsonWriters {
 		Converter.constant[JsonError,Unit,Map[String,JsonValue]](Map.empty)	>=>
 		JC.makeObjectMap
 
-	[#inline def cc1AutoWriter[S<:Product](using m:Mirror.ProductOf[S], [#f1:JsonWriter[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonWriter[S]	= {
+	[#inline def cc1AutoWriter[S<:Product](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonWriter[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonWriter[S]	= {
 		// TODO this sucks, but scala is not smart enough to find out
 		// i'm manually doing a Map[MirroredElemTypes,JsonWriter]
 		// and this type is identical to m.MirroredElemTypes

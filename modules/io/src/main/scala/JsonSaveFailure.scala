@@ -1,8 +1,8 @@
 package scjson.io
 
-import java.io._
+import java.io.*
 
-import scjson.converter._
+import scjson.converter.*
 
 object JsonSaveFailure {
 	final case class IoException(cause:IOException)	extends JsonSaveFailure

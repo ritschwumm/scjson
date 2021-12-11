@@ -1,12 +1,12 @@
 package scjson.converter
 
-import minitest._
+import minitest.*
 
-import scutil.lang._
-import scutil.lang.implicits._
+import scutil.lang.*
+import scutil.lang.implicits.*
 
-import scjson.ast._
-import scjson.codec._
+import scjson.ast.*
+import scjson.codec.*
 
 import JsonFormat.given
 

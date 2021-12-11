@@ -1,7 +1,7 @@
 package scjson
 
-import scutil.lang._
-import scjson.ast._
+import scutil.lang.*
+import scjson.ast.*
 
 package object converter {
 	// BETTER use a sum type instead of a simple String

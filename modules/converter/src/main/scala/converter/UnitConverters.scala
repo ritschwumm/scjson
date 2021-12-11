@@ -1,9 +1,9 @@
 package scjson.converter
 
-import scutil.lang._
-import scjson.ast._
+import scutil.lang.*
+import scjson.ast.*
 
-import scjson.converter.{ JsonConverters => JC }
+import scjson.converter.{ JsonConverters as JC }
 
 object UnitConverters {
 	/** uses an empty json object, because json null is used for None - and because we have an object then we can put an (oldskool) type tag into */

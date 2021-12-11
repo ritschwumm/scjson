@@ -1,8 +1,8 @@
 package scjson.converter
 
 import scjson.converter.{
-	CollectionConverters	=> CC,
-	JsonConverters			=> JC
+	CollectionConverters	as CC,
+	JsonConverters			as JC
 }
 
 object AltSeqConverters {

@@ -1,9 +1,9 @@
 package scjson.io
 
-import java.io._
+import java.io.*
 
-import scjson.codec._
-import scjson.converter._
+import scjson.codec.*
+import scjson.converter.*
 
 object JsonLoadFailure {
 	final case class IoException(cause:IOException)			extends JsonLoadFailure

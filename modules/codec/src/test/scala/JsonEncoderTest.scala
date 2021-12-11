@@ -1,8 +1,8 @@
 package scjson.codec
 
-import minitest._
+import minitest.*
 
-import scjson.ast._
+import scjson.ast.*
 
 object JsonEncoderTest extends SimpleTestSuite {
 	test("JsonEncoder should encode null") {

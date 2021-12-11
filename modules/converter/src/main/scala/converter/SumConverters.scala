@@ -1,9 +1,9 @@
 package scjson.converter
 
-import scutil.core.implicits._
-import scutil.lang._
-import scjson.ast._
-import scjson.converter.{ JsonConverters => JC }
+import scutil.core.implicits.*
+import scutil.lang.*
+import scjson.ast.*
+import scjson.converter.{ JsonConverters as JC }
 
 // BETTER json rework
 object SumConverters {

@@ -1,10 +1,10 @@
 package scjson.converter
 
-import scutil.lang._
+import scutil.lang.*
 
 import scjson.converter.{
-	CollectionConverters	=> CC,
-	AltSeqConverters		=> ASC
+	CollectionConverters	as CC,
+	AltSeqConverters		as ASC
 }
 
 trait NullOptionJsonReaders extends NullOptionJsonReadersLow {

@@ -1,8 +1,8 @@
 package scjson.converter
 
 import scjson.converter.{
-	JsonConverters	=> JC,
-	KeyConverters	=> KC
+	JsonConverters	as JC,
+	KeyConverters	as KC
 }
 
 /** JsonKeyReader can double JsonReader */

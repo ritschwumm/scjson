@@ -1,9 +1,9 @@
 package scjson.converter
 
-import scutil.lang._
+import scutil.lang.*
 
 import scjson.converter.{
-	JsonConverters	=> JC
+	JsonConverters	as JC
 }
 
 trait EnumJsonWriters {

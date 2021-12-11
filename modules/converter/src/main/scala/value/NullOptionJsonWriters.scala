@@ -1,11 +1,11 @@
 package scjson.converter
 
-import scutil.lang._
-import scjson.ast._
+import scutil.lang.*
+import scjson.ast.*
 
 import scjson.converter.{
-	CollectionConverters	=> CC,
-	AltSeqConverters		=> ASC
+	CollectionConverters	as CC,
+	AltSeqConverters		as ASC
 }
 trait NullOptionJsonWriters extends NullOptionJsonWritersLow {
 	private given NullOptionJsonUnitWriter:JsonWriter[Unit]	= UnitConverters.UnitWriter

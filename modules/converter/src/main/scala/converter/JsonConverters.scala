@@ -1,8 +1,8 @@
 package scjson.converter
 
-import scutil.lang.implicits._
-import scutil.lang._
-import scjson.ast._
+import scutil.lang.implicits.*
+import scutil.lang.*
+import scjson.ast.*
 
 object JsonConverters {
 	val expectNull:JsonConverter[JsonValue,Unit]	=

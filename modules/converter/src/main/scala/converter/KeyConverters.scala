@@ -1,6 +1,6 @@
 package scjson.converter
 
-import scutil.lang._
+import scutil.lang.*
 
 object KeyConverters {
 	val StringToKey:JsonConverter[String,JsonKey]	= Converter total JsonKey.apply

@@ -1,7 +1,7 @@
 package scjson.converter
 
-import scutil.lang._
-import scjson.ast._
+import scutil.lang.*
+import scjson.ast.*
 
 trait JsonIdentity {
 	given IdentityRW:JsonConverter[JsonValue,JsonValue]	=

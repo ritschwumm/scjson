@@ -1,12 +1,12 @@
 package scjson.converter
 
-import minitest._
+import minitest.*
 
-import scutil.lang._
+import scutil.lang.*
 
-import scjson.ast._
+import scjson.ast.*
 
-import JsonFormat.{ given, _ }
+import JsonFormat.{ given, * }
 
 final case class NewtypeFixed(value:String)
 final case class NewtypeGeneric[T](value:T)

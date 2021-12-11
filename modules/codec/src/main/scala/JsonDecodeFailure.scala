@@ -1,6 +1,6 @@
 package scjson.codec
 
-import scutil.lang.implicits._
+import scutil.lang.implicits.*
 
 /** the input is invalid */
 final case class JsonDecodeFailure(input:String, offset:Int, expectation:String) {

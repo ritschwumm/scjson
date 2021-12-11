@@ -1,11 +1,11 @@
 package scjson.converter
 
-import minitest._
+import minitest.*
 
-import scutil.lang._
+import scutil.lang.*
 
-import scjson.ast._
-import scjson.converter.syntax._
+import scjson.ast.*
+import scjson.converter.syntax.*
 import JsonWriters.given
 
 object SyntaxTest extends SimpleTestSuite {

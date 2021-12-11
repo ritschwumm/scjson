@@ -1,7 +1,7 @@
 package scjson.io
 
-import scjson.codec._
-import scjson.converter._
+import scjson.codec.*
+import scjson.converter.*
 
 object JsonReadFailure {
 	final case class DecodeFailure(base:JsonDecodeFailure)	extends JsonReadFailure

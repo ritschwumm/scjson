@@ -25,7 +25,7 @@ trait CaseJsonReaders extends UnitJsonReaders {
 			else				Validated invalid JsonError(s"expected zero elements, got ${map.size.toString}")
 		}
 
-	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
+	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
 		JC.expectObjectMap	>=>
 		TC.mapToTuple1[String,JsonValue](
 			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,

@@ -1,6 +1,6 @@
 package scjson.codec
 
-import scjson.ast._
+import scjson.ast.*
 
 private object JsonEncoder {
 	/** unparse a JsonValue into a String */

@@ -2,7 +2,7 @@ package scjson.codec
 
 import scala.collection.immutable
 
-import scjson.ast._
+import scjson.ast.*
 
 // BETTER unused should be private
  object JsonDecoder {

@@ -1,6 +1,6 @@
 package scjson.ast
 
-import scutil.lang._
+import scutil.lang.*
 
 object JsonPrisms {
 	val nullRef		:Prism[JsonValue,Unit]						= Prism(_.asNull,		_ => JsonValue.Null)

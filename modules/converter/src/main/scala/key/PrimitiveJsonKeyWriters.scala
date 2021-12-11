@@ -1,9 +1,9 @@
 package scjson.converter
 
-import scutil.lang._
+import scutil.lang.*
 
 import scjson.converter.{
-	NumberStringConverters	=> NS
+	NumberStringConverters	as NS
 }
 
 trait PrimitiveJsonKeyWriters {

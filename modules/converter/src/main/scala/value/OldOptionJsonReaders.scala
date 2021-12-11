@@ -1,8 +1,8 @@
 package scjson.converter
 
 import scjson.converter.{
-	CollectionConverters	=> CC,
-	AltSeqConverters		=> ASC
+	CollectionConverters	as CC,
+	AltSeqConverters		as ASC
 }
 
 trait OldOptionJsonReaders extends UnitJsonReaders {

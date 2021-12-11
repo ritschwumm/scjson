@@ -1,11 +1,11 @@
 package scjson.converter
 
-import minitest._
+import minitest.*
 
-import scjson.ast._
+import scjson.ast.*
 
 object NullOptionTest extends SimpleTestSuite {
-	import JsonFormat.{ given, _ }
+	import JsonFormat.{ given, * }
 
 	//------------------------------------------------------------------------------
 

@@ -1,8 +1,8 @@
 package scjson.converter
 
 import scjson.converter.{
-	JsonConverters				=> JC,
-	NumberBigDecimalConverters	=> NB
+	JsonConverters				as JC,
+	NumberBigDecimalConverters	as NB
 }
 
 trait PrimitiveJsonReaders {

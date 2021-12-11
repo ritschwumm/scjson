@@ -1,37 +1,37 @@
 package scjson.converter
 
-import minitest._
+import minitest.*
 
-import scutil.lang._
+import scutil.lang.*
 
-import scjson.ast._
+import scjson.ast.*
 
-import JsonFormat.{ given, _ }
+import JsonFormat.{ given, * }
 
 //------------------------------------------------------------------------------
 
 object TestAdt {
-	case object TestAdt0						extends TestAdt
+	case object TestAdtObj						extends TestAdt
 	final case class TestAdt1(a:Int)			extends TestAdt
 	final case class TestAdt2(a:Int, b:String)	extends TestAdt
 
 	object P {
 		type Self	= TestAdt
 		val Self	= TestAdt
-		val TestAdt0	= Prism.subType[Self,Self.TestAdt0.type]
+		val TestAdtObj	= Prism.subType[Self,Self.TestAdtObj.type]
 		val TestAdt1	= Prism.subType[Self,Self.TestAdt1]
 		val TestAdt2	= Prism.subType[Self,Self.TestAdt2]
 	}
 
 	given TestAdtReader:JsonReader[TestAdt]	=
 		sumReaderVar(
-			"TestAdt0"		-> subReader(coReader(TestAdt0)),
+			"TestAdtObj"	-> subReader(coReader(TestAdtObj)),
 			"TestAdt1"		-> subReader(cc1AutoReader[TestAdt1]),
 			"TestAdt2"		-> subReader(cc2AutoReader[TestAdt2])
 		)
 	given TestAdtWriter:JsonWriter[TestAdt]	=
 		sumWriterVar(
-			"TestAdt0"		-> subWriter(coWriter(TestAdt0),		P.TestAdt0.get),
+			"TestAdtObj"	-> subWriter(coWriter(TestAdtObj),		P.TestAdtObj.get),
 			"TestAdt1"		-> subWriter(cc1AutoWriter[TestAdt1],	P.TestAdt1.get),
 			"TestAdt2"		-> subWriter(cc2AutoWriter[TestAdt2],	P.TestAdt2.get)
 		)
@@ -44,16 +44,29 @@ sealed trait TestAdt
 object AdtTest extends SimpleTestSuite {
 	val Empty	= JsonValue.emptyObject
 
-	test("adts should unparse 0") {
+	test("auto reader arity cannot be too large") {
+		assertDoesNotCompile("cc2AutoReader[TestAdt.TestAdt1]")
+	}
+	test("auto writer arity cannot be too large") {
+		assertDoesNotCompile("cc2AutoWriter[TestAdt.TestAdt1]")
+	}
+	test("auto reader arity cannot be too small") {
+		assertDoesNotCompile("cc1AutoReader[TestAdt.TestAdt2]")
+	}
+	test("auto writer arity cannot be too small") {
+		assertDoesNotCompile("cc1AutoWriter[TestAdt.TestAdt2]")
+	}
+
+	test("adts should unparse object") {
 		assertEquals(
-			JsonWriter[TestAdt] convert TestAdt.TestAdt0,
-			Validated.valid(JsonValue.obj("TestAdt0" -> Empty))
+			JsonWriter[TestAdt] convert TestAdt.TestAdtObj,
+			Validated.valid(JsonValue.obj("TestAdtObj" -> Empty))
 		)
 	}
-	test("adts should parse 0") {
+	test("adts should parse object") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonValue.obj("TestAdt0" -> Empty),
-			Validated.valid(TestAdt.TestAdt0)
+			JsonReader[TestAdt] convert JsonValue.obj("TestAdtObj" -> Empty),
+			Validated.valid(TestAdt.TestAdtObj)
 		)
 	}
 
