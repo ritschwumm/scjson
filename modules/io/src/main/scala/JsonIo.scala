@@ -6,6 +6,7 @@ import java.nio.file.Path
 import scutil.core.implicits.*
 import scutil.jdk.implicits.*
 import scutil.lang.*
+import scutil.io.*
 
 import scjson.ast.*
 import scjson.codec.*
@@ -35,7 +36,7 @@ object JsonIo {
 
 	def readFileString(file:Path):Either[IOException,String]	=
 		try {
-			Right(file readString charset)
+			Right(MoreFiles.readString(file, charset))
 		}
 		catch { case e:IOException =>
 			Left(e)
@@ -43,7 +44,7 @@ object JsonIo {
 
 	def writeFileString(file:Path)(content:String):Either[IOException,Unit]	=
 		try {
-			file.writeString(charset, content)
+			MoreFiles.writeString(file, charset, content)
 			Right(())
 		}
 		catch { case e:IOException =>
