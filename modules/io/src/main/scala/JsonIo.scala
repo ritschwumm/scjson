@@ -1,6 +1,7 @@
 package scjson.io
 
 import java.io.*
+import java.nio.file.Path
 
 import scutil.core.implicits.*
 import scutil.jdk.implicits.*
@@ -11,6 +12,13 @@ import scjson.codec.*
 import scjson.converter.*
 
 object JsonIo {
+	def loadFilePath[T:JsonReader](path:Path):Either[JsonLoadFailure,T]	=
+		loadFile(path.toFile)
+
+	def saveFilePath[T:JsonWriter](path:Path, value:T, pretty:Boolean):Either[JsonSaveFailure,Unit]	=
+		saveFile(path.toFile, value, pretty)
+
+	// TODO path get rid of this
 	def loadFile[T:JsonReader](file:File):Either[JsonLoadFailure,T]	=
 		for {
 			str	<- readFileString(file)	leftMap (it => JsonLoadFailure.IoException(it)	:JsonLoadFailure)
@@ -19,6 +27,7 @@ object JsonIo {
 		}
 		yield out
 
+	// TODO path get rid of this
 	def saveFile[T:JsonWriter](file:File, value:T, pretty:Boolean):Either[JsonSaveFailure,Unit]	=
 		for {
 			string	<-	writeString[T](value, pretty) leftMap {
@@ -32,6 +41,13 @@ object JsonIo {
 
 	val charset	= Charsets.utf_8
 
+	def readFilePathString(path:Path):Either[IOException,String]	=
+		readFileString(path.toFile)
+
+	def writeFilePathString(path:Path)(content:String):Either[IOException,Unit]	=
+		writeFileString(path.toFile)(content)
+
+	// TODO path get rid of this
 	def readFileString(file:File):Either[IOException,String]	=
 		try {
 			Right(file readString charset)
@@ -40,6 +56,7 @@ object JsonIo {
 			Left(e)
 		}
 
+	// TODO path get rid of this
 	def writeFileString(file:File)(content:String):Either[IOException,Unit]	=
 		try {
 			file.writeString(charset, content)
