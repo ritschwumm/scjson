@@ -5,6 +5,7 @@ import scala.deriving.Mirror
 import scutil.lang.Bijection
 
 trait NewtypeJsonWriters {
+	@SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
 	def newtypeWriter[S<:Product](using m:Mirror.ProductOf[S], ev: m.MirroredElemTypes <:< Tuple1[?], f:JsonWriter[Tuple.Elem[m.MirroredElemTypes, 0]]):JsonWriter[S]	= {
 		// TODO this sucks, but scala is not smart enough to find out
 		// i'm manually doing a Map[MirroredElemTypes,JsonWriter]

@@ -19,9 +19,13 @@ object TestAdt {
 	object P {
 		type Self	= TestAdt
 		val Self	= TestAdt
+		@SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
 		val TestAdtObj	= Prism.subType[Self,Self.TestAdtObj.type]
+		@SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
 		val TestAdt0	= Prism.subType[Self,Self.TestAdt0]
+		@SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
 		val TestAdt1	= Prism.subType[Self,Self.TestAdt1]
+		@SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf"))
 		val TestAdt2	= Prism.subType[Self,Self.TestAdt2]
 	}
 

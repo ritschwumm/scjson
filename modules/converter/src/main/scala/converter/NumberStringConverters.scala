@@ -28,6 +28,7 @@ object NumberStringConverters {
 
 	//------------------------------------------------------------------------------
 
+	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	val BigIntToString:JsonConverter[BigInt,String]	=
 		Converter total (_.toString)
 

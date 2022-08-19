@@ -4,6 +4,7 @@ import scjson.ast.*
 
 private object JsonEncoder {
 	/** unparse a JsonValue into a String */
+	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def encode(v:JsonValue, pretty:Boolean):String	= {
 		val builder	= new StringBuilder
 		val encoder	= new JsonEncoder(builder, pretty)
@@ -20,6 +21,7 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 
 	def onNull():Unit					= b append "null"
 	def onBoolean(value:Boolean):Unit	= if (value) b append "true" else b append "false"
+	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def onNumber(value:BigDecimal):Unit	= b append value.toString
 	def onString(value:String):Unit		= encodeString(value)
 

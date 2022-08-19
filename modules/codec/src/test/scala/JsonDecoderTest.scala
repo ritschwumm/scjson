@@ -155,6 +155,7 @@ object JsonDecoderTest extends SimpleTestSuite {
 		)
 	}
 	test("JsonDecoder should decode hex escapes outside the basic plane") {
+		@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 		val cs	= (new java.lang.StringBuilder appendCodePoint 0x1D11E).toString
 		assertEquals(
 			JsonCodec decode "\"\\uD834\\uDD1E\"",
