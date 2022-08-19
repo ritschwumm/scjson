@@ -5,10 +5,8 @@ import java.io.*
 import scjson.codec.*
 import scjson.converter.*
 
-object JsonLoadFailure {
-	final case class IoException(cause:IOException)			extends JsonLoadFailure
-	final case class DecodeFailure(base:JsonDecodeFailure)	extends JsonLoadFailure
-	final case class ParseFailure(base:JsonError)			extends JsonLoadFailure
+enum JsonLoadFailure {
+	case IoException(cause:IOException)
+	case DecodeFailure(base:JsonDecodeFailure)
+	case ParseFailure(base:JsonError)
 }
-
-sealed trait JsonLoadFailure

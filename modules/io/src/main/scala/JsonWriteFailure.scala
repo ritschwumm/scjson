@@ -2,8 +2,6 @@ package scjson.io
 
 import scjson.converter.*
 
-object JsonWriteFailure {
-	final case class UnparseFailure(base:JsonError)	extends JsonWriteFailure
+enum JsonWriteFailure {
+	case UnparseFailure(base:JsonError)
 }
-
-sealed trait JsonWriteFailure

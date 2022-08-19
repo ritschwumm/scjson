@@ -4,9 +4,7 @@ import java.io.*
 
 import scjson.converter.*
 
-object JsonSaveFailure {
-	final case class IoException(cause:IOException)	extends JsonSaveFailure
-	final case class UnparseFailure(base:JsonError)	extends JsonSaveFailure
+enum JsonSaveFailure {
+	case IoException(cause:IOException)
+	case UnparseFailure(base:JsonError)
 }
-
-sealed trait JsonSaveFailure
