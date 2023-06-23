@@ -5,7 +5,7 @@ import minitest.*
 import scjson.ast.*
 
 object NullOptionTest extends SimpleTestSuite {
-	import JsonFormat.{ given, * }
+	import JsonFormat.given
 
 	//------------------------------------------------------------------------------
 
