@@ -17,12 +17,12 @@ object JsonCodec {
 
 	/** parse a Json formatted String into a JsonValue */
 	def decode(it:String):Either[JsonDecodeFailure,JsonValue]	=
-		JsonDecoder decode it
+		JsonDecoder.decode(it)
 
 	/** small-style */
 	def asPrism(pretty:Boolean):Prism[String,JsonValue]	=
 		Prism(
-			decode _ andThen { _.toOption },
+			decode(_).toOption,
 			encode(_, pretty)
 		)
 }

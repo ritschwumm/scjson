@@ -26,27 +26,27 @@ object JsonConverters {
 	//------------------------------------------------------------------------------
 
 	val expectObjectMap:JsonConverter[JsonValue,Map[String,JsonValue]]	=
-		expectObject map (_.toMap)
+		expectObject.map(_.toMap)
 
 	//------------------------------------------------------------------------------
 
 	val makeNull:JsonConverter[Unit,JsonValue]	=
-		Converter pure JsonValue.Null
+		Converter.pure(JsonValue.Null)
 
 	val makeBoolean:JsonConverter[Boolean,JsonValue]	=
-		Converter total JsonValue.fromBoolean
+		Converter.total(JsonValue.fromBoolean)
 
 	val makeNumber:JsonConverter[BigDecimal,JsonValue]	=
-		Converter total JsonValue.fromBigDecimal
+		Converter.total(JsonValue.fromBigDecimal)
 
 	val makeString:JsonConverter[String,JsonValue]	=
-		Converter total JsonValue.fromString
+		Converter.total(JsonValue.fromString)
 
 	val makeArray:JsonConverter[Seq[JsonValue],JsonValue]	=
-		Converter total JsonValue.fromItems
+		Converter.total(JsonValue.fromItems)
 
 	val makeObject:JsonConverter[Seq[(String,JsonValue)],JsonValue]	=
-		Converter total JsonValue.fromFields
+		Converter.total(JsonValue.fromFields)
 
 	//------------------------------------------------------------------------------
 

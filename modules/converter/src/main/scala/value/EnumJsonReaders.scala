@@ -4,7 +4,7 @@ import scutil.lang.implicits.*
 import scutil.lang.*
 
 import scjson.converter.{
-	JsonConverters	=> JC
+	JsonConverters	as JC
 }
 
 trait EnumJsonReaders {

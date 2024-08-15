@@ -5,7 +5,7 @@ import scjson.ast.*
 
 // BETTER use a sum type instead of a simple String
 type JsonError	= Nes[String]
-def JsonError(s:String):JsonError	= Nes one s
+def JsonError(s:String):JsonError	= Nes.one(s)
 def JsonInvalid[T](s:String):JsonResult[T]	= Validated.invalid(JsonError(s))
 
 type JsonResult[T]		= Validated[JsonError,T]

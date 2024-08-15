@@ -15,11 +15,11 @@ object JsonUtil {
 	//------------------------------------------------------------------------------
 
 	val jsonToString:JsonConverter[JsonValue,String]	=
-		Converter total JsonCodec.encodeShort
+		Converter.total(JsonCodec.encodeShort)
 
 	val stringToJson:JsonConverter[String,JsonValue]	=
 		Converter { it =>
 			// TODO swallows the "looking at" information. sad...
-			JsonCodec.decode(it).leftMap { it => Nes one it.message }.toValidated
+			JsonCodec.decode(it).leftMap { it => Nes.one(it.message) }.toValidated
 		}
 }

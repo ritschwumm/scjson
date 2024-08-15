@@ -67,52 +67,52 @@ object AdtTest extends SimpleTestSuite {
 
 	test("adts should unparse object") {
 		assertEquals(
-			JsonWriter[TestAdt] convert TestAdt.TestAdtObj,
+			JsonWriter[TestAdt].convert(TestAdt.TestAdtObj),
 			Validated.valid(JsonValue.obj("TestAdtObj" -> Empty))
 		)
 	}
 	test("adts should parse object") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonValue.obj("TestAdtObj" -> Empty),
+			JsonReader[TestAdt].convert(JsonValue.obj("TestAdtObj" -> Empty)),
 			Validated.valid(TestAdt.TestAdtObj)
 		)
 	}
 
 	test("adts should unparse 0") {
 		assertEquals(
-			JsonWriter[TestAdt] convert TestAdt.TestAdt0(),
+			JsonWriter[TestAdt].convert(TestAdt.TestAdt0()),
 			Validated.valid(JsonValue.obj("TestAdt0" -> Empty))
 		)
 	}
 	test("adts should parse 0") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonValue.obj("TestAdt0" -> Empty),
+			JsonReader[TestAdt].convert(JsonValue.obj("TestAdt0" -> Empty)),
 			Validated.valid(TestAdt.TestAdt0())
 		)
 	}
 
 	test("adts should unparse 1") {
 		assertEquals(
-			JsonWriter[TestAdt] convert TestAdt.TestAdt1(7),
+			JsonWriter[TestAdt].convert(TestAdt.TestAdt1(7)),
 			Validated.valid(JsonValue.obj("TestAdt1" -> JsonValue.obj("a" -> JsonValue.fromInt(7))))
 		)
 	}
 	test("adts should parse 1") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonValue.obj("TestAdt1" -> JsonValue.obj("a" -> JsonValue.fromInt(7))),
+			JsonReader[TestAdt].convert(JsonValue.obj("TestAdt1" -> JsonValue.obj("a" -> JsonValue.fromInt(7)))),
 			Validated.valid(TestAdt.TestAdt1(7))
 		)
 	}
 
 	test("adts should unparse 2") {
 		assertEquals(
-			JsonWriter[TestAdt] convert TestAdt.TestAdt2(7, "z"),
+			JsonWriter[TestAdt].convert(TestAdt.TestAdt2(7, "z")),
 			Validated.valid(JsonValue.obj("TestAdt2" -> JsonValue.obj("a" -> JsonValue.fromInt(7), "b" -> JsonValue.fromString("z"))))
 		)
 	}
 	test("adts should parse 2") {
 		assertEquals(
-			JsonReader[TestAdt] convert JsonValue.obj("TestAdt2" -> JsonValue.obj("a" -> JsonValue.fromInt(7), "b" -> JsonValue.fromString("z"))),
+			JsonReader[TestAdt].convert(JsonValue.obj("TestAdt2" -> JsonValue.obj("a" -> JsonValue.fromInt(7), "b" -> JsonValue.fromString("z")))),
 			Validated.valid(TestAdt.TestAdt2(7, "z"))
 		)
 	}

@@ -21,5 +21,5 @@ trait NewtypeJsonKeyWriters {
 	}
 
 	def bijectionKeyWriter[S,T:JsonKeyWriter](bijection:Bijection[S,T]):JsonKeyWriter[S]	=
-		JsonKeyWriter[T] contraMap bijection.get
+		JsonKeyWriter[T].contraMap(bijection.get)
 }

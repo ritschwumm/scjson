@@ -10,7 +10,7 @@ object SumConverters {
 	val expectTagged:JsonConverter[JsonValue,(String,JsonValue)]	=
 		JC.expectObject >=>
 		Converter { it =>
-			it.singleOption toValid JsonError(show"expected exactly one element, found ${it.size}")
+			it.singleOption.toValid(JsonError(show"expected exactly one element, found ${it.size}"))
 		}
 
 	val makeTagged:JsonConverter[(String,JsonValue),JsonValue]	=
@@ -27,10 +27,10 @@ object SumConverters {
 	def extractTag:JsonConverter[JsonValue,JsonValue]	=
 		JC.expectObject >=>
 		Converter { parts =>
-			val map 	= parts.toMap
+			val map	= parts.toMap
 			for {
-				tagVal	<-	map get typeTag	toValid JsonError("type tag not found")
-				tagStr	<-	tagVal.asString	toValid JsonError("type tag not a string")
+				tagVal	<-	map.get(typeTag).toValid(JsonError("type tag not found"))
+				tagStr	<-	tagVal.asString.toValid(JsonError("type tag not a string"))
 			}
 			yield {
 				val remainder	= map - typeTag
@@ -43,9 +43,9 @@ object SumConverters {
 		JC.expectObject >=>
 		Converter { it =>
 			for {
-				item	<-	it.singleOption	toValid JsonError(show"expected exactly one element, found ${it.size}")
+				item	<-	it.singleOption	.toValid(JsonError(show"expected exactly one element, found ${it.size}"))
 				(k, v)	=	item
-				payload	<-	v.asObject		toValid JsonError(show"expected payload to be an object")
+				payload	<-	v.asObject		.toValid(JsonError(show"expected payload to be an object"))
 			}
 			yield {
 				JsonValue.fromFields(

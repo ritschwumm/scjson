@@ -113,7 +113,7 @@ private final class JsonDecoder(text:String) {
 				// offset	= beforeBody
 				throw expected("number digits")
 			}
-			if (numInt > 1 && (text charAt beforeInt) == '0') {
+			if (numInt > 1 && text.charAt(beforeInt) == '0') {
 				offset	= beforeInt
 				throw expected("number digits without leading zero")
 			}
@@ -124,7 +124,7 @@ private final class JsonDecoder(text:String) {
 			if (isChar('e') || isChar('E')) {
 				/*
 				val signExpo	=
-							 if (isChar('+'))	true
+						if		(isChar('+'))	true
 						else if (isChar('-'))	false
 						else					true
 				*/
@@ -143,20 +143,20 @@ private final class JsonDecoder(text:String) {
 
 		// no recognized token at all
 		offset	= before
-		throw expected("unexpected character %04x" format (text charAt offset).toInt)
+		throw expected("unexpected character %04x".format((text.charAt(offset)).toInt))
 	}
 
 	private def expected(what:String)	=
 		new JsonDecodeException(JsonDecodeFailure(text, offset, what))
 
 	private def expectedClass(charClass:String)	=
-		new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + (JsonCodec encodeShort JsonValue.fromString(charClass))))
+		new JsonDecodeException(JsonDecodeFailure(text, offset, "one of " + JsonCodec.encodeShort(JsonValue.fromString(charClass))))
 
 	//-------------------------------------------------------------------------
 	//## tokens
 
 	private def hexDigit():Int	= {
-		val	c	= text charAt offset
+		val	c	= text.charAt(offset)
 		val h	=
 			if		(c >= '0' && c <= '9')	c - '0'
 			else if	(c >= 'a' && c <= 'f')	c - 'a' + 10
@@ -197,7 +197,7 @@ private final class JsonDecoder(text:String) {
 	}
 
 	private def isChar(c:Char):Boolean	= {
-			 if (finished)	false
+		if		(finished)	false
 		else if (next != c)	false
 		else				{ consume(); true }
 	}
@@ -233,12 +233,12 @@ private final class JsonDecoder(text:String) {
 
 	private def next:Int	=
 		if (finished)	NO_CHAR
-		else  			text charAt offset
+		else			text.charAt(offset)
 
 	/*
 	private def previous:Int	=
 		if (offset == 0)	NO_CHAR
-		else				text charAt offset-1
+		else				text.charAt(offset-1)
 	*/
 
 	private def from(before:Int):String	=

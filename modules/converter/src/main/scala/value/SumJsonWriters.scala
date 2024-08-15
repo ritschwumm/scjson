@@ -16,15 +16,15 @@ trait SumJsonWriters {
 	def sumWriter[T](partials:Seq[(String,JsonConverter[T,Option[JsonValue]])]):JsonWriter[T]	=
 		(Converter { (it:T) =>
 			val a:JsonResult[Seq[Option[(String,JsonValue)]]]	=
-				partials traverseValidated { case (k, conv) =>
-					conv convert it map { _ map ((k, _)) }
+				partials.traverseValidated { (k, conv) =>
+					conv.convert(it).map(_.map((k, _)))
 				}
 
 			val b:JsonResult[Seq[(String,JsonValue)]]	=
-				a map { _.flattenOption }
+				a.map(_.flattenOption)
 
 			val c:JsonResult[(String,JsonValue)]	=
-				b flatMap { pairs =>
+				b.flatMap { pairs =>
 					pairs.singleEither
 					.leftMap {
 						case false	=> JsonError(show"expected unique ctor, found none")
@@ -38,10 +38,10 @@ trait SumJsonWriters {
 		SC.makeTagged
 
 	def subWriter[Super,Sub<:Super](writer:JsonWriter[Sub], ctor:Super=>Option[Sub]):JsonConverter[Super,Option[JsonValue]]	=
-		Converter(ctor(_) traverseValidated writer.convert)
+		Converter(ctor(_).traverseValidated(writer.convert))
 
 	def prismWriter[E,S,T,U](prism:Prism[S,T], writer:Converter[E,T,U]):Converter[E,S,Option[U]]	=
 		Converter {	s =>
-			prism get s traverseValidated writer.convert
+			prism.get(s).traverseValidated(writer.convert)
 		}
 }

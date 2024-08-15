@@ -8,6 +8,6 @@ import scjson.converter.{
 
 trait EnumJsonWriters {
 	def enumWriter[T](func:T=>String):JsonWriter[T]	=
-		(Converter total func) >=>
+		Converter.total(func) >=>
 		JC.makeString
 }

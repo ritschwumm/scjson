@@ -5,13 +5,14 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.267.0",
+	version			:= "0.268.0",
 
-	scalaVersion	:= "3.3.0",
+	scalaVersion	:= "3.3.1",
 	scalacOptions	++= Seq(
 		"-feature",
 		"-deprecation",
 		"-unchecked",
+		"-source:future",
 		"-Wunused:all",
 		"-Xfatal-warnings",
 		"-Ykind-projector:underscores",
@@ -69,7 +70,7 @@ def myCrossProject(id:String, base:File):CrossProject	=
 	.configurePlatform(JSPlatform)	(_ withId (id + "-js"))
 
 lazy val `scjson` =
-	(project in file("."))
+	project.in(file("."))
 	.aggregate(
 		`scjson-ast-jvm`,
 		`scjson-ast-js`,
@@ -92,7 +93,7 @@ lazy val `scjson-ast`	=
 	.enablePlugins()
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.239.0"				% "compile"
+			"de.djini"			%%%	"scutil-core"	% "0.240.0"				% "compile"
 		)
 	)
 	.jvmSettings()
@@ -110,7 +111,7 @@ lazy val `scjson-codec`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.239.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.240.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.6"				% "test"
 		)
 	)
@@ -134,7 +135,7 @@ lazy val `scjson-converter`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.239.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.240.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.6"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
@@ -150,7 +151,7 @@ lazy val `scjson-converter-jvm`	= `scjson-converter`.jvm
 lazy val `scjson-converter-js`	= `scjson-converter`.js
 
 lazy val `scjson-io`	=
-	(project in file("modules/io"))
+	project.in(file("modules/io"))
 	.enablePlugins()
 	.dependsOn(
 		`scjson-ast-jvm`,
@@ -159,6 +160,6 @@ lazy val `scjson-io`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.239.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.240.0"				% "compile"
 		)
 	)

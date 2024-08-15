@@ -34,7 +34,7 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 			b		+= '['
 			level	+= 1
 			var sep	= false
-			items foreach { it =>
+			items.foreach { it =>
 				if (sep)	b += ','
 				else		sep	= true
 				b	+= '\n';	indent()
@@ -47,7 +47,7 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 		else {
 			b	+= '['
 			var sep	= false
-			items foreach { it =>
+			items.foreach { it =>
 				if (sep)	b += ','
 				else		sep	= true
 				it.visit(this)
@@ -64,7 +64,7 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 			b	+= '{'
 			level	+= 1
 			var sep	= false
-			fields foreach { case (key, value) =>
+			fields.foreach { (key, value) =>
 				if (sep)	b += ','
 				else		sep	= true
 				b	+= '\n';	indent()
@@ -80,7 +80,7 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 		else {
 			b	+= '{'
 			var sep	= false
-			fields foreach { case (key, value) =>
+			fields.foreach { (key, value) =>
 				if (sep)	b += ','
 				else		sep	= true
 				encodeString(key)
@@ -94,8 +94,8 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 		b += '"'
 		var i	= 0
 		while (i < data.length) {
-		data charAt i match {
-			case '\"' 	=> b += '\\'; b += '\"'
+		data.charAt(i) match {
+			case '\"'	=> b += '\\'; b += '\"'
 			case '\\'	=> b += '\\'; b += '\\'
 			case '\b'	=> b += '\\'; b += 'b'
 			case '\f'	=> b += '\\'; b += 'f'
@@ -108,7 +108,7 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 				b	+= JsonEncoder hexTable ((c >>  8) & 0xf)
 				b	+= JsonEncoder hexTable ((c >>  4) & 0xf)
 				b	+= JsonEncoder hexTable ((c >>  0) & 0xf)
-			case c 	=> b += c
+			case c	=> b += c
 		}
 		i += 1
 		}

@@ -11,16 +11,16 @@ object syntax {
 		value.unwrap
 
 	def jsonArray(values:JsonWrapper*):JsonResult[JsonValue]	=
-		values.toVector traverseValidated (_.unwrap) map JsonValue.fromItems
+		values.toVector.traverseValidated(_.unwrap).map(JsonValue.fromItems)
 
 	def jsonObject(values:(String,JsonWrapper)*):JsonResult[JsonValue]	=
-		values.toVector traverseValidated { case (key, value) => value.unwrap map (key -> _) } map JsonValue.fromFields
+		values.toVector.traverseValidated{ (key, value) => value.unwrap.map(key -> _) }.map(JsonValue.fromFields)
 
 	//------------------------------------------------------------------------------
 
 	object JsonWrapper {
 		implicit def JsonWrapperUsingJsonWriter[T:JsonWriter](it:T):JsonWrapper	=
-			JsonWrapper(JsonWriter[T] convert it)
+			JsonWrapper(JsonWriter[T].convert(it))
 
 		implicit def JsonWrapperFromJsonResult(it:JsonResult[JsonValue]):JsonWrapper	=
 			JsonWrapper(it)

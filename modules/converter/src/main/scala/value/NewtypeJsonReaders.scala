@@ -9,5 +9,5 @@ trait NewtypeJsonReaders {
 		f.map { t => m.fromProduct(t *: EmptyTuple) }
 
 	def bijectionReader[S:JsonReader,T](bijection:Bijection[T,S]):JsonReader[T]	=
-		JsonReader[S] map bijection.set
+		JsonReader[S].map(bijection.set)
 }

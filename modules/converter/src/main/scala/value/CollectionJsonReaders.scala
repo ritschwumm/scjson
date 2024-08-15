@@ -11,20 +11,20 @@ import scjson.converter.{
 
 trait CollectionJsonReaders extends CollectionJsonReadersLow {
 	given VectorReader[T:JsonReader]:JsonReader[Vector[T]]	=
-		JC.expectArray					>=>
-		(Converter total (_.toVector))	>=>
+		JC.expectArray				>=>
+		Converter.total(_.toVector)	>=>
 		JsonReader[T].liftVector
 
 	given SetReader[T:JsonReader]:JsonReader[Set[T]]	=
-		JsonReader[Seq[T]] map { _.toSet }
+		JsonReader[Seq[T]].map(_.toSet)
 
 	given NesReader[T:JsonReader]:JsonReader[Nes[T]]	=
 		VectorReader	>=>
 		Converter.optional(_.toNesOption, JsonError("expected at least 1 element"))
 
 	given KeyMapReader[K:JsonKeyReader,V:JsonReader]:JsonReader[Map[K,V]]	=
-		JC.expectObject		>=>
-		(KC.StringToKey >=> JsonKeyReader[K] pair JsonReader[V]).liftSeq	>=>
+		JC.expectObject	>=>
+		(KC.StringToKey >=> JsonKeyReader[K]).pair(JsonReader[V]).liftSeq	>=>
 		CC.pairsToMap
 }
 
@@ -36,5 +36,5 @@ trait CollectionJsonReadersLow {
 	private object MyTupleJsonReaders extends TupleJsonReaders
 
 	given KeylessMapReader[K:JsonReader,V:JsonReader]:JsonReader[Map[K,V]]	=
-		SeqReader(MyTupleJsonReaders.Tuple2Reader[K,V]) map (_.toMap)
+		SeqReader(using MyTupleJsonReaders.Tuple2Reader[K,V]).map(_.toMap)
 }

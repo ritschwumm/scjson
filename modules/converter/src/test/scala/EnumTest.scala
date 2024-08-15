@@ -35,14 +35,14 @@ sealed trait TestEnum
 object EnumTest extends SimpleTestSuite {
 	test("enums should unparse ") {
 		assertEquals(
-			JsonWriter[TestEnum] convert TestEnum.X1,
+			JsonWriter[TestEnum].convert(TestEnum.X1),
 			Validated.valid(JsonValue.fromString("x1"))
 		)
 	}
 
 	test("enums should parse") {
 		assertEquals(
-			JsonReader[TestEnum] convert JsonValue.fromString("x2"),
+			JsonReader[TestEnum].convert(JsonValue.fromString("x2")),
 			Validated.valid(TestEnum.X2)
 		)
 	}

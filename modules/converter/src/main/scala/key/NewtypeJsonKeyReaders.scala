@@ -9,5 +9,5 @@ trait NewtypeJsonKeyReaders {
 		f.map { t => m.fromProduct(t *: EmptyTuple) }
 
 	def bijectionKeyReader[S:JsonKeyReader,T](bijection:Bijection[T,S]):JsonKeyReader[T]	=
-		JsonKeyReader[S] map bijection.set
+		JsonKeyReader[S].map(bijection.set)
 }

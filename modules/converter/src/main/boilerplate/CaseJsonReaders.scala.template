@@ -3,28 +3,28 @@ package scjson.converter
 import scala.deriving.Mirror
 import scala.compiletime.*
 
-import scutil.lang._
-import scutil.lang.TupleNApplySyntax._
-import scutil.lang.tc.ApplicativeTupleNSyntax._
-import scjson.ast._
+import scutil.lang.*
+import scutil.lang.TupleNApplySyntax.*
+import scutil.lang.tc.ApplicativeTupleNSyntax.*
+import scjson.ast.*
 
 import scjson.converter.{
-	TupleConverters	=> TC,
-	JsonConverters	=> JC,
-	UnitConverters	=> UC
+	TupleConverters	as TC,
+	JsonConverters	as JC,
+	UnitConverters	as UC
 }
 
 trait CaseJsonReaders extends UnitJsonReaders {
 	def coReader[T](value:T):JsonReader[T]	=
-		UC.UnitReader map constant(value)
+		UC.UnitReader.map(constant(value))
 
 	/*
 	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
-		UC.UnitReader map { _ => apply() }
+		UC.UnitReader.map { _ => apply() }
 	*/
 
 	def cc0AutoReader[S](using m:Mirror.ProductOf[S] { type MirroredElemTypes = EmptyTuple }):JsonReader[S]	=
-		UC.UnitReader map { _ =>
+		UC.UnitReader.map { _ =>
 			m.fromProduct(EmptyTuple)
 		}
 

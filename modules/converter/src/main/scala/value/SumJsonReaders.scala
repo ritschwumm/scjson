@@ -14,9 +14,9 @@ trait SumJsonReaders {
 
 	def sumReader[T](partials:Seq[(String,JsonReader[T])]):JsonReader[T]	=
 		SC.expectTagged >=>
-		Converter { case (k, v) =>
+		Converter { (k, v) =>
 			partials
-			.collectFirst	{ case (`k`, conv) => conv convert v }
+			.collectFirst	{ case (`k`, conv) => conv.convert(v) }
 			.getOrElse		(JsonInvalid(show"unexpected key '$k'"))
 		}
 
@@ -25,5 +25,5 @@ trait SumJsonReaders {
 		//Converter(reader.convert)
 
 	def prismReader[E,R,S,T](prism:Prism[S,T], reader:Converter[E,R,T]):Converter[E,R,S]	=
-		reader map prism.set
+		reader.map(prism.set)
 }

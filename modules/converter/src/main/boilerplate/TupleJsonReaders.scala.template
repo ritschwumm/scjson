@@ -1,12 +1,12 @@
 package scjson.converter
 
-import scutil.lang._
-import scutil.lang.TupleNApplySyntax._
-import scutil.lang.tc.ApplicativeTupleNSyntax._
+import scutil.lang.*
+import scutil.lang.TupleNApplySyntax.*
+import scutil.lang.tc.ApplicativeTupleNSyntax.*
 
 import scjson.converter.{
-	JsonConverters	=> JC,
-	TupleConverters	=> TC,
+	JsonConverters	as JC,
+	TupleConverters	as TC,
 }
 
 trait TupleJsonReaders {

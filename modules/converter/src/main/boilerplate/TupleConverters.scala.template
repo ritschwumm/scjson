@@ -1,28 +1,28 @@
 package scjson.converter
 
-import scutil.lang._
-import scutil.lang.tc.ApplicativeTupleNSyntax._
-import scutil.lang.extension.OptionExtensions._
+import scutil.lang.*
+import scutil.lang.tc.ApplicativeTupleNSyntax.*
+import scutil.lang.extension.OptionExtensions.*
 
 @SuppressWarnings(Array("org.wartremover.warts.ToString"))
 object TupleConverters {
 	[#def tuple1ToSeq[T]:JsonConverter[Tuple1[[#T#]],Seq[T]]	=
-		Converter total { case Tuple1([#t1#]) => Vector([#t1#]) }#
+		Converter.total { case Tuple1([#t1#]) => Vector([#t1#]) }#
 
 	]
 
 	[#def seqToTuple1[T]:JsonConverter[Seq[T],Tuple1[[#T#]]]	=
 		Converter {
 			case Seq([#t1#]) =>
-				Validated valid Tuple1([#t1#])
+				Validated.valid(Tuple1([#t1#]))
 			case x	=>
-				Validated invalid JsonError(s"expected 1, not ${x.size.toString} value(s)")
+				Validated.invalid(JsonError(s"expected 1, not ${x.size.toString} value(s)"))
 		}#
 
 	]
 
 	[#def tuple1ToMap[E,K,V]([#k1:K#]):Converter[E,Tuple1[[#V#]],Map[K,V]]	=
-		Converter total { case Tuple1([#t1#])	=>
+		Converter.total { case Tuple1([#t1#])	=>
 			Map([#k1 -> t1#])
 		}#
 
@@ -38,7 +38,7 @@ object TupleConverters {
 				.zipN
 			}
 			else {
-				Validated invalid JsonError(s"expected 1, not ${it.size.toString} value(s)")
+				Validated.invalid(JsonError(s"expected 1, not ${it.size.toString} value(s)"))
 			}
 		}#
 	]

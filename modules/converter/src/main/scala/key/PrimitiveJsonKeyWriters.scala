@@ -7,7 +7,7 @@ import scjson.converter.{
 }
 
 trait PrimitiveJsonKeyWriters {
-	given StringKeyWriter:JsonKeyWriter[String]	= Converter total JsonKey.apply
+	given StringKeyWriter:JsonKeyWriter[String]	= Converter.total(JsonKey.apply)
 	given IntKeyWriter:JsonKeyWriter[Int]		= NS.IntToString	>=> StringKeyWriter
 	given LongKeyWriter:JsonKeyWriter[Long]		= NS.LongToString	>=> StringKeyWriter
 	given BigIntKeyWriter:JsonKeyWriter[BigInt]	= NS.BigIntToString	>=> StringKeyWriter
