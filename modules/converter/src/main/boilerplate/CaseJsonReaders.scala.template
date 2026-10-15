@@ -32,7 +32,7 @@ trait CaseJsonReaders {
 		Converter { (input:Map[String, JsonValue]) =>
 			if input.size == 1 then {
 				Tuple1(
-					[#input.get(constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]).toValid(JsonError(s"missing element ${constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]}")).flatMap(f1.convert),#
+					[#input.get(constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]).toValid(JsonError(s"missing element ${constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String].toString}")).flatMap(f1.convert),#
 					]
 				)
 				.productN
