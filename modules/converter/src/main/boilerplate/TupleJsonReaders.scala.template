@@ -4,15 +4,10 @@ import scutil.lang.*
 import scutil.lang.TupleNApplySyntax.*
 import scutil.lang.tc.ApplicativeTupleNSyntax.*
 
-import scjson.converter.{
-	JsonConverters	as JC,
-	TupleConverters	as TC,
-}
-
 trait TupleJsonReaders {
 	[#given Tuple1Reader:[[#T1#]] => ([#f1:JsonReader[T1]#]) => JsonReader[Tuple1[[#T1#]]]	=
-		JC.expectArray	>=>
-		TC.seqToTuple1	>=>
+		JsonConverters.expectArray	>=>
+		TupleConverters.seqToTuple1	>=>
 		Converter { values =>
 			Tuple1(
 				[#f1.convert#,

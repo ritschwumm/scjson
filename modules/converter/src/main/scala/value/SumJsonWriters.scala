@@ -4,9 +4,6 @@ import scutil.core.implicits.*
 import scutil.lang.*
 
 import scjson.ast.*
-import scjson.converter.{
-	SumConverters	as SC
-}
 
 // BETTER json rework
 trait SumJsonWriters {
@@ -35,7 +32,7 @@ trait SumJsonWriters {
 
 			c
 		}) >=>
-		SC.makeTagged
+		SumConverters.makeTagged
 
 	def subWriter[Super,Sub<:Super](writer:JsonWriter[Sub], ctor:Super=>Option[Sub]):JsonConverter[Super,Option[JsonValue]]	=
 		Converter(ctor(_).traverseValidated(writer.convert))

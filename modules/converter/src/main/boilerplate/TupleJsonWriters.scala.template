@@ -3,12 +3,8 @@ package scjson.converter
 import scutil.lang.*
 import scutil.lang.TupleNApplySyntax.*
 import scutil.lang.tc.ApplicativeTupleNSyntax.*
-import scjson.ast.*
 
-import scjson.converter.{
-	JsonConverters	as JC,
-	TupleConverters	as TC
-}
+import scjson.ast.*
 
 trait TupleJsonWriters {
 	[#given Tuple1Writer:[[#T1#]] => ([#f1:JsonWriter[T1]#]) => JsonWriter[Tuple1[[#T1#]]]	=
@@ -20,8 +16,8 @@ trait TupleJsonWriters {
 			.applyN(values)
 			.zipN
 		} >=>
-		TC.tuple1ToSeq >=>
-		JC.makeArray#
+		TupleConverters.tuple1ToSeq >=>
+		JsonConverters.makeArray#
 
 	]
 }

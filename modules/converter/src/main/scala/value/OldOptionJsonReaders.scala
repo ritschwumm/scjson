@@ -1,15 +1,10 @@
 package scjson.converter
 
-import scjson.converter.{
-	CollectionConverters	as CC,
-	AltSeqConverters		as ASC
-}
-
-trait OldOptionJsonReaders extends UnitJsonReaders {
+trait OldOptionJsonReaders {
 	private given OldOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
 
 	/** replaced by OptionOptionReader and OptionNullReader in NullOptionJsonReaders(Low) */
 	given OldOptionReader: [T:JsonReader] => JsonReader[Option[T]]	=
-		ASC.altReader[Unit,T]("none", "some")	>=>
-		CC.eitherToOption
+		AltSeqConverters.altReader[Unit,T]("none", "some")	>=>
+		CollectionConverters.eitherToOption
 }

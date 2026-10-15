@@ -2,16 +2,10 @@ package scjson.converter
 
 import scutil.lang.*
 
-import scjson.converter.{
-	CollectionConverters	as CC,
-	JsonConverters			as JC,
-	KeyConverters			as KC
-}
-
 trait CollectionJsonWriters extends CollectionJsonWritersLow {
 	given VectorWriter: [T:JsonWriter] => JsonWriter[Vector[T]]	=
 		JsonWriter[T].liftVector	>=>
-		JC.makeArray.varyIn
+		JsonConverters.makeArray.varyIn
 
 	given SetWriter: [T:JsonWriter] => JsonWriter[Set[T]]	=
 		JsonWriter[Seq[T]].contraMap(_.toVector)
@@ -21,15 +15,15 @@ trait CollectionJsonWriters extends CollectionJsonWritersLow {
 		VectorWriter
 
 	given KeyMapWriter: [K:JsonKeyWriter,V:JsonWriter] => JsonWriter[Map[K,V]]	=
-		CC.mapToPairs		>=>
-		(JsonKeyWriter[K] >=> KC.KeyToString).pair(JsonWriter[V]).liftSeq	>=>
-		JC.makeObject
+		CollectionConverters.mapToPairs		>=>
+		(JsonKeyWriter[K] >=> KeyConverters.KeyToString).pair(JsonWriter[V]).liftSeq	>=>
+		JsonConverters.makeObject
 }
 
 trait CollectionJsonWritersLow {
 	given SeqWriter: [T:JsonWriter] => JsonWriter[Seq[T]]	=
 		JsonWriter[T].liftSeq	>=>
-		JC.makeArray
+		JsonConverters.makeArray
 
 	private object MyTupleJsonWriters extends TupleJsonWriters
 

@@ -3,19 +3,18 @@ package scjson.converter
 import scutil.core.implicits.*
 import scutil.lang.*
 import scjson.ast.*
-import scjson.converter.{ JsonConverters as JC }
 
 // BETTER json rework
 object SumConverters {
 	val expectTagged:JsonConverter[JsonValue,(String,JsonValue)]	=
-		JC.expectObject >=>
+		JsonConverters.expectObject >=>
 		Converter { it =>
 			it.singleOption.toValid(JsonError(show"expected exactly one element, found ${it.size}"))
 		}
 
 	val makeTagged:JsonConverter[(String,JsonValue),JsonValue]	=
 		Converter.total { (kv:(String,JsonValue)) => Seq(kv) }	>=>
-		JC.makeObject
+		JsonConverters.makeObject
 
 	//------------------------------------------------------------------------------
 
@@ -25,7 +24,7 @@ object SumConverters {
 
 	// converts old { "": "type", ...foo } to new { "type": { ...foo }}
 	def extractTag:JsonConverter[JsonValue,JsonValue]	=
-		JC.expectObject >=>
+		JsonConverters.expectObject >=>
 		Converter { parts =>
 			val map	= parts.toMap
 			for {
@@ -40,7 +39,7 @@ object SumConverters {
 
 	// converts new { "type": { ...foo }} to old { "": "type", ...foo }
 	def injectTag:JsonConverter[JsonValue,JsonValue]	=
-		JC.expectObject >=>
+		JsonConverters.expectObject >=>
 		Converter { it =>
 			for {
 				item	<-	it.singleOption	.toValid(JsonError(show"expected exactly one element, found ${it.size}"))

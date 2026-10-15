@@ -1,32 +1,27 @@
 package scjson.converter
 
-import scjson.converter.{
-	JsonConverters				as JC,
-	NumberBigDecimalConverters	as NB
-}
-
 trait PrimitiveJsonWriters {
 	given StringWriter:JsonWriter[String]	=
-		JC.makeString
+		JsonConverters.makeString
 
 	given BooleanWriter:JsonWriter[Boolean]	=
-		JC.makeBoolean
+		JsonConverters.makeBoolean
 
 	given IntWriter:JsonWriter[Int]	=
-		NB.IntToBigDecimal >=> JC.makeNumber
+		NumberBigDecimalConverters.IntToBigDecimal >=> JsonConverters.makeNumber
 
 	given BigIntWriter:JsonWriter[BigInt]	=
-		NB.BigIntToBigDecimal >=> JC.makeNumber
+		NumberBigDecimalConverters.BigIntToBigDecimal >=> JsonConverters.makeNumber
 
 	given LongWriter:JsonWriter[Long]	=
-		NB.LongToBigDecimal >=> JC.makeNumber
+		NumberBigDecimalConverters.LongToBigDecimal >=> JsonConverters.makeNumber
 
 	given FloatWriter:JsonWriter[Float]	=
-		NB.FloatToBigDecimal >=> JC.makeNumber
+		NumberBigDecimalConverters.FloatToBigDecimal >=> JsonConverters.makeNumber
 
 	given DoubleWriter:JsonWriter[Double]	=
-		NB.DoubleToBigDecimal >=> JC.makeNumber
+		NumberBigDecimalConverters.DoubleToBigDecimal >=> JsonConverters.makeNumber
 
 	given BigDecimalWriter:JsonWriter[BigDecimal]	=
-		JC.makeNumber
+		JsonConverters.makeNumber
 }

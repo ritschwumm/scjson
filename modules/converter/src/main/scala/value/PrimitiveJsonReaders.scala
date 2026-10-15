@@ -1,32 +1,27 @@
 package scjson.converter
 
-import scjson.converter.{
-	JsonConverters				as JC,
-	NumberBigDecimalConverters	as NB
-}
-
 trait PrimitiveJsonReaders {
 	given StringReader:JsonReader[String]	=
-		JC.expectString
+		JsonConverters.expectString
 
 	given BooleanReader:JsonReader[Boolean]	=
-		JC.expectBoolean
+		JsonConverters.expectBoolean
 
 	given IntReader:JsonReader[Int]	=
-		JC.expectNumber >=> NB.BigDecimalToInt
+		JsonConverters.expectNumber >=> NumberBigDecimalConverters.BigDecimalToInt
 
 	given LongReader:JsonReader[Long]	=
-		JC.expectNumber >=> NB.BigDecimalToLong
+		JsonConverters.expectNumber >=> NumberBigDecimalConverters.BigDecimalToLong
 
 	given BigIntReader:JsonReader[BigInt]	=
-		JC.expectNumber >=> NB.BigDecimalToBigInt
+		JsonConverters.expectNumber >=> NumberBigDecimalConverters.BigDecimalToBigInt
 
 	given FloatReader:JsonReader[Float]	=
-		JC.expectNumber >=> NB.BigDecimalToFloat
+		JsonConverters.expectNumber >=> NumberBigDecimalConverters.BigDecimalToFloat
 
 	given DoubleReader:JsonReader[Double]	=
-		JC.expectNumber >=> NB.BigDecimalToDouble
+		JsonConverters.expectNumber >=> NumberBigDecimalConverters.BigDecimalToDouble
 
 	given BigDecimalReader:JsonReader[BigDecimal]	=
-		JC.expectNumber
+		JsonConverters.expectNumber
 }

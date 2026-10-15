@@ -6,31 +6,26 @@ import scala.compiletime.*
 import scutil.lang.*
 import scutil.lang.TupleNApplySyntax.*
 import scutil.lang.tc.ApplicativeTupleNSyntax.*
+
 import scjson.ast.*
 
-import scjson.converter.{
-	TupleConverters	as TC,
-	JsonConverters	as JC,
-	UnitConverters	as UC
-}
-
-trait CaseJsonReaders extends UnitJsonReaders {
+trait CaseJsonReaders {
 	def coReader[T](value:T):JsonReader[T]	=
-		UC.UnitReader.map(constant(value))
+		UnitConverters.UnitReader.map(constant(value))
 
 	/*
 	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
-		UC.UnitReader.map { _ => apply() }
+		UnitConverters.UnitReader.map { _ => apply() }
 	*/
 
 	def cc0AutoReader[S](using m:Mirror.ProductOf[S] { type MirroredElemTypes = EmptyTuple }):JsonReader[S]	=
-		UC.UnitReader.map { _ =>
+		UnitConverters.UnitReader.map { _ =>
 			m.fromProduct(EmptyTuple)
 		}
 
 	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
-		JC.expectObjectMap	>=>
-		TC.mapToTuple1[String,JsonValue](
+		JsonConverters.expectObjectMap	>=>
+		TupleConverters.mapToTuple1[String,JsonValue](
 			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,
 			]
 		)	>=>

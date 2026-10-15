@@ -3,15 +3,9 @@ package scjson.converter
 import scutil.core.implicits.*
 import scutil.lang.*
 
-import scjson.converter.{
-	CollectionConverters	as CC,
-	JsonConverters			as JC,
-	KeyConverters			as KC
-}
-
 trait CollectionJsonReaders extends CollectionJsonReadersLow {
 	given VectorReader: [T:JsonReader] => JsonReader[Vector[T]]	=
-		JC.expectArray				>=>
+		JsonConverters.expectArray	>=>
 		Converter.total(_.toVector)	>=>
 		JsonReader[T].liftVector
 
@@ -23,14 +17,14 @@ trait CollectionJsonReaders extends CollectionJsonReadersLow {
 		Converter.optional(_.toNesOption, JsonError("expected at least 1 element"))
 
 	given KeyMapReader: [K:JsonKeyReader,V:JsonReader] => JsonReader[Map[K,V]]	=
-		JC.expectObject	>=>
-		(KC.StringToKey >=> JsonKeyReader[K]).pair(JsonReader[V]).liftSeq	>=>
-		CC.pairsToMap
+		JsonConverters.expectObject	>=>
+		(KeyConverters.StringToKey >=> JsonKeyReader[K]).pair(JsonReader[V]).liftSeq	>=>
+		CollectionConverters.pairsToMap
 }
 
 trait CollectionJsonReadersLow {
 	given SeqReader: [T:JsonReader] => JsonReader[Seq[T]]	=
-		JC.expectArray >=>
+		JsonConverters.expectArray >=>
 		JsonReader[T].liftSeq
 
 	private object MyTupleJsonReaders extends TupleJsonReaders

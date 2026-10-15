@@ -2,22 +2,17 @@ package scjson.converter
 
 import scutil.lang.*
 
-import scjson.converter.{
-	CollectionConverters	as CC,
-	AltSeqConverters		as ASC
-}
-
 trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 	private given NullOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
 
 	given OptionOptionReader: [T] => (ev:JsonReader[Option[T]]) => JsonReader[Option[Option[T]]]	=
-		ASC.altReader[Unit,Option[T]]("none", "some")	>=>
-		CC.eitherToOption
+		AltSeqConverters.altReader[Unit,Option[T]]("none", "some")	>=>
+		CollectionConverters.eitherToOption
 
 	/*
 	// in old times, OptionReader would have broken for Option[Unit] because Unit was encoded as json null just like None.
 	given OptionUnitReader:JsonReader[Option[Unit]]	=
-		JC.expectBoolean.map {
+		JsonConverters.expectBoolean.map {
 			case true	=> Some(())
 			case false	=> None
 		}
