@@ -23,7 +23,7 @@ object JsonIo {
 
 	def saveFile[T:JsonWriter](file:Path, value:T, pretty:Boolean):Either[JsonSaveFailure,Unit]	=
 		for {
-			string	<-	writeString[T](value, pretty) leftMap {
+			string	<-	writeString[T](value, pretty).leftMap {
 							case JsonWriteFailure.UnparseFailure(x)	=> JsonSaveFailure.UnparseFailure(x):JsonSaveFailure
 						}
 			_		<-	writeFileString(file)(string).leftMap(JsonSaveFailure.IoException.apply)
