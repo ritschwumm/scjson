@@ -12,7 +12,7 @@ object NumberBigDecimalConverters {
 			try {
 				Validated.valid(it.toIntExact)
 			}
-			catch { case e:ArithmeticException =>
+			catch { case _:ArithmeticException =>
 				// fractional or not fitting
 				JsonInvalid(show"${it} is not an Int")
 			}
@@ -28,7 +28,7 @@ object NumberBigDecimalConverters {
 			try {
 				Validated.valid(it.toLongExact)
 			}
-			catch { case e:ArithmeticException =>
+			catch { case _:ArithmeticException =>
 				// fractional or not fitting
 				JsonInvalid(show"${it} is not a Long")
 			}
@@ -52,7 +52,7 @@ object NumberBigDecimalConverters {
 			try {
 				Validated.valid(BigDecimal.exact(it.toDouble))
 			}
-			catch { case e:NumberFormatException =>
+			catch { case _:NumberFormatException =>
 				// infinite or NaN
 				JsonInvalid(show"$it is not a BigDecimal")
 			}
@@ -69,7 +69,7 @@ object NumberBigDecimalConverters {
 			try {
 				Validated.valid(BigDecimal.exact(it))
 			}
-			catch { case e:NumberFormatException =>
+			catch { case _:NumberFormatException =>
 				// infinite or NaN
 				JsonInvalid(show"$it is not a BigDecimal")
 			}

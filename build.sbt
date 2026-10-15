@@ -5,9 +5,9 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 inThisBuild(Seq(
 	organization	:= "de.djini",
-	version			:= "0.285.0",
+	version			:= "0.286.0",
 
-	scalaVersion	:= "3.6.3",
+	scalaVersion	:= "3.7.1",
 	scalacOptions	++= Seq(
 		"-feature",
 		"-deprecation",
@@ -32,20 +32,16 @@ inThisBuild(Seq(
 		Wart.TryPartial,
 		Wart.Enumeration,
 		Wart.FinalCaseClass,
-		Wart.JavaConversions,
 		Wart.Option2Iterable,
-		Wart.JavaSerializable,
 		//Wart.Any,
 		Wart.AnyVal,
 		//Wart.Nothing,
 		Wart.ArrayEquals,
 		//Wart.ImplicitParameter,
-		Wart.ExplicitImplicitTypes,
 		Wart.LeakingSealed,
 		Wart.DefaultArguments,
 		Wart.Overloading,
-		//Wart.PublicInference,
-		//Wart.TraversableOps
+		//Wart.IterableOps
 	)
 ))
 
@@ -95,7 +91,7 @@ lazy val `scjson-ast`	=
 	.enablePlugins()
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.257.0"				% "compile"
+			"de.djini"			%%%	"scutil-core"	% "0.258.0"				% "compile"
 		)
 	)
 	.jvmSettings()
@@ -113,7 +109,7 @@ lazy val `scjson-codec`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.257.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.258.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.6"				% "test"
 		)
 	)
@@ -137,7 +133,7 @@ lazy val `scjson-converter`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%%	"scutil-core"	% "0.257.0"				% "compile",
+			"de.djini"			%%%	"scutil-core"	% "0.258.0"				% "compile",
 			"io.monix"			%%	"minitest"		% "2.9.6"				% "test"
 		),
 		// getParentFile because we are actually in .jvm or .js due to cross compilation
@@ -162,6 +158,6 @@ lazy val `scjson-io`	=
 	)
 	.settings(
 		libraryDependencies	++= Seq(
-			"de.djini"			%%	"scutil-jdk"	% "0.257.0"				% "compile"
+			"de.djini"			%%	"scutil-jdk"	% "0.258.0"				% "compile"
 		)
 	)

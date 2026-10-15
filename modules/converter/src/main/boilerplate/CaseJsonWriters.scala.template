@@ -1,5 +1,6 @@
 package scjson.converter
 
+import scala.annotation.nowarn
 import scala.deriving.Mirror
 import scala.compiletime.*
 
@@ -10,6 +11,7 @@ import scutil.lang.tc.ApplicativeTupleNSyntax.*
 import scjson.ast.*
 
 trait CaseJsonWriters {
+	@nowarn("msg=unused explicit parameter")
 	def coWriter[T](value:T):JsonWriter[T]	=
 		UnitConverters.UnitWriter.contraMap(constant(()))
 

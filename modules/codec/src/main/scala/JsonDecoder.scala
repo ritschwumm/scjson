@@ -135,7 +135,7 @@ private final class JsonDecoder(text:String) {
 			try {
 				return JsonValue.fromBigDecimal(BigDecimal(from(before)))
 			}
-			catch { case e:NumberFormatException	=>
+			catch { case _:NumberFormatException	=>
 				offset	= before
 				throw expected("valid number")
 			}
