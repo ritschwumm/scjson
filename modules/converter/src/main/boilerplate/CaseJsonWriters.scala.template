@@ -5,8 +5,7 @@ import scala.deriving.Mirror
 import scala.compiletime.*
 
 import scutil.lang.*
-import scutil.lang.TupleNApplySyntax.*
-import scutil.lang.tc.ApplicativeTupleNSyntax.*
+import scutil.lang.extension.TupleExtensions.*
 
 import scjson.ast.*
 
@@ -34,19 +33,21 @@ trait CaseJsonWriters {
 				]
 			]
 
-		Converter.total[JsonError,S,m.MirroredElemTypes] { (s:S) =>
+		Converter.total[JsonError, S, m.MirroredElemTypes] { (s:S) =>
 			Tuple.fromProductTyped(s)(using m)
 		} >=>
 		Converter { (values:m.MirroredElemTypes) =>
-			Tuple1(
-				[#f1.convert#,
-				]
+			values.asInstanceOf[Values]
+			.ap(
+				Tuple1(
+					[#f1.convert#,
+					]
+				)
 			)
-			.applyN(values.asInstanceOf[Values])
 			.zipN
 		} >=>
-		TupleConverters.tuple1ToMap[JsonError,String,JsonValue](
-			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,
+		TupleConverters.tuple1ToMap[JsonError, String, JsonValue](
+			[#constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]#,
 			]
 		)	>=>
 		JsonConverters.makeObjectMap

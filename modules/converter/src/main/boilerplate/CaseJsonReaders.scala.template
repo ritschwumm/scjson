@@ -4,8 +4,7 @@ import scala.deriving.Mirror
 import scala.compiletime.*
 
 import scutil.lang.*
-import scutil.lang.TupleNApplySyntax.*
-import scutil.lang.tc.ApplicativeTupleNSyntax.*
+import scutil.lang.extension.TupleExtensions.*
 
 import scjson.ast.*
 
@@ -25,16 +24,18 @@ trait CaseJsonReaders {
 
 	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
 		JsonConverters.expectObjectMap	>=>
-		TupleConverters.mapToTuple1[String,JsonValue](
-			[#constValue[Tuple.Elem[m.MirroredElemLabels,0] & String]#,
+		TupleConverters.mapToTuple1[String, JsonValue](
+			[#constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]#,
 			]
 		)	>=>
 		Converter { (values:Tuple1[[#JsonValue#]]) =>
-			Tuple1(
-				[#f1.convert#,
-				]
+			values
+			.ap(
+				Tuple1(
+					[#f1.convert#,
+					]
+				)
 			)
-			.applyN(values)
 			.zipN
 			.map(m.fromProduct)
 		}

@@ -1,19 +1,19 @@
 package scjson.converter
 
 import scutil.lang.*
-import scutil.lang.TupleNApplySyntax.*
-import scutil.lang.tc.ApplicativeTupleNSyntax.*
+import scutil.lang.extension.TupleExtensions.*
 
 trait TupleJsonReaders {
 	[#given Tuple1Reader:[[#T1#]] => ([#f1:JsonReader[T1]#]) => JsonReader[Tuple1[[#T1#]]]	=
 		JsonConverters.expectArray	>=>
 		TupleConverters.seqToTuple1	>=>
 		Converter { values =>
-			Tuple1(
-				[#f1.convert#,
-				]
+			values.ap(
+				Tuple1(
+					[#f1.convert#,
+					]
+				)
 			)
-			.applyN(values)
 			.zipN
 		}#
 
