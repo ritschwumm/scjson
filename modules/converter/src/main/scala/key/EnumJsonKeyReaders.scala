@@ -8,6 +8,6 @@ trait EnumJsonKeyReaders {
 		KeyConverters.KeyToString	>=>
 		Converter.optional(func, JsonError(show"unexpected enum value"))
 
-	def enumKeyReaderPf[T](func:PartialFunction[String,T]):JsonKeyReader[T]	=
+	def enumKeyReaderPf[T](func:PartialFunction[String, T]):JsonKeyReader[T]	=
 		enumKeyReader(func.lift)
 }

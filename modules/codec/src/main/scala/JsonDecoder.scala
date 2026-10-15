@@ -7,7 +7,7 @@ import scjson.ast.*
 // BETTER unused should be private
  object JsonDecoder {
 	/** parse a Json formatted String into a JsonValue */
-	def decode(s:String):Either[JsonDecodeFailure,JsonValue]	=
+	def decode(s:String):Either[JsonDecodeFailure, JsonValue]	=
 		try {
 			Right(new JsonDecoder(s).decode())
 		}
@@ -32,7 +32,7 @@ private final class JsonDecoder(text:String) {
 		if finished		then throw expected("any char")
 
 		if isChar('{') then {
-			val out	= new immutable.VectorBuilder[(String,JsonValue)]
+			val out	= new immutable.VectorBuilder[(String, JsonValue)]
 			ws()
 			if isChar('}')	then return JsonValue.fromFields(out.result())
 			while true do {

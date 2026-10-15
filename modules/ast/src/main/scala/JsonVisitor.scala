@@ -46,13 +46,13 @@ object JsonVisitor {
 		def onObject(fields:Seq[(String, JsonValue)]):Option[Seq[JsonValue]]	= None
 	}
 
-	object asObject extends JsonVisitor[Option[Seq[(String,JsonValue)]]] {
-		def onNull():Option[Seq[(String,JsonValue)]]									= None
-		def onBoolean(value:Boolean):Option[Seq[(String,JsonValue)]]					= None
-		def onNumber(value:BigDecimal):Option[Seq[(String,JsonValue)]]					= None
-		def onString(value:String):Option[Seq[(String,JsonValue)]]						= None
-		def onArray(items:Seq[JsonValue]):Option[Seq[(String,JsonValue)]]				= None
-		def onObject(fields:Seq[(String, JsonValue)]):Option[Seq[(String,JsonValue)]]	= Some(fields)
+	object asObject extends JsonVisitor[Option[Seq[(String, JsonValue)]]] {
+		def onNull():Option[Seq[(String, JsonValue)]]									= None
+		def onBoolean(value:Boolean):Option[Seq[(String, JsonValue)]]					= None
+		def onNumber(value:BigDecimal):Option[Seq[(String, JsonValue)]]					= None
+		def onString(value:String):Option[Seq[(String, JsonValue)]]						= None
+		def onArray(items:Seq[JsonValue]):Option[Seq[(String, JsonValue)]]				= None
+		def onObject(fields:Seq[(String, JsonValue)]):Option[Seq[(String, JsonValue)]]	= Some(fields)
 	}
 }
 

@@ -12,8 +12,14 @@ trait TupleJsonWriters {
 				[#f1.convert(input._1),#
 				]
 			)
-			.mapN { ([#t1#]) =>
-				JsonValue.fromItems(Vector([#t1#]))
+			.productN
+			.map { values	=>
+				JsonValue.fromItems(
+					Vector(
+						[#values._1,#
+						]
+					)
+				)
 			}
 		}#
 

@@ -25,7 +25,7 @@ final class JsonNavigation(peer:Option[JsonValue]) {
 	def boolean:Option[Boolean]						= peer.flatMap(_.asBoolean)
 	def number:Option[BigDecimal]					= peer.flatMap(_.asNumber)
 	def arraySeq:Option[Seq[JsonValue]]				= peer.flatMap(_.asArray)
-	def objectSeq:Option[Seq[(String,JsonValue)]]	= peer.flatMap(_.asObject)
+	def objectSeq:Option[Seq[(String, JsonValue)]]	= peer.flatMap(_.asObject)
 
 	//------------------------------------------------------------------------------
 
@@ -33,5 +33,5 @@ final class JsonNavigation(peer:Option[JsonValue]) {
 	def toInt:Option[Int]							= number.map(_.intValue)
 	def toDouble:Option[Double]						= number.map(_.doubleValue)
 	def toFloat:Option[Float]						= number.map(_.floatValue)
-	def toMap:Option[Map[String,JsonValue]]			= objectSeq.map(_.toMap)
+	def toMap:Option[Map[String, JsonValue]]			= objectSeq.map(_.toMap)
 }

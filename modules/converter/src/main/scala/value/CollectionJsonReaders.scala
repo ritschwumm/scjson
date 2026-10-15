@@ -16,8 +16,8 @@ trait CollectionJsonReaders extends CollectionJsonReadersLow {
 		VectorReader	>=>
 		Converter.optional(_.toNesOption, JsonError("expected at least 1 element"))
 
-	given KeyMapReader: [K:JsonKeyReader,V:JsonReader] => JsonReader[Map[K,V]]	=
-		JsonConverters.expectObject	>=>
+	given KeyMapReader: [K:JsonKeyReader, V:JsonReader] => JsonReader[Map[K, V]]	=
+		JsonConverters.expectObject														>=>
 		(KeyConverters.StringToKey >=> JsonKeyReader[K]).pair(JsonReader[V]).liftSeq	>=>
 		CollectionConverters.pairsToMap
 }
@@ -29,6 +29,6 @@ trait CollectionJsonReadersLow {
 
 	private object MyTupleJsonReaders extends TupleJsonReaders
 
-	given KeylessMapReader: [K:JsonReader,V:JsonReader] => JsonReader[Map[K,V]]	=
-		SeqReader(using MyTupleJsonReaders.Tuple2Reader[K,V]).map(_.toMap)
+	given KeylessMapReader: [K:JsonReader, V:JsonReader] => JsonReader[Map[K, V]]	=
+		SeqReader(using MyTupleJsonReaders.Tuple2Reader[K, V]).map(_.toMap)
 }

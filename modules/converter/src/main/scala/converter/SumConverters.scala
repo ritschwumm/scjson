@@ -6,14 +6,14 @@ import scjson.ast.*
 
 // BETTER json rework
 object SumConverters {
-	val expectTagged:JsonConverter[JsonValue,(String,JsonValue)]	=
+	val expectTagged:JsonConverter[JsonValue,(String, JsonValue)]	=
 		JsonConverters.expectObject >=>
 		Converter { it =>
 			it.singleOption.toValid(JsonError(show"expected exactly one element, found ${it.size}"))
 		}
 
-	val makeTagged:JsonConverter[(String,JsonValue),JsonValue]	=
-		Converter.total { (kv:(String,JsonValue)) => Seq(kv) }	>=>
+	val makeTagged:JsonConverter[(String, JsonValue), JsonValue]	=
+		Converter.total { (kv:(String, JsonValue)) => Seq(kv) }	>=>
 		JsonConverters.makeObject
 
 	//------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ object SumConverters {
 	private val typeTag	= ""
 
 	// converts old { "": "type", ...foo } to new { "type": { ...foo }}
-	def extractTag:JsonConverter[JsonValue,JsonValue]	=
+	def extractTag:JsonConverter[JsonValue, JsonValue]	=
 		JsonConverters.expectObject >=>
 		Converter { parts =>
 			val map	= parts.toMap
@@ -38,7 +38,7 @@ object SumConverters {
 		}
 
 	// converts new { "type": { ...foo }} to old { "": "type", ...foo }
-	def injectTag:JsonConverter[JsonValue,JsonValue]	=
+	def injectTag:JsonConverter[JsonValue, JsonValue]	=
 		JsonConverters.expectObject >=>
 		Converter { it =>
 			for {

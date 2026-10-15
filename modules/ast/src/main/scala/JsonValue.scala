@@ -76,14 +76,14 @@ object JsonValue {
 
 	val emptyObject:JsonValue	= JsonObject(List.empty)
 
-	def fromFields(it:Seq[(String,JsonValue)]):JsonValue	= {
+	def fromFields(it:Seq[(String, JsonValue)]):JsonValue	= {
 		require(it ne null,	s"unexpected null value")
 		if it.nonEmpty
 		then JsonObject(it)
 		else emptyObject
 	}
 
-	def obj(values:(String,JsonValue)*):JsonValue	= fromFields(values.toVector)
+	def obj(values:(String, JsonValue)*):JsonValue	= fromFields(values.toVector)
 
 	//------------------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ object JsonValue {
 	private final case class JsonNumber(value:BigDecimal)				extends JsonValue
 	private final case class JsonString(value:String)					extends JsonValue
 	private final case class JsonArray(value:Seq[JsonValue])			extends JsonValue
-	private final case class JsonObject(value:Seq[(String,JsonValue)])	extends JsonValue
+	private final case class JsonObject(value:Seq[(String, JsonValue)])	extends JsonValue
 }
 
 sealed abstract class JsonValue {
@@ -143,7 +143,7 @@ sealed abstract class JsonValue {
 			case JsonValue.JsonArray(x)		=> x
 		}
 
-	def asObject:Option[Seq[(String,JsonValue)]]	=
+	def asObject:Option[Seq[(String, JsonValue)]]	=
 		this matchOption {
 			case JsonValue.JsonObject(x)	=> x
 		}
@@ -175,7 +175,7 @@ sealed abstract class JsonValue {
 			case x						=> x
 		}
 
-	def modifyObject(func:Seq[(String,JsonValue)]=>Seq[(String,JsonValue)])	=
+	def modifyObject(func:Seq[(String, JsonValue)]=>Seq[(String, JsonValue)])	=
 		this match {
 			case JsonValue.JsonObject(x)	=> JsonValue.fromFields(func(x))
 			case x							=> x

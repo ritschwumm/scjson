@@ -178,7 +178,7 @@ object JsonDecoderTest extends SimpleTestSuite {
 	test("JsonDecoder should decode arrays with 2 elements") {
 		assertEquals(
 			JsonCodec.decode("[1,2]"),
-			Right(JsonValue.fromItems(Seq(JsonValue.fromInt(1),JsonValue.fromInt(2))))
+			Right(JsonValue.fromItems(Seq(JsonValue.fromInt(1), JsonValue.fromInt(2))))
 		)
 	}
 

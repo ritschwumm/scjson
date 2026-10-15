@@ -14,8 +14,8 @@ trait CollectionJsonWriters extends CollectionJsonWritersLow {
 		Converter.total((_:Nes[T]).toVector)	>=>
 		VectorWriter
 
-	given KeyMapWriter: [K:JsonKeyWriter,V:JsonWriter] => JsonWriter[Map[K,V]]	=
-		CollectionConverters.mapToPairs		>=>
+	given KeyMapWriter: [K:JsonKeyWriter, V:JsonWriter] => JsonWriter[Map[K, V]]	=
+		CollectionConverters.mapToPairs													>=>
 		(JsonKeyWriter[K] >=> KeyConverters.KeyToString).pair(JsonWriter[V]).liftSeq	>=>
 		JsonConverters.makeObject
 }
@@ -27,6 +27,6 @@ trait CollectionJsonWritersLow {
 
 	private object MyTupleJsonWriters extends TupleJsonWriters
 
-	given KeylessMapWriter: [K:JsonWriter,V:JsonWriter] => JsonWriter[Map[K,V]]	=
-		SeqWriter(using MyTupleJsonWriters.Tuple2Writer[K,V]).contraMap(_.toVector)
+	given KeylessMapWriter: [K:JsonWriter, V:JsonWriter] => JsonWriter[Map[K, V]]	=
+		SeqWriter(using MyTupleJsonWriters.Tuple2Writer[K, V]).contraMap(_.toVector)
 }

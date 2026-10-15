@@ -16,11 +16,11 @@ object JsonCodec {
 		JsonEncoder.encode(it, pretty)
 
 	/** parse a Json formatted String into a JsonValue */
-	def decode(it:String):Either[JsonDecodeFailure,JsonValue]	=
+	def decode(it:String):Either[JsonDecodeFailure, JsonValue]	=
 		JsonDecoder.decode(it)
 
 	/** small-style */
-	def asPrism(pretty:Boolean):Prism[String,JsonValue]	=
+	def asPrism(pretty:Boolean):Prism[String, JsonValue]	=
 		Prism(
 			decode(_).toOption,
 			encode(_, pretty)

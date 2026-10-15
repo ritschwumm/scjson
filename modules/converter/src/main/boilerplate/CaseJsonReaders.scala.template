@@ -14,16 +14,20 @@ trait CaseJsonReaders {
 		UnitConverters.UnitReader.map(constant(value))
 
 	/*
-	def cc0Reader[S](apply:()=>S):JsonReader[S]	=
+	def cc0Reader[S](apply:()=>T):JsonReader[T]	=
 		UnitConverters.UnitReader.map { _ => apply() }
 	*/
 
-	def cc0AutoReader[S](using m:Mirror.ProductOf[S] { type MirroredElemTypes = EmptyTuple }):JsonReader[S]	=
+	def cc0AutoReader[T](using m:Mirror.ProductOf[T] { type MirroredElemTypes = EmptyTuple }):JsonReader[T]	=
 		UnitConverters.UnitReader.map { _ =>
 			m.fromProduct(EmptyTuple)
 		}
 
-	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#]):JsonReader[S]	=
+	[#inline def cc1AutoReader[T](using
+		m:Mirror.ProductOf[T],
+		sz:Tuple.Size[m.MirroredElemTypes] =:= 1,
+		[#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#],
+	):JsonReader[T]	=
 		JsonConverters.expectObjectMap	>=>
 		Converter { (input:Map[String, JsonValue]) =>
 			if input.size == 1 then {

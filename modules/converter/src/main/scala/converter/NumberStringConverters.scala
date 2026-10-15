@@ -4,34 +4,34 @@ import scutil.core.implicits.*
 import scutil.lang.*
 
 object NumberStringConverters {
-	val UnitToString:JsonConverter[Unit,String]	=
+	val UnitToString:JsonConverter[Unit, String]	=
 		Converter.constant("")
 
-	val StringToUnit:JsonConverter[String,Unit]	=
+	val StringToUnit:JsonConverter[String, Unit]	=
 		Converter { it => (it == "").validated(JsonError(show"$it is not a Unit"), ()) }
 
 	//------------------------------------------------------------------------------
 
-	val IntToString:JsonConverter[Int,String]	=
+	val IntToString:JsonConverter[Int, String]	=
 		Converter.total(_.toString)
 
-	val StringToInt:JsonConverter[String,Int]	=
+	val StringToInt:JsonConverter[String, Int]	=
 		Converter { it => it.toIntOption.toValid(JsonError(show"$it is not an Int")) }
 
 	//------------------------------------------------------------------------------
 
-	val LongToString:JsonConverter[Long,String]	=
+	val LongToString:JsonConverter[Long, String]	=
 		Converter.total(_.toString)
 
-	val StringToLong:JsonConverter[String,Long]	=
+	val StringToLong:JsonConverter[String, Long]	=
 		Converter { it => it.toLongOption.toValid(JsonError(show"$it is not a Long")) }
 
 	//------------------------------------------------------------------------------
 
 	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
-	val BigIntToString:JsonConverter[BigInt,String]	=
+	val BigIntToString:JsonConverter[BigInt, String]	=
 		Converter.total(_.toString)
 
-	val StringToBigInt:JsonConverter[String,BigInt]	=
+	val StringToBigInt:JsonConverter[String, BigInt]	=
 		Converter { it => it.toBigIntOption.toValid(JsonError(show"$it is not a BigInt")) }
 }

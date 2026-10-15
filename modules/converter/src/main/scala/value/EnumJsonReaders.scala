@@ -8,6 +8,6 @@ trait EnumJsonReaders {
 		JsonConverters.expectString >=>
 		Converter.optional(func, JsonError(show"unexpected enum value"))
 
-	def enumReaderPf[T](func:PartialFunction[String,T]):JsonReader[T]	=
+	def enumReaderPf[T](func:PartialFunction[String, T]):JsonReader[T]	=
 		enumReader(func.lift)
 }

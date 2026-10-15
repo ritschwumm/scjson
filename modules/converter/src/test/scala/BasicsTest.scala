@@ -118,14 +118,14 @@ object BasicsTest extends SimpleTestSuite {
 		assertEquals(out, in)
 	}
 	test("scala values should roundtrip a string-keyed Map") {
-		type T	= Map[String,Int]
+		type T	= Map[String, Int]
 		val in:T		= Map("a" -> 1, "b" -> 2)
 		val str:String	= pickle[T](in)		.getOrError("oops")
 		val out:T		= unpickle[T](str)	.getOrError("oops")
 		assertEquals(out, in)
 	}
 	test("scala values should roundtrip a Map") {
-		type T	= Map[Long,Int]
+		type T	= Map[Long, Int]
 		val in:T		= Map(1L -> 1, 1L -> 2)
 		val str:String	= pickle[T](in)		.getOrError("oops")
 		val out:T		= unpickle[T](str)	.getOrError("oops")

@@ -5,6 +5,6 @@ trait OldOptionJsonWriters {
 
 	/** replaced by OptionOptionWriter and OptionNullWriter in NullOptionJsonWriters(Low) */
 	given OldOptionWriter: [T:JsonWriter] => JsonWriter[Option[T]]	=
-		CollectionConverters.optionToEither[JsonError,T]	>=>
+		CollectionConverters.optionToEither[JsonError, T]	>=>
 		AltSeqConverters.altWriter("none", "some")
 }

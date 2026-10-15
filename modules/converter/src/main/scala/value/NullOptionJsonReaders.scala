@@ -6,7 +6,7 @@ trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 	private given NullOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
 
 	given OptionOptionReader: [T] => (ev:JsonReader[Option[T]]) => JsonReader[Option[Option[T]]]	=
-		AltSeqConverters.altReader[Unit,Option[T]]("none", "some")	>=>
+		AltSeqConverters.altReader[Unit, Option[T]]("none", "some")	>=>
 		CollectionConverters.eitherToOption
 
 	/*

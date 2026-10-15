@@ -75,9 +75,9 @@ object NullOptionTest extends SimpleTestSuite {
 	// TODO it seems in old times, we encoded ```none``` as ```{ "none": true }``` and now we use ```{ "none": {} }```
 	def Empty:JsonValue	= JsonValue.emptyObject
 
-	def readAst[T:JsonReader](json:JsonValue):Either[JsonError,T]	=
+	def readAst[T:JsonReader](json:JsonValue):Either[JsonError, T]	=
 		JsonReader[T].convert(json).toEither
 
-	def writeAst[T:JsonWriter](value:T):Either[JsonError,JsonValue]	=
+	def writeAst[T:JsonWriter](value:T):Either[JsonError, JsonValue]	=
 		JsonWriter[T].convert(value).toEither
 }

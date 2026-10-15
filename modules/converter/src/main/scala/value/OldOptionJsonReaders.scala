@@ -5,6 +5,6 @@ trait OldOptionJsonReaders {
 
 	/** replaced by OptionOptionReader and OptionNullReader in NullOptionJsonReaders(Low) */
 	given OldOptionReader: [T:JsonReader] => JsonReader[Option[T]]	=
-		AltSeqConverters.altReader[Unit,T]("none", "some")	>=>
+		AltSeqConverters.altReader[Unit, T]("none", "some")	>=>
 		CollectionConverters.eitherToOption
 }

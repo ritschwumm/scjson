@@ -7,7 +7,7 @@ trait NullOptionJsonWriters extends NullOptionJsonWritersLow {
 	private given NullOptionJsonUnitWriter:JsonWriter[Unit]	= UnitConverters.UnitWriter
 
 	given OptionOptionWriter: [T] => (ev:JsonWriter[Option[T]]) => JsonWriter[Option[Option[T]]]	=
-		CollectionConverters.optionToEither[JsonError,Option[T]]	>=>
+		CollectionConverters.optionToEither[JsonError, Option[T]]	>=>
 		AltSeqConverters.altWriter("none", "some")
 
 	/*
