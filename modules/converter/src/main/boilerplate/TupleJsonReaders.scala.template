@@ -12,7 +12,7 @@ trait TupleJsonReaders {
 					[#f1.convert(t1),#
 					]
 				)
-				.zipN
+				.productN
 			case x	=>
 				Validated.invalid(JsonError(s"expected 1, not ${x.size.toString} value(s)"))
 		}#

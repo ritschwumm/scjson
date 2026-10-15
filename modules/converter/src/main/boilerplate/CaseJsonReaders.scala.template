@@ -31,7 +31,7 @@ trait CaseJsonReaders {
 					[#input.get(constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]).toValid(JsonError(s"missing element ${constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]}")).flatMap(f1.convert),#
 					]
 				)
-				.zipN
+				.productN
 				.map(m.fromProduct)
 			}
 			else {
