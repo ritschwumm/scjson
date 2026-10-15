@@ -10,7 +10,7 @@ import scjson.converter.{
 }
 
 trait TupleJsonReaders {
-	[#given Tuple1Reader[[#T1#]](using [#f1:JsonReader[T1]#]):JsonReader[Tuple1[[#T1#]]]	=
+	[#given Tuple1Reader:[[#T1#]] => ([#f1:JsonReader[T1]#]) => JsonReader[Tuple1[[#T1#]]]	=
 		JC.expectArray	>=>
 		TC.seqToTuple1	>=>
 		Converter { values =>

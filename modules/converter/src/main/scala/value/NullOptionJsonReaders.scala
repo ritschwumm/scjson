@@ -10,7 +10,7 @@ import scjson.converter.{
 trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 	private given NullOptionJsonUnitReader:JsonReader[Unit]	= UnitConverters.UnitReader
 
-	given OptionOptionReader[T](using ev:JsonReader[Option[T]]):JsonReader[Option[Option[T]]]	=
+	given OptionOptionReader: [T] => (ev:JsonReader[Option[T]]) => JsonReader[Option[Option[T]]]	=
 		ASC.altReader[Unit,Option[T]]("none", "some")	>=>
 		CC.eitherToOption
 
@@ -25,7 +25,7 @@ trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 }
 
 trait NullOptionJsonReadersLow {
-	given OptionNullReader[T:JsonReader]:JsonReader[Option[T]]	=
+	given OptionNullReader: [T:JsonReader] => JsonReader[Option[T]]	=
 		Converter { it =>
 			if (it.isNull)	Validated.valid(None)
 			else			JsonReader[T].convert(it).map(Some.apply)

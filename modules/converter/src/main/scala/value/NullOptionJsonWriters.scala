@@ -10,7 +10,7 @@ import scjson.converter.{
 trait NullOptionJsonWriters extends NullOptionJsonWritersLow {
 	private given NullOptionJsonUnitWriter:JsonWriter[Unit]	= UnitConverters.UnitWriter
 
-	given OptionOptionWriter[T](using ev:JsonWriter[Option[T]]):JsonWriter[Option[Option[T]]]	=
+	given OptionOptionWriter: [T] => (ev:JsonWriter[Option[T]]) => JsonWriter[Option[Option[T]]]	=
 		CC.optionToEither[JsonError,Option[T]]	>=>
 		ASC.altWriter("none", "some")
 
@@ -25,7 +25,7 @@ trait NullOptionJsonWriters extends NullOptionJsonWritersLow {
 }
 
 trait NullOptionJsonWritersLow {
-	given OptionNullWriter[T:JsonWriter]:JsonWriter[Option[T]]	=
+	given OptionNullWriter: [T:JsonWriter] => JsonWriter[Option[T]]	=
 		Converter {
 			case None		=> Validated.valid(JsonValue.Null)
 			case Some(x)	=> JsonWriter[T].convert(x)

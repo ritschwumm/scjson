@@ -31,8 +31,8 @@ object NewtypeTest extends SimpleTestSuite {
 
 	//------------------------------------------------------------------------------
 
-	given NewtypeGenericReader[T:JsonReader]:JsonReader[NewtypeGeneric[T]]	= newtypeReader
-	given NewtypeGenericWriter[T:JsonWriter]:JsonWriter[NewtypeGeneric[T]]	= newtypeWriter
+	given NewtypeGenericReader: [T:JsonReader] => JsonReader[NewtypeGeneric[T]]	= newtypeReader
+	given NewtypeGenericWriter: [T:JsonWriter] => JsonWriter[NewtypeGeneric[T]]	= newtypeWriter
 
 	test("generic newtypes should unparse") {
 		assertEquals(
