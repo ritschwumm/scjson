@@ -7,18 +7,15 @@ import scjson.ast.*
 
 trait TupleJsonWriters {
 	[#given Tuple1Writer:[[#T1#]] => ([#f1:JsonWriter[T1]#]) => JsonWriter[Tuple1[[#T1#]]]	=
-		Converter[JsonError, Tuple1[[#T1#]], Tuple1[[#JsonValue#]]] { values =>
-			values
-			.ap(
-				Tuple1(
-					[#f1.convert#,
-					]
-				)
+		Converter[JsonError, Tuple1[[#T1#]], JsonValue] { input =>
+			Tuple1(
+				[#f1.convert(input._1),#
+				]
 			)
-			.zipN
-		} >=>
-		TupleConverters.tuple1ToSeq >=>
-		JsonConverters.makeArray#
+			.mapN { ([#t1#]) =>
+				JsonValue.fromItems(Vector([#t1#]))
+			}
+		}#
 
 	]
 }

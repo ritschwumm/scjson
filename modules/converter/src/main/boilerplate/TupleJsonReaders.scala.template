@@ -6,15 +6,15 @@ import scutil.lang.extension.TupleExtensions.*
 trait TupleJsonReaders {
 	[#given Tuple1Reader:[[#T1#]] => ([#f1:JsonReader[T1]#]) => JsonReader[Tuple1[[#T1#]]]	=
 		JsonConverters.expectArray	>=>
-		TupleConverters.seqToTuple1	>=>
-		Converter { values =>
-			values.ap(
+		Converter {
+			case Seq([#t1#]) =>
 				Tuple1(
-					[#f1.convert#,
+					[#f1.convert(t1),#
 					]
 				)
-			)
-			.zipN
+				.zipN
+			case x	=>
+				Validated.invalid(JsonError(s"expected 1, not ${x.size.toString} value(s)"))
 		}#
 
 	]

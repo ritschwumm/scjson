@@ -5,6 +5,7 @@ import scala.compiletime.*
 
 import scutil.lang.*
 import scutil.lang.extension.TupleExtensions.*
+import scutil.lang.extension.OptionExtensions.*
 
 import scjson.ast.*
 
@@ -22,24 +23,21 @@ trait CaseJsonReaders {
 			m.fromProduct(EmptyTuple)
 		}
 
-	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#,]):JsonReader[S]	= {
+	[#inline def cc1AutoReader[S](using m:Mirror.ProductOf[S], ev:m.MirroredElemTypes <:< Tuple1[[#?#]], [#f1:JsonReader[Tuple.Elem[m.MirroredElemTypes, 0]]#]):JsonReader[S]	=
 		JsonConverters.expectObjectMap	>=>
-		TupleConverters.mapToTuple1[String, JsonValue](
-			[#constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]#,
-			]
-		)	>=>
-		Converter { (values:Tuple1[[#JsonValue#]]) =>
-			values
-			.ap(
+		Converter { (input:Map[String, JsonValue]) =>
+			if input.size == 1 then {
 				Tuple1(
-					[#f1.convert#,
+					[#input.get(constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]).toValid(JsonError(s"missing element ${constValue[Tuple.Elem[m.MirroredElemLabels, 0] & String]}")).flatMap(f1.convert),#
 					]
 				)
-			)
-			.zipN
-			.map(m.fromProduct)
-		}
-	}#
+				.zipN
+				.map(m.fromProduct)
+			}
+			else {
+				Validated.invalid(JsonError(s"expected 1, not ${input.size.toString} value(s)"))
+			}
+		}#
 
 	]
 }

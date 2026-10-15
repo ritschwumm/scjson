@@ -51,7 +51,7 @@ object JsonConverters {
 	//------------------------------------------------------------------------------
 
 	val makeObjectMap:JsonConverter[Map[String,JsonValue],JsonValue]	=
-		makeObject contraMap { _.toVector }
+		makeObject.contraMap(_.toVector)
 
 	//------------------------------------------------------------------------------
 
