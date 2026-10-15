@@ -20,23 +20,24 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 	private var level	= 0
 
 	def onNull():Unit					= b append "null"
-	def onBoolean(value:Boolean):Unit	= if (value) b append "true" else b append "false"
+	def onBoolean(value:Boolean):Unit	= if value then b append "true" else b append "false"
 	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def onNumber(value:BigDecimal):Unit	= b append value.toString
 	def onString(value:String):Unit		= encodeString(value)
 
 	def onArray(items:Seq[JsonValue]):Unit	=
-		if (items.isEmpty) {
+		if items.isEmpty then {
 			b	+= '['
 			b	+= ']'
 		}
-		else if (pretty) {
+		else if pretty then {
 			b		+= '['
 			level	+= 1
 			var sep	= false
 			items.foreach { it =>
-				if (sep)	b += ','
-				else		sep	= true
+				if sep
+				then b += ','
+				else sep	= true
 				b	+= '\n';	indent()
 				it.visit(this)
 			}
@@ -48,25 +49,27 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 			b	+= '['
 			var sep	= false
 			items.foreach { it =>
-				if (sep)	b += ','
-				else		sep	= true
+				if sep
+				then b += ','
+				else sep	= true
 				it.visit(this)
 			}
 			b	+= ']'
 		}
 
 	def onObject(fields:Seq[(String, JsonValue)]):Unit	=
-		if (fields.isEmpty) {
+		if fields.isEmpty then {
 			b	+= '{'
 			b	+= '}'
 		}
-		else if (pretty) {
+		else if pretty then {
 			b	+= '{'
 			level	+= 1
 			var sep	= false
 			fields.foreach { (key, value) =>
-				if (sep)	b += ','
-				else		sep	= true
+				if sep
+				then b += ','
+				else sep	= true
 				b	+= '\n';	indent()
 				encodeString(key)
 				b	+= ':'
@@ -81,8 +84,9 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 			b	+= '{'
 			var sep	= false
 			fields.foreach { (key, value) =>
-				if (sep)	b += ','
-				else		sep	= true
+				if sep
+				then b += ','
+				else sep	= true
 				encodeString(key)
 				b	+= ':'
 				value.visit(this)
@@ -93,33 +97,33 @@ private final class JsonEncoder(b:StringBuilder, pretty:Boolean) extends JsonVis
 	private def encodeString(data:String):Unit	= {
 		b += '"'
 		var i	= 0
-		while (i < data.length) {
-		data.charAt(i) match {
-			case '\"'	=> b += '\\'; b += '\"'
-			case '\\'	=> b += '\\'; b += '\\'
-			case '\b'	=> b += '\\'; b += 'b'
-			case '\f'	=> b += '\\'; b += 'f'
-			case '\n'	=> b += '\\'; b += 'n'
-			case '\r'	=> b += '\\'; b += 'r'
-			case '\t'	=> b += '\\'; b += 't'
-			case c if c < 32	=>
-				b	+= '\\'; b	+= 'u'
-				b	+= JsonEncoder hexTable ((c >> 12) & 0xf)
-				b	+= JsonEncoder hexTable ((c >>  8) & 0xf)
-				b	+= JsonEncoder hexTable ((c >>  4) & 0xf)
-				b	+= JsonEncoder hexTable ((c >>  0) & 0xf)
-			case c	=> b += c
-		}
-		i += 1
+		while i < data.length do {
+			data.charAt(i) match {
+				case '\"'	=> b += '\\'; b += '\"'
+				case '\\'	=> b += '\\'; b += '\\'
+				case '\b'	=> b += '\\'; b += 'b'
+				case '\f'	=> b += '\\'; b += 'f'
+				case '\n'	=> b += '\\'; b += 'n'
+				case '\r'	=> b += '\\'; b += 'r'
+				case '\t'	=> b += '\\'; b += 't'
+				case c if c < 32	=>
+					b	+= '\\'; b	+= 'u'
+					b	+= JsonEncoder hexTable ((c >> 12) & 0xf)
+					b	+= JsonEncoder hexTable ((c >>  8) & 0xf)
+					b	+= JsonEncoder hexTable ((c >>  4) & 0xf)
+					b	+= JsonEncoder hexTable ((c >>  0) & 0xf)
+				case c	=> b += c
+			}
+			i += 1
 		}
 		b += '"'
 	}
 
 	private def indent():Unit	= {
 		var x	= 0
-		while (x < level) {
-		b	++= JsonEncoder.indention
-		x	+= 1
+		while x < level do {
+			b	++= JsonEncoder.indention
+			x	+= 1
 		}
 	}
 }

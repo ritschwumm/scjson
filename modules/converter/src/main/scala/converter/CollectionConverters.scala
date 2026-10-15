@@ -23,7 +23,7 @@ object CollectionConverters {
 	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def mapToPair[K,V](k1:K, k2:K):JsonConverter[Map[K,V],(V,V)]	=
 		Converter { (it:Map[K,V]) =>
-			if (it.size == 2) {
+			if it.size == 2 then {
 				it.get(k1).toValid(JsonError(show"missing element ${k1.toString}"))	`product`
 				it.get(k2).toValid(JsonError(show"missing element ${k2.toString}"))
 			}
@@ -43,7 +43,7 @@ object CollectionConverters {
 	@SuppressWarnings(Array("org.wartremover.warts.ToString"))
 	def mapToEither[K,V](k1:K, k2:K):JsonConverter[Map[K,V],Either[V,V]]	=
 		Converter { (it:Map[K,V]) =>
-			if (it.size == 1) {
+			if it.size == 1 then {
 				it.get(k1).map { v => Validated.valid[JsonError,Either[V,V]](Left(v) :Either[V,V]) }	orElse
 				it.get(k2).map { v => Validated.valid[JsonError,Either[V,V]](Right(v):Either[V,V]) }	getOrElse
 				JsonInvalid(show"missing element ${k1.toString} or ${k2.toString}")

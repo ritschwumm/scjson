@@ -23,60 +23,61 @@ private final class JsonDecoder(text:String) {
 	private def decode():JsonValue	= {
 		val value	= decodeNext()
 		ws()
-		if (!finished)	throw expected("end of input")
+		if !finished	then throw expected("end of input")
 		value
 	}
 
 	private def decodeNext():JsonValue = {
 		ws()
-		if (finished)	throw expected("any char")
+		if finished		then throw expected("any char")
 
-		if (isChar('{')) {
+		if isChar('{') then {
 			val out	= new immutable.VectorBuilder[(String,JsonValue)]
 			ws()
-			if (isChar('}'))	return JsonValue.fromFields(out.result())
-			while (true) {
+			if isChar('}')	then return JsonValue.fromFields(out.result())
+			while true do {
 				// TODO decode only strings here, nothing else!
 				val key	= decodeNext().asString getOrElse { throw expected("string key") }
 				ws();
-				if (!isChar(':'))	throw expectedClass(":")
+				if !isChar(':')	then throw expectedClass(":")
 				val value	= decodeNext()
 				out	+= (key -> value)
 				ws()
-				if (isChar('}'))	return JsonValue.fromFields(out.result())
-				if (!isChar(','))	throw expectedClass(",}");
+				if isChar('}')	then return JsonValue.fromFields(out.result())
+				if !isChar(',')	then expectedClass(",}");
 			}
 		}
-		if (isChar('[')) {
+		if isChar('[') then {
 			val	out	= new immutable.VectorBuilder[JsonValue]
 			ws()
-			if (isChar(']'))	return JsonValue.fromItems(out.result())
-			while (true) {
+			if isChar(']')	then return JsonValue.fromItems(out.result())
+			while true do {
 				val value	= decodeNext()
 				out	+= value
 				ws()
-				if (isChar(']'))	return JsonValue.fromItems(out.result())
-				if (!isChar(','))	throw expectedClass(",]")
+				if isChar(']')	then return JsonValue.fromItems(out.result())
+				if !isChar(',')	then throw expectedClass(",]")
 			}
 		}
-		if (isChar('"')) {
+		if isChar('"') then {
 			val out	= new StringBuilder
-			while (true) {
-				if (isChar('"')) {
+			while true do {
+				if isChar('"')then {
 					return JsonValue.fromString(out.result())
 				}
-				else if (isChar('\\')) {
-					if (finished)	throw expected("escape continuation")
-					if		(isChar('"'))	out	+= '"'
-					else if	(isChar('\\'))	out	+= '\\'
-					else if	(isChar('/'))	out	+= '/'
-					else if	(isChar('t'))	out	+= '\t'
-					else if	(isChar('r'))	out	+= '\r'
-					else if	(isChar('n'))	out	+= '\n'
-					else if	(isChar('f'))	out	+= '\f'
-					else if	(isChar('b'))	out	+= '\b'
-					else if	(isChar('u')) {
-						if (offset+4 > text.length)	throw expected("4 hex digits")
+				else if isChar('\\') then {
+					if (finished)			then throw expected("escape continuation")
+
+					if		isChar('"')		then out	+= '"'
+					else if	isChar('\\')	then out	+= '\\'
+					else if	isChar('/')		then out	+= '/'
+					else if	isChar('t')		then out	+= '\t'
+					else if	isChar('r')		then out	+= '\r'
+					else if	isChar('n')		then out	+= '\n'
+					else if	isChar('f')		then out	+= '\f'
+					else if	isChar('b')		then out	+= '\b'
+					else if	isChar('u')		then {
+						if offset+4 > text.length	then throw expected("4 hex digits")
 
 						val h1	= hexDigit()
 						val h2	= hexDigit()
@@ -87,41 +88,41 @@ private final class JsonDecoder(text:String) {
 					}
 					else throw expectedClass("\"\\/trnfbu")
 				}
-				else if (rng('\u0000', '\u001f')) {
+				else if rng('\u0000', '\u001f') then {
 					offset	-= 1
 					throw expected("not a control character")
 				}
 				else {
-					if (finished)	throw expected("more chars")
+					if finished	then throw expected("more chars")
 					out	+= next.toChar
 					consume()
 				}
 			}
 		}
-		if (isString("true"))	return JsonValue.True
-		if (isString("false"))	return JsonValue.False
-		if (isString("null"))	return JsonValue.Null
+		if isString("true")		then return JsonValue.True
+		if isString("false")	then return JsonValue.False
+		if isString("null")		then return JsonValue.Null
 
 		val before		= offset
 
 		val numNeg		= isChar('-')
 		val beforeInt	= offset
 		val numInt		= digits()
-		if (numNeg || numInt != 0) {
-			if (numInt == 0) {
+		if numNeg || numInt != 0 then {
+			if numInt == 0 then {
 				// TODO [.eE+-n] could issue special errors
 				// offset	= beforeBody
 				throw expected("number digits")
 			}
-			if (numInt > 1 && text.charAt(beforeInt) == '0') {
+			if numInt > 1 && text.charAt(beforeInt) == '0' then {
 				offset	= beforeInt
 				throw expected("number digits without leading zero")
 			}
-			if (isChar('.')) {
+			if isChar('.') then {
 				val numFrac	= digits()
-				if (numFrac == 0)	throw expected("fraction digits after dot")
+				if numFrac == 0	then throw expected("fraction digits after dot")
 			}
-			if (isChar('e') || isChar('E')) {
+			if isChar('e') || isChar('E') then {
 				/*
 				val signExpo	=
 						if		(isChar('+'))	true
@@ -130,7 +131,7 @@ private final class JsonDecoder(text:String) {
 				*/
 				isChar('+') || isChar('-')
 				val countExpo	= digits()
-				if (countExpo == 0)	throw expected("at least one digit in the exponent")
+				if countExpo == 0	then throw expected("at least one digit in the exponent")
 			}
 			try {
 				return JsonValue.fromBigDecimal(BigDecimal(from(before)))
@@ -158,9 +159,9 @@ private final class JsonDecoder(text:String) {
 	private def hexDigit():Int	= {
 		val	c	= text.charAt(offset)
 		val h	=
-			if		(c >= '0' && c <= '9')	c - '0'
-			else if	(c >= 'a' && c <= 'f')	c - 'a' + 10
-			else if	(c >= 'A' && c <= 'F')	c - 'A' + 10
+			if		c >= '0' && c <= '9'	then c - '0'
+			else if	c >= 'a' && c <= 'f'	then c - 'a' + 10
+			else if	c >= 'A' && c <= 'F'	then c - 'A' + 10
 			else throw expected("a hex digit")
 		offset	+= 1
 		h
@@ -169,36 +170,40 @@ private final class JsonDecoder(text:String) {
 	private def digits():Int	= {
 		val before	= offset
 		var keepOn	= true
-		while (!finished && keepOn) {
+		while !finished && keepOn do {
 			val c	= next
-			if (c >= '0' && c <= '9')	consume()
-			else						keepOn	= false
+			if c >= '0' && c <= '9'
+			then consume()
+			else keepOn	= false
 		}
 		offset - before
 	}
 
 	private def ws():Unit	= {
 		var keepOn	= true
-		while (!finished && keepOn) {
+		while !finished && keepOn do {
 			val c	= next
-			if (c == ' '
-			|| c == '\t'
-			|| c == '\r'
-			|| c == '\n')	consume()
-			else			keepOn	= false
+			if (
+				c == ' '	||
+				c == '\t'	||
+				c == '\r'	||
+				c == '\n'
+			)
+			then consume()
+			else keepOn	= false
 		}
 	}
 
 	private def rng(start:Char, end:Char):Boolean	= {
 		val c	= next
-		if		(c == NO_CHAR)			false
-		else if	(c < start || c > end)	false
+		if		c == NO_CHAR			then false
+		else if	c < start || c > end	then false
 		else							{ consume(); true }
 	}
 
 	private def isChar(c:Char):Boolean	= {
-		if		(finished)	false
-		else if (next != c)	false
+		if		finished	then false
+		else if next != c	then false
 		else				{ consume(); true }
 	}
 
@@ -213,10 +218,10 @@ private final class JsonDecoder(text:String) {
 
 	private def isString(s:String):Boolean	= {
 		val end	= offset + s.length
-		if (end <= text.length) {
+		if end <= text.length then {
 			var i	= 0
-			while (i < s.length) {
-				if (text.charAt(offset+i) != s.charAt(i))	return false
+			while i < s.length do {
+				if text.charAt(offset+i) != s.charAt(i)	then return false
 				i	+= 1
 			}
 			offset	= end
@@ -232,8 +237,9 @@ private final class JsonDecoder(text:String) {
 		offset == text.length
 
 	private def next:Int	=
-		if (finished)	NO_CHAR
-		else			text.charAt(offset)
+		if finished
+		then NO_CHAR
+		else text.charAt(offset)
 
 	/*
 	private def previous:Int	=
@@ -245,7 +251,7 @@ private final class JsonDecoder(text:String) {
 		text.substring(before, offset)
 
 	private def consume():Unit	= {
-		if (finished)	sys error "already finished"
+		if finished	then sys.error("already finished")
 		offset	+= 1
 	}
 }

@@ -11,8 +11,7 @@ object JsonValue {
 	val False:JsonValue						= JsonFalse
 
 	def fromBoolean(it:Boolean):JsonValue	=
-		if (it)	True
-		else	False
+		if it then True else False
 
 	//------------------------------------------------------------------------------
 
@@ -55,8 +54,9 @@ object JsonValue {
 
 	def fromString(it:String):JsonValue		= {
 		require(it ne null,	s"unexpected null value")
-		if (it.nonEmpty)	JsonString(it)
-		else				emptyString
+		if it.nonEmpty
+		then JsonString(it)
+		else emptyString
 	}
 
 	//------------------------------------------------------------------------------
@@ -65,8 +65,9 @@ object JsonValue {
 
 	def fromItems(it:Seq[JsonValue]):JsonValue	= {
 		require(it ne null,	s"unexpected null value")
-		if (it.nonEmpty)	JsonArray(it)
-		else				emptyArray
+		if it.nonEmpty
+		then JsonArray(it)
+		else emptyArray
 	}
 
 	def arr(values:JsonValue*):JsonValue	= fromItems(values.toVector)
@@ -77,8 +78,9 @@ object JsonValue {
 
 	def fromFields(it:Seq[(String,JsonValue)]):JsonValue	= {
 		require(it ne null,	s"unexpected null value")
-		if (it.nonEmpty)	JsonObject(it)
-		else				emptyObject
+		if it.nonEmpty
+		then JsonObject(it)
+		else emptyObject
 	}
 
 	def obj(values:(String,JsonValue)*):JsonValue	= fromFields(values.toVector)

@@ -1,10 +1,16 @@
 package scjson.ast
 
-import scala.language.implicitConversions
-
+@SuppressWarnings(Array("org.wartremover.warts.Overloading"))
 object JsonNavigation {
-	implicit def extendJsonNavigation(value:JsonValue):JsonNavigation				= new JsonNavigation(Some(value))
-	implicit def extendJsonNavigationOption(value:Option[JsonValue]):JsonNavigation	= new JsonNavigation(value)
+	extension (value:JsonValue)	{
+		def navigation	= new JsonNavigation(Some(value))
+		export navigation.*
+	}
+
+	extension (value:Option[JsonValue])	{
+		def navigation	= new JsonNavigation(value)
+		export navigation.*
+	}
 }
 
 @SuppressWarnings(Array("org.wartremover.warts.Overloading"))

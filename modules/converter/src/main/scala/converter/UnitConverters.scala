@@ -8,8 +8,9 @@ object UnitConverters {
 	val UnitReader:JsonReader[Unit]	=
 		JsonConverters.expectObject >=>
 		(Converter { it =>
-			if (it.isEmpty)	Validated.valid(())
-			else			JsonInvalid("expected an empty object")
+			if it.isEmpty
+			then Validated.valid(())
+			else JsonInvalid("expected an empty object")
 		})
 
 	/** uses an empty json object, because json null is used for None - and because we have an object then we can put an (oldskool) type tag into */

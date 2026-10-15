@@ -22,7 +22,8 @@ trait NullOptionJsonReaders extends NullOptionJsonReadersLow {
 trait NullOptionJsonReadersLow {
 	given OptionNullReader: [T:JsonReader] => JsonReader[Option[T]]	=
 		Converter { it =>
-			if (it.isNull)	Validated.valid(None)
-			else			JsonReader[T].convert(it).map(Some.apply)
+			if it.isNull
+			then Validated.valid(None)
+			else JsonReader[T].convert(it).map(Some.apply)
 		}
 }
